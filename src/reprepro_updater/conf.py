@@ -90,11 +90,17 @@ Update: %(update_rule)s
 
     def generate_file_contents(self, rosdistro, distro, arch):
         out = ''
-        d = {'distro': distro, 
-             'archs': ' '.join(self.arches),
-             'repo_key': self.repo_key,
-             'update_rule': 'ros-%s-%s-%s' % (rosdistro, distro, arch)}
-        out += self.standard_snippet % d
+
+        for dist in self.distros:
+            if dist == distro:
+                update_rule = 'ros-%s-%s-%s' % (rosdistro, distro, arch)
+            else:
+                update_rule = ''
+            d = {'distro': dist, 
+                 'archs': ' '.join(self.arches),
+                 'repo_key': self.repo_key,
+                 'update_rule': update_rule}
+            out += self.standard_snippet % d
 
         return out
 
@@ -106,9 +112,9 @@ class UpdatesFile(object):
         self.arches = arches
         self.repo_key = repo_key
 
-        self.standard_snippet = """Name: ros-%(distro)s-%(rosdistro)s-%(arch)s
+        self.standard_snippet = """Name: ros-%(rosdistro)s-%(distro)s-%(arch)s
 Method: %(upstream_method)s
-Suite: %(rosdistro)s
+Suite: %(distro)s
 Components: main
 Architectures: %(arch)s
 FilterFormula: Package (%% ros-%(rosdistro)s-*)
@@ -135,8 +141,9 @@ class ConfGenerator(object):
     It can generate, the distributions and update rules dynamically for more granular updates. 
     """
 
-    def __init__(self, directory):
+    def __init__(self, directory, rosdistros):
         """ Read the basic information """
+        self.valid_rosdistros = rosdistros
         
 
         
