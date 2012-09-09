@@ -5,6 +5,12 @@ from optparse import OptionParser
 import os
 import subprocess
 
+
+
+ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal']
+
+ALL_ARCHES =  ['amd64', 'i386', 'armel', 'source']
+
 parser = OptionParser()
 parser.add_option("-r", "--rosdistro", dest="rosdistro")
 parser.add_option("-a", "--arch", dest="arch")
@@ -22,14 +28,21 @@ if not len(args) == 1:
 if not options.distro:
     parser.error("distro required")
 
+if not options.distro in ALL_DISTROS:
+    parser.error("invalid distro %s, not in %s" % (options.distro, ALL_DISTROS))
+
 if not options.rosdistro:
     parser.error("rosdistro required")
 
 if not options.arch:
     parser.error("arch required")
 
+if not options.arch in ALL_ARCHES:
+    parser.error("invalid arch %s, not in %s" % (options.arch, ALL_ARCHES))
+
+
 repo_dir = args[0]
-conf_dir = os.path.join(args[0], conf)
+conf_dir = os.path.join(args[0], 'conf')
 
 if not os.path.isdir(conf_dir):
     parser.error("Argument must be an existing reprepro")
@@ -40,24 +53,37 @@ if not os.path.isdir(conf_dir):
 #print inc.generate_file_contents()
 
 
-inc = conf.UpdatesFile(['fuerte', 'groovy'], ['lucid', 'oneiric', 'precise'], ['amd64', 'i386', 'armel', 'source'], 'B01FA116', options.upstream )
+inc = conf.UpdatesFile(['fuerte', 'groovy'], ['lucid', 'oneiric', 'precise'], ALL_ARCHES, 'B01FA116', options.upstream )
 update_filename = os.path.join(conf_dir, 'updates')
 with open(update_filename, 'w') as fh:
     fh.write(inc.generate_file_contents())
 
 
 
-dist = conf.DistributionsFile(['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal'], ['amd64', 'i386', 'armel', 'source'], 'B01FA116' )
+dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, 'B01FA116' )
 
 distributions_filename = os.path.join(conf_dir, 'distributions')
 with open(distributions_filename, 'w') as fh:
     fh.write(dist.generate_file_contents(options.rosdistro, options.distro, options.arch))
 
 
-cleanup_command = 
+cleanup_command = ['reprepro', '-v', '-b', repo_dir, '-A', options.arch, 'removefilter', options.distro, "Package (%% ros-%s-* )"% options.rosdistro]
 
-command = ['reprepro', '-v', '-b', repo_dir, 'update', distro]
+update_command = ['reprepro', '-v', '-b', repo_dir, 'update', options.distro]
+
+def try_run_command(command):
+
+    try:
+        subprocess.check_call(command)
+        return True
+
+    except Exception, ex:
+        print "Execution of [%s] Failed:" % cleanup_command, ex
+        return False
+
+
+
 
 if options.commit:
-    
-    subprocess.c
+    try_run_command(cleanup_command)
+    try_run_command(update_command)
