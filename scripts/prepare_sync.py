@@ -84,6 +84,9 @@ def try_run_command(command):
 
 
 
+
 if options.commit:
-    try_run_command(cleanup_command)
-    try_run_command(update_command)
+    if not try_run_command(cleanup_command):
+        sys.exit(1)
+    if not try_run_command(update_command):
+        sys.exit(1)
