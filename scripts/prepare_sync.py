@@ -4,8 +4,8 @@ from optparse import OptionParser
 
 import os
 import subprocess
-
-
+import fcntl
+import time
 
 ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal']
 
@@ -71,22 +71,44 @@ cleanup_command = ['reprepro', '-v', '-b', repo_dir, '-A', options.arch, 'remove
 
 update_command = ['reprepro', '-v', '-b', repo_dir, 'update', options.distro]
 
-def try_run_command(command):
-
-    try:
-        subprocess.check_call(command)
-        return True
-
-    except Exception, ex:
-        print "Execution of [%s] Failed:" % cleanup_command, ex
-        return False
+def try_run_command(command, lockfile=None):
 
 
+    if not lockfile:
+        
+        lockfile = '/tmp/prepare_sync.py.lock'
+    
+    with open(lockfile, 'w') as lfh:
+
+        file_locked = False
+        for i in xrange(1000):
+
+            try:
+
+                fcntl.lockf(lfh, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                file_locked = True
+                break
+            except IOError, ex:
+                print "could not get lock on %s. Waiting one second" % lockfile
+                time.sleep(1)
+        if not file_locked:
+            print "Failed to lock %s after 1000 tries quitting. Could not execute [%s]" % (lockfile, command)
+            return False
+
+        try:
+            subprocess.check_call(command)
+            return True
+
+        except Exception, ex:
+            print "Execution of [%s] Failed:" % command, ex
+            return False
+        
 
 
+lockfile = os.path.join(repo_dir, 'lock')
 
 if options.commit:
-    if not try_run_command(cleanup_command):
+    if not try_run_command(cleanup_command, lockfile = lockfile):
         sys.exit(1)
-    if not try_run_command(update_command):
+    if not try_run_command(update_command, lockfile = lockfile):
         sys.exit(1)
