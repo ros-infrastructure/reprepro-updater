@@ -3,6 +3,7 @@ from reprepro_updater import conf
 from optparse import OptionParser
 
 import os
+import sys
 import subprocess
 import fcntl
 import time
@@ -53,7 +54,7 @@ if not os.path.isdir(conf_dir):
 #print inc.generate_file_contents()
 
 
-inc = conf.UpdatesFile(['fuerte', 'groovy'], ['lucid', 'oneiric', 'precise'], ALL_ARCHES, 'B01FA116', options.upstream )
+inc = conf.UpdatesFile(['fuerte', 'groovy'], ALL_DISTROS, ALL_ARCHES, 'B01FA116', options.upstream )
 update_filename = os.path.join(conf_dir, 'updates')
 with open(update_filename, 'w') as fh:
     fh.write(inc.generate_file_contents())
