@@ -1,4 +1,4 @@
-
+B
 
 from optparse import OptionParser
 
@@ -20,7 +20,7 @@ parser.add_option("--delete-folder", dest="do_delete", action='store_true', defa
 parser.add_option("-d", "--distro", dest="distro")
 parser.add_option("-a", "--arch", dest="arch")
 
-parser.add_option("-f", "--changefile", dest="changefile")
+parser.add_option("-f", "--folder", dest="folder")
 parser.add_option("-p", "--package", dest="package")
 
 parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
@@ -43,9 +43,22 @@ if not options.arch in ALL_ARCHES:
     parser.error("invalid arch %s, not in %s" % (options.arch, ALL_ARCHES))
 
 
+if not os.path.isdir(options.folder):
+    parser.error("Folder option must be a folder", options.folder)
+
     #cleanup_command = ['reprepro', '-v', '-b', options.repo_path, '-A', options.arch, 'removefilter', options.distro, "Package (%% ros-%s-* )"% options.rosdistro]
 
-update_command = ['reprepro', '-v', '-b', options.repo_path, 'include', options.distro, options.changefile]
+changesfile = None
+
+for f in os.listdir(options.folder):
+    if f.endswith('.changes'):
+        changesfile = f
+        break
+
+if not changesfile:
+    parser.error("Folder %s doesn't contain a changes file" % options.folder)
+
+update_command = ['reprepro', '-v', '-b', options.repo_path, 'include', options.distro, changefile]
 
 
 invalidate_dependent_command = ['reprepro', '-b', options.repo_path, '-T', 'deb', '-V', 'removefilter', options.distro,
@@ -66,8 +79,7 @@ if options.commit:
     #if not try_run_command(update_command, lockfile = lockfile):
     #    sys.exit(1)
     if options.do_delete:
-        directory = os.path.dirname(options.changefile)
-        print "Removing %s" % directory
+        print "Removing %s" % optoins.folder
         #shutil.rmtree(directory)
 
 
