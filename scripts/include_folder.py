@@ -2,8 +2,7 @@ from optparse import OptionParser
 
 import os
 import sys
-import subprocess
-import time
+import shutil 
 
 from reprepro_updater.helpers import try_run_command
 
