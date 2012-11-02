@@ -24,6 +24,7 @@ parser.add_option("-f", "--changefile", dest="changefile")
 parser.add_option("-p", "--package", dest="package")
 
 parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
+parser.add_option("--invalidate", dest="invalidate", action='store_true', default=False)
 
 parser.add_option("--repo-path", dest="repo_path", default='/var/www/repos/building')
 
@@ -58,17 +59,27 @@ invalidate_package_command = ['reprepro', '-b', options.repo_path, '-T', 'deb', 
 
 lockfile = os.path.join(options.repo_path, 'lock')
 
+
+
 if options.commit:
-    print invalidate_package_command
-    print invalidate_dependent_command
+    if options.invalidate:
+        print "running", invalidate_dependent_command
+        if not try_run_command(invalidate_dependent_command, lockfile = lockfile):
+            sys.exit(1)
+
+        print "running", invalidate_package_command
+        if not try_run_command(invalidate_package_command, lockfile = lockfile):
+            sys.exit(1)
+        
+
     print "running command %s" % update_command
     
-    #if not try_run_command(update_command, lockfile = lockfile):
-    #    sys.exit(1)
+    if not try_run_command(update_command, lockfile = lockfile):
+        sys.exit(1)
     if options.do_delete:
         directory = os.path.dirname(options.changefile)
         print "Removing %s" % directory
-        #shutil.rmtree(directory)
+        shutil.rmtree(directory)
 
 
 
