@@ -1,5 +1,3 @@
-B
-
 from optparse import OptionParser
 
 import os
@@ -53,13 +51,13 @@ changesfile = None
 
 for f in os.listdir(options.folder):
     if f.endswith('.changes'):
-        changesfile = f
+        changesfile = os.path.join(options.folder, f)
         break
 
 if not changesfile:
     parser.error("Folder %s doesn't contain a changes file" % options.folder)
 
-update_command = ['reprepro', '-v', '-b', options.repo_path, 'include', options.distro, changefile]
+update_command = ['reprepro', '-v', '-b', options.repo_path, 'include', options.distro, changesfile]
 
 
 invalidate_dependent_command = ['reprepro', '-b', options.repo_path, '-T', 'deb', '-V', 'removefilter', options.distro,
@@ -92,6 +90,5 @@ if options.commit:
     if options.do_delete:
         print "Removing %s" % options.folder
         shutil.rmtree(options.folder)
-
 
 
