@@ -42,7 +42,7 @@ if not options.arch in ALL_ARCHES:
 
 
 if not os.path.isdir(options.folder):
-    parser.error("Folder option must be a folder", options.folder)
+    parser.error("Folder option must be a folder: %s" % options.folder)
 
     #cleanup_command = ['reprepro', '-v', '-b', options.repo_path, '-A', options.arch, 'removefilter', options.distro, "Package (%% ros-%s-* )"% options.rosdistro]
 
