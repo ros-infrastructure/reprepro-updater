@@ -60,7 +60,7 @@ update_command = ['reprepro', '-v', '-b', options.repo_path, 'include', options.
 
 
 debtype = 'deb' if options.arch != 'source' else 'dsc'
-arch_match = ', Architecture (== "+options.arch+" )' if options.arch != 'source' else ''
+arch_match = ', Architecture (== ' + options.arch + ' )' if options.arch != 'source' else ''
 
 invalidate_dependent_command = ['reprepro', '-b', options.repo_path, '-T', debtype, '-V', 'removefilter', options.distro,
                               "Package (% ros-* )"+arch_match+", ( Depends (% *"+options.package+"[, ]* ) | Depends (% *"+options.package+" ) )"]
