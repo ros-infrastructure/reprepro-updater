@@ -1,11 +1,8 @@
-B
-
 from optparse import OptionParser
 
 import os
 import sys
-import subprocess
-import time
+import shutil 
 
 from reprepro_updater.helpers import try_run_command
 
@@ -45,7 +42,7 @@ if not options.arch in ALL_ARCHES:
 
 
 if not os.path.isdir(options.folder):
-    parser.error("Folder option must be a folder", options.folder)
+    parser.error("Folder option must be a folder: %s" % options.folder)
 
     #cleanup_command = ['reprepro', '-v', '-b', options.repo_path, '-A', options.arch, 'removefilter', options.distro, "Package (%% ros-%s-* )"% options.rosdistro]
 
@@ -53,20 +50,23 @@ changesfile = None
 
 for f in os.listdir(options.folder):
     if f.endswith('.changes'):
-        changesfile = f
+        changesfile = os.path.join(options.folder, f)
         break
 
 if not changesfile:
-    parser.error("Folder %s doesn't contain a changes file" % options.folder)
+    parser.error("Folder %s doesn't contain a changes file. %s" % (options.folder, os.listdir(options.folder)))
 
-update_command = ['reprepro', '-v', '-b', options.repo_path, 'include', options.distro, changefile]
+update_command = ['reprepro', '-v', '-b', options.repo_path, 'include', options.distro, changesfile]
 
 
-invalidate_dependent_command = ['reprepro', '-b', options.repo_path, '-T', 'deb', '-V', 'removefilter', options.distro,
-                              "Package (% ros-* ), Architecture (== "+options.arch+" ), ( Depends (% *"+options.package+"[, ]* ) | Depends (% *"+options.package+" ) )"]
+debtype = 'deb' if options.arch != 'source' else 'dsc'
+arch_match = ', Architecture (== ' + options.arch + ' )' if options.arch != 'source' else ''
 
-invalidate_package_command = ['reprepro', '-b', options.repo_path, '-T', 'deb', '-V', 'removefilter', options.distro,
-                              "Package (== "+options.package+" ), Architecture (== "+options.arch+" )"]
+invalidate_dependent_command = ['reprepro', '-b', options.repo_path, '-T', debtype, '-V', 'removefilter', options.distro,
+                              "Package (% ros-* )"+arch_match+", ( Depends (% *"+options.package+"[, ]* ) | Depends (% *"+options.package+" ) )"]
+
+invalidate_package_command = ['reprepro', '-b', options.repo_path, '-T', debtype, '-V', 'removefilter', options.distro,
+                              "Package (== "+options.package+" )"+arch_match]
 
 
 
@@ -76,22 +76,22 @@ lockfile = os.path.join(options.repo_path, 'lock')
 
 if options.commit:
     if options.invalidate:
-        print "running", invalidate_dependent_command
-        if not try_run_command(invalidate_dependent_command, lockfile = lockfile):
-            sys.exit(1)
+        if options.arch != 'source':
+            print >>sys.stderr, "running", invalidate_dependent_command
+            if not try_run_command(invalidate_dependent_command, lockfile = lockfile):
+                sys.exit(1)
 
-        print "running", invalidate_package_command
+        print >>sys.stderr, "running", invalidate_package_command
         if not try_run_command(invalidate_package_command, lockfile = lockfile):
             sys.exit(1)
         
 
-    print "running command %s" % update_command
+    print >>sys.stderr, "running command %s" % update_command
     
     if not try_run_command(update_command, lockfile = lockfile):
         sys.exit(1)
     if options.do_delete:
         print "Removing %s" % options.folder
         shutil.rmtree(options.folder)
-
 
 
