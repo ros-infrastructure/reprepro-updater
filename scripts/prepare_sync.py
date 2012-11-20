@@ -10,7 +10,7 @@ import subprocess
 import time
 
 ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal']
-
+ALL_ROSDISTROS = ['electric', 'fuerte', 'groovy']
 ALL_ARCHES =  ['amd64', 'i386', 'armel', 'source']
 
 parser = OptionParser()
@@ -55,10 +55,17 @@ if not os.path.isdir(conf_dir):
 #print inc.generate_file_contents()
 
 
-inc = conf.UpdatesFile(['fuerte', 'groovy'], ALL_DISTROS, ALL_ARCHES, 'B01FA116', options.upstream )
+updates_contents = ""
+for rosdistro_name in ALL_ROSDISTROS:
+    if rosdistro_name != 'electric':
+        generator = conf.UpdatesFile([rosdistro_name], ALL_DISTROS, ALL_ARCHES, 'B01FA116', options.upstream )
+        updates_contents += generator.generate_file_contents()
+    else: # special electric case
+        generator = conf.UpdatesFile([rosdistro_name], ALL_DISTROS, ALL_ARCHES, 'B01FA116', 'file:/var/packages/ros-shadow/ubuntu' )
+        updates_contents += generator.generate_file_contents()
 update_filename = os.path.join(conf_dir, 'updates')
 with open(update_filename, 'w') as fh:
-    fh.write(inc.generate_file_contents())
+    fh.write(updates_contents)
 
 
 
