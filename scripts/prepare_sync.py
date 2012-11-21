@@ -1,6 +1,6 @@
 from reprepro_updater import conf
 
-from reprepro_updater.helpers import try_run_command
+from reprepro_updater.helpers import try_run_command, LockContext
 
 from optparse import OptionParser
 
@@ -55,25 +55,18 @@ if not os.path.isdir(conf_dir):
 #print inc.generate_file_contents()
 
 
-updates_contents = ""
-for rosdistro_name in ALL_ROSDISTROS:
-    if rosdistro_name != 'electric':
-        generator = conf.UpdatesFile([rosdistro_name], ALL_DISTROS, ALL_ARCHES, 'B01FA116', options.upstream )
-        updates_contents += generator.generate_file_contents()
-    else: # special electric case
-        generator = conf.UpdatesFile([rosdistro_name], ALL_DISTROS, ALL_ARCHES, 'B01FA116', 'file:/var/packages/ros-shadow/ubuntu' )
-        updates_contents += generator.generate_file_contents()
+method = options.upstream if options.rosdistro != 'electric' else 'file:/var/packages/ros-shadow/ubuntu'
+
+updates_generator = conf.UpdatesFile([options.rosdistro], ALL_DISTROS, ALL_ARCHES, 'B01FA116', method )
 update_filename = os.path.join(conf_dir, 'updates')
-with open(update_filename, 'w') as fh:
-    fh.write(updates_contents)
+
 
 
 
 dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, 'B01FA116' )
 
 distributions_filename = os.path.join(conf_dir, 'distributions')
-with open(distributions_filename, 'w') as fh:
-    fh.write(dist.generate_file_contents(options.rosdistro, options.distro, options.arch))
+
 
 
 cleanup_command = ['reprepro', '-v', '-b', repo_dir, '-A', options.arch, 'removefilter', options.distro, "Package (%% ros-%s-* )"% options.rosdistro]
@@ -85,8 +78,23 @@ update_command = ['reprepro', '-v', '-b', repo_dir, 'update', options.distro]
 
 lockfile = os.path.join(repo_dir, 'lock')
 
-if options.commit:
-    if not try_run_command(cleanup_command, lockfile = lockfile):
-        sys.exit(1)
-    if not try_run_command(update_command, lockfile = lockfile):
-        sys.exit(1)
+with LockContext(lockfile) as lock_c:
+    print "I have a lock"
+
+    # write out update file
+    with open(update_filename, 'w') as fh:
+        fh.write(updates_generator.generate_file_contents())
+
+    # write out distributions file
+    with open(distributions_filename, 'w') as fh:
+        fh.write(dist.generate_file_contents(options.rosdistro, options.distro, options.arch))
+
+    if options.commit:
+        print "running command", cleanup_command
+        subprocess.check_call(cleanup_command)
+        print "running command", update_command
+        subprocess.check_call(update_command)
+
+
+
+    
