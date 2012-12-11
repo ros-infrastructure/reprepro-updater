@@ -77,13 +77,16 @@ update_command = ['reprepro', '-v', '-b', repo_dir, '--noskipold', 'update', opt
 lockfile = os.path.join(repo_dir, 'lock')
 
 with LockContext(lockfile) as lock_c:
-    print "I have a lock"
+    print "I have a lock on %s"% lockfile
 
     # write out update file
+    print "Creating updates file %s" % update_filename
     with open(update_filename, 'w') as fh:
         fh.write(updates_generator.generate_file_contents())
 
+
     # write out distributions file
+    print "Creating distributions file %s" % update_filename
     with open(distributions_filename, 'w') as fh:
         fh.write(dist.generate_file_contents(options.rosdistro, options.distro, options.arch))
 
@@ -92,7 +95,5 @@ with LockContext(lockfile) as lock_c:
         subprocess.check_call(cleanup_command)
         print "running command", update_command
         subprocess.check_call(update_command)
-
-
-
-    
+    else:
+        print "Not executing sync I would have executed [%s] [%s]" % ( cleanup_command, update_command)
