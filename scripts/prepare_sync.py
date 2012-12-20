@@ -1,6 +1,6 @@
 from reprepro_updater import conf
 
-from reprepro_updater.helpers import LockContext
+from reprepro_updater.helpers import try_run_command, LockContext
 
 from optparse import OptionParser
 
@@ -10,6 +10,7 @@ import subprocess
 import time
 
 ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal']
+ALL_ROSDISTROS = ['electric', 'fuerte', 'groovy']
 ALL_ARCHES =  ['amd64', 'i386', 'armel', 'source']
 
 parser = OptionParser()
@@ -54,8 +55,9 @@ if not os.path.isdir(conf_dir):
 #print inc.generate_file_contents()
 
 
+method = options.upstream if options.rosdistro != 'electric' else 'file:/var/packages/ros-shadow/ubuntu'
 
-updates_generator = conf.UpdatesFile([options.rosdistro], ALL_DISTROS, ALL_ARCHES, 'B01FA116', options.upstream )
+updates_generator = conf.UpdatesFile([options.rosdistro], ALL_DISTROS, ALL_ARCHES, 'B01FA116', method )
 update_filename = os.path.join(conf_dir, 'updates')
 
 
@@ -69,7 +71,7 @@ distributions_filename = os.path.join(conf_dir, 'distributions')
 
 cleanup_command = ['reprepro', '-v', '-b', repo_dir, '-A', options.arch, 'removefilter', options.distro, "Package (%% ros-%s-* )"% options.rosdistro]
 
-update_command = ['reprepro', '-v', '-b', repo_dir, '--noskipold', 'update', options.distro]
+update_command = ['reprepro', '-v', '-b', repo_dir, 'update', options.distro]
 
         
 
