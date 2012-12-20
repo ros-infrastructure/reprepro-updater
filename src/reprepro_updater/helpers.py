@@ -7,7 +7,7 @@ import time
 
 
 class LockContext:
-    def __init__(self, lockfilename = None, timeout = 1000):
+    def __init__(self, lockfilename = None, timeout = 3000):
         if lockfilename:
             self.lockfilename = lockfilename
         else:
