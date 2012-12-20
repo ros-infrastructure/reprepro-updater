@@ -75,23 +75,26 @@ lockfile = os.path.join(options.repo_path, 'lock')
 
 
 if options.commit:
-    if options.invalidate:
-        if options.arch != 'source':
-            print >>sys.stderr, "running", invalidate_dependent_command
-            if not try_run_command(invalidate_dependent_command, lockfile = lockfile):
+    with LockContext(lockfile) as lock_c:
+
+        if options.invalidate:
+            if options.arch != 'source':
+                print >>sys.stderr, "running", invalidate_dependent_command
+                if not try_run_command(invalidate_dependent_command):
+                    sys.exit(1)
+
+            print >>sys.stderr, "running", invalidate_package_command
+            if not try_run_command(invalidate_package_command):
                 sys.exit(1)
 
-        print >>sys.stderr, "running", invalidate_package_command
-        if not try_run_command(invalidate_package_command, lockfile = lockfile):
+
+        print >>sys.stderr, "running command %s" % update_command
+
+        if not try_run_command(update_command):
             sys.exit(1)
-        
+        if options.do_delete:
+            print "Removing %s" % options.folder
+            shutil.rmtree(options.folder)
 
-    print >>sys.stderr, "running command %s" % update_command
-    
-    if not try_run_command(update_command, lockfile = lockfile):
-        sys.exit(1)
-    if options.do_delete:
-        print "Removing %s" % options.folder
-        shutil.rmtree(options.folder)
-
-
+else:
+    print >>sys.stderr, "NO COMMIT OPTION\nWould have run: ", invalidate_dependent_command, "\nThen ", invalidate_package_command, "\nThen ", update_command
