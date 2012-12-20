@@ -4,7 +4,7 @@ import os
 import sys
 import shutil 
 
-from reprepro_updater.helpers import try_run_command
+from reprepro_updater.helpers import try_run_command, LockContext
 
 ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal']
 
