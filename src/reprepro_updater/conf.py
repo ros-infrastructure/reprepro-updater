@@ -92,15 +92,17 @@ Update: %(update_rule)s
     def generate_file_contents(self, rosdistro, distro, arch):
         out = ''
 
-        #for dist in self.distros:
-        update_rule = self.update_objects.get_update_names(rosdistro, distro, arch)
-        d = {'distro': distro, 
-             'archs': ' '.join(self.arches),
-             'repo_key': self.repo_key,
-             'update_rule': update_rule}
-        out += self.standard_snippet % d
+        # all distros must be listed in the distributions file for reprepro to be happy
+        for dist in self.distros:
+            update_rule = ' '.join(self.update_objects.get_update_names(rosdistro, dist, arch) )
+            d = {'distro': dist, 
+                 'archs': ' '.join(self.arches),
+                 'repo_key': self.repo_key,
+                 'update_rule': update_rule}
+            out += self.standard_snippet % d
 
         return out
+
 
 class UpdateElement(object):
     def __init__(self, name, method, suites, component, architectures, filter_formula=None):
@@ -112,21 +114,21 @@ class UpdateElement(object):
         self.filter_formula = filter_formula
 
 
-        def generate_update_rule(self, distro, arch):
-            if not distro in self.suites:
-                return ''
-            if not arch in self.architectures:
-                return ''
-            output = ''
-            output += 'Name: %s' % self.name
-            output += 'Method: %s' % self.method
-            output += 'Suite: %s' % distro
-            output += 'Component: %s' % self.component
-            output += 'Architectures: %s' % arch
-            if self.filter_formula:
-                output += 'Filter_Formula: %s' % self.filter_formula
-            output += '\n'
-            return output
+    def generate_update_rule(self, distro, arch):
+        if not distro in self.suites:
+            return ''
+        if not arch in self.architectures:
+            return ''
+        output = ''
+        output += 'Name: %s\n' % self.name
+        output += 'Method: %s\n' % self.method
+        output += 'Suite: %s\n' % distro
+        output += 'Components: %s\n' % self.component
+        output += 'Architectures: %s\n' % arch
+        if self.filter_formula:
+            output += 'FilterFormula: %s' % self.filter_formula
+        output += '\n'
+        return output
 
 class UpdatesFile(object):
     def __init__(self, rosdistros, distros, arches, repo_key, upstream_method):
@@ -170,7 +172,7 @@ FilterFormula: Package (%% ros-%(rosdistro)s-*)
         update_names.append('ros-%(rosdistro)s-%(suite)s-%(arch)s'%locals())
         for c in self.update_elements:
             if suite in c.suites:
-                if arch in c.arches:
+                if arch in c.architectures:
                     update_names.append(c.name)
         return update_names
     

@@ -8,6 +8,7 @@ import os
 import sys
 import subprocess
 import time
+import yaml
 
 ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal']
 ALL_ARCHES =  ['amd64', 'i386', 'armel', 'source']
@@ -17,6 +18,7 @@ parser.add_option("-r", "--rosdistro", dest="rosdistro")
 parser.add_option("-a", "--arch", dest="arch")
 parser.add_option("-d", "--distro", dest="distro")
 parser.add_option("-u", "--upstream", dest="upstream", default='http://50.28.27.175/repos/building')
+parser.add_option("-y", "--yaml-upstream", dest="yaml_upstream", default=[], action='append')
 
 parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
 
@@ -42,6 +44,8 @@ if not options.arch in ALL_ARCHES:
     parser.error("invalid arch %s, not in %s" % (options.arch, ALL_ARCHES))
 
 
+            
+
 repo_dir = args[0]
 conf_dir = os.path.join(args[0], 'conf')
 
@@ -58,7 +62,16 @@ if not os.path.isdir(conf_dir):
 updates_generator = conf.UpdatesFile([options.rosdistro], ALL_DISTROS, ALL_ARCHES, 'B01FA116', options.upstream )
 update_filename = os.path.join(conf_dir, 'updates')
 
-
+# Parse the upstream yaml files for addtional upstream sources
+if options.yaml_upstream:
+    for fname in options.yaml_upstream:
+        with open(fname) as fh:
+            yaml_dict = yaml.load(fh.read())
+            if not 'name' in yaml_dict:
+                print "error %s does not include a name element" % fname
+                continue
+            # TODO add more verification
+            updates_generator.add_update_element(conf.UpdateElement(**yaml_dict))
 
 
 dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, 'B01FA116' , updates_generator)
