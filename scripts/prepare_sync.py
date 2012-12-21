@@ -113,4 +113,7 @@ with LockContext(lockfile) as lock_c:
         print "running command", update_command
         subprocess.check_call(update_command)
     else:
-        print "Not executing sync I would have executed [%s] [%s]" % ( cleanup_command, update_command)
+        print "Not executing sync I would have executed:"
+        if options.upstream:
+            print "[%s]" % cleanup_command
+        print"[%s]" % (  update_command)
