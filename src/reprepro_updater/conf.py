@@ -71,10 +71,11 @@ Options: multiple_distributions
 
 
 class DistributionsFile(object):
-    def __init__(self, distros, arches, repo_key):
+    def __init__(self, distros, arches, repo_key, update_objects):
         self.distros = distros
         self.arches = arches
         self.repo_key = repo_key
+        self.update_objects = update_objects
 
         self.standard_snippet = """Origin: ROS
 Label: ROS %(distro)s
@@ -91,18 +92,41 @@ Update: %(update_rule)s
     def generate_file_contents(self, rosdistro, distro, arch):
         out = ''
 
-        for dist in self.distros:
-            if dist == distro:
-                update_rule = 'ros-%s-%s-%s' % (rosdistro, distro, arch)
-            else:
-                update_rule = ''
-            d = {'distro': dist, 
-                 'archs': ' '.join(self.arches),
-                 'repo_key': self.repo_key,
-                 'update_rule': update_rule}
-            out += self.standard_snippet % d
+        #for dist in self.distros:
+        update_rule = self.update_objects.get_update_names(rosdistro, distro, arch)
+        d = {'distro': distro, 
+             'archs': ' '.join(self.arches),
+             'repo_key': self.repo_key,
+             'update_rule': update_rule}
+        out += self.standard_snippet % d
 
         return out
+
+class UpdateElement(object):
+    def __init__(self, name, method, suites, component, architectures, filter_formula=None):
+        self.name = name
+        self.method = method
+        self.suites = suites
+        self.component = component
+        self.architectures = architectures
+        self.filter_formula = filter_formula
+
+
+        def generate_update_rule(self, distro, arch):
+            if not distro in self.suites:
+                return ''
+            if not arch in self.architectures:
+                return ''
+            output = ''
+            output += 'Name: %s' % self.name
+            output += 'Method: %s' % self.method
+            output += 'Suite: %s' % distro
+            output += 'Component: %s' % self.component
+            output += 'Architectures: %s' % arch
+            if self.filter_formula:
+                output += 'Filter_Formula: %s' % self.filter_formula
+            output += '\n'
+            return output
 
 class UpdatesFile(object):
     def __init__(self, rosdistros, distros, arches, repo_key, upstream_method):
@@ -111,8 +135,10 @@ class UpdatesFile(object):
         self.distros = distros
         self.arches = arches
         self.repo_key = repo_key
+        
+        self.update_elements = []
 
-        self.standard_snippet = """Name: ros-%(rosdistro)s-%(distro)s-%(arch)s
+        self.standard_ros_snippet = """Name: ros-%(rosdistro)s-%(distro)s-%(arch)s
 Method: %(upstream_method)s
 Suite: %(distro)s
 Components: main
@@ -121,21 +147,33 @@ FilterFormula: Package (%% ros-%(rosdistro)s-*)
 
 """
 
-    def generate_file_contents(self):
+    def generate_file_contents(self, rosdistro, distro, arch):
         out = ''
-        for r in self.rosdistros:
-            for dist in self.distros:
-                for a in self.arches:
-                    d = {'upstream_method': self.upstream_method,
-                         'rosdistro': r,
-                         'distro': dist,
-                         'arch': a}
-                    out += self.standard_snippet % d
-                    
+        d = {'name': 'ros-%(rosdistro)s-%(distro)s-%(arch)s'%locals(),
+             'upstream_method': self.upstream_method,
+             'rosdistro': rosdistro,
+             'distro': distro,
+             'arch': arch}
+        out += self.standard_ros_snippet % d
+
+        for update_element in self.update_elements:
+            out += update_element.generate_update_rule(distro, arch)
+            
         return out
 
+    def add_update_element(self, update_element):
+        self.update_elements.append(update_element)
 
-
+    def get_update_names(self, rosdistro, suite, arch):
+        update_names = []
+        # default ros rule
+        update_names.append('ros-%(rosdistro)s-%(suite)s-%(arch)s'%locals())
+        for c in self.update_elements:
+            if suite in c.suites:
+                if arch in c.arches:
+                    update_names.append(c.name)
+        return update_names
+    
 class ConfGenerator(object):
     """ A Class for genrating the reprepro conf directory.  
     It can generate, the distributions and update rules dynamically for more granular updates. 

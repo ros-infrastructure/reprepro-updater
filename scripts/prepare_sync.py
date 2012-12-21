@@ -61,7 +61,7 @@ update_filename = os.path.join(conf_dir, 'updates')
 
 
 
-dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, 'B01FA116' )
+dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, 'B01FA116' , updates_generator)
 
 distributions_filename = os.path.join(conf_dir, 'distributions')
 
@@ -82,11 +82,11 @@ with LockContext(lockfile) as lock_c:
     # write out update file
     print "Creating updates file %s" % update_filename
     with open(update_filename, 'w') as fh:
-        fh.write(updates_generator.generate_file_contents())
+        fh.write(updates_generator.generate_file_contents(options.rosdistro, options.distro, options.arch))
 
 
     # write out distributions file
-    print "Creating distributions file %s" % update_filename
+    print "Creating distributions file %s" % distributions_filename
     with open(distributions_filename, 'w') as fh:
         fh.write(dist.generate_file_contents(options.rosdistro, options.distro, options.arch))
 
