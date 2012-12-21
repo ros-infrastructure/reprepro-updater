@@ -104,8 +104,12 @@ with LockContext(lockfile) as lock_c:
         fh.write(dist.generate_file_contents(options.rosdistro, options.distro, options.arch))
 
     if options.commit:
-        print "running command", cleanup_command
-        subprocess.check_call(cleanup_command)
+        if options.upstream:
+            print "running command", cleanup_command
+            subprocess.check_call(cleanup_command)
+        else:
+            print "Skipping removal of ros packages as upstream not declared"
+
         print "running command", update_command
         subprocess.check_call(update_command)
     else:
