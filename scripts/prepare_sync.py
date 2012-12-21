@@ -17,7 +17,7 @@ parser = OptionParser()
 parser.add_option("-r", "--rosdistro", dest="rosdistro")
 parser.add_option("-a", "--arch", dest="arch")
 parser.add_option("-d", "--distro", dest="distro")
-parser.add_option("-u", "--upstream", dest="upstream", default='http://50.28.27.175/repos/building')
+parser.add_option("-u", "--upstream", dest="upstream", default=None)
 parser.add_option("-y", "--yaml-upstream", dest="yaml_upstream", default=[], action='append')
 
 parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)

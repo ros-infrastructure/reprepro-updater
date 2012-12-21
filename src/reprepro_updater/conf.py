@@ -151,12 +151,13 @@ FilterFormula: Package (%% ros-%(rosdistro)s-*)
 
     def generate_file_contents(self, rosdistro, distro, arch):
         out = ''
-        d = {'name': 'ros-%(rosdistro)s-%(distro)s-%(arch)s'%locals(),
-             'upstream_method': self.upstream_method,
-             'rosdistro': rosdistro,
-             'distro': distro,
-             'arch': arch}
-        out += self.standard_ros_snippet % d
+        if self.upstream_method:
+            d = {'name': 'ros-%(rosdistro)s-%(distro)s-%(arch)s'%locals(),
+                 'upstream_method': self.upstream_method,
+                 'rosdistro': rosdistro,
+                 'distro': distro,
+                 'arch': arch}
+            out += self.standard_ros_snippet % d
 
         for update_element in self.update_elements:
             out += update_element.generate_update_rule(distro, arch)
@@ -169,7 +170,8 @@ FilterFormula: Package (%% ros-%(rosdistro)s-*)
     def get_update_names(self, rosdistro, suite, arch):
         update_names = []
         # default ros rule
-        update_names.append('ros-%(rosdistro)s-%(suite)s-%(arch)s'%locals())
+        if self.upstream_method:
+            update_names.append('ros-%(rosdistro)s-%(suite)s-%(arch)s'%locals())
         for c in self.update_elements:
             if suite in c.suites:
                 if arch in c.architectures:
