@@ -3,4 +3,4 @@ method: http://ppa.launchpad.net/v-launchpad-jochen-sprickerhof-de/pcl/ubuntu
 suites: [lucid, maverick, natty, oneiric, precise, quantal]
 component: main
 architectures: [i386, amd64, source, armel]
-filter_formula: Package (% libopenni* )
+filter_formula: Package (% *openni* )
