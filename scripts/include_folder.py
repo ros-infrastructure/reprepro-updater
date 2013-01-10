@@ -6,7 +6,7 @@ import shutil
 
 from reprepro_updater.helpers import try_run_command, LockContext
 
-ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal']
+ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'wheezy']
 
 ALL_ARCHES =  ['amd64', 'i386', 'armel', 'source']
 
