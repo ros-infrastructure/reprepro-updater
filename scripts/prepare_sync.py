@@ -19,6 +19,7 @@ parser.add_option("-a", "--arch", dest="arch")
 parser.add_option("-d", "--distro", dest="distro")
 parser.add_option("-u", "--upstream", dest="upstream", default=None)
 parser.add_option("-y", "--yaml-upstream", dest="yaml_upstream", default=[], action='append')
+parser.add_option("-k", "--sign-key", dest="key", default="B01FA116")
 
 parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
 
@@ -59,7 +60,7 @@ if not os.path.isdir(conf_dir):
 
 
 
-updates_generator = conf.UpdatesFile([options.rosdistro], ALL_DISTROS, ALL_ARCHES, 'B01FA116', options.upstream )
+updates_generator = conf.UpdatesFile([options.rosdistro], ALL_DISTROS, ALL_ARCHES, options.key, options.upstream )
 update_filename = os.path.join(conf_dir, 'updates')
 
 # Parse the upstream yaml files for addtional upstream sources
@@ -74,7 +75,7 @@ if options.yaml_upstream:
             updates_generator.add_update_element(conf.UpdateElement(**yaml_dict))
 
 
-dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, 'B01FA116' , updates_generator)
+dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, options.key , updates_generator)
 
 distributions_filename = os.path.join(conf_dir, 'distributions')
 
