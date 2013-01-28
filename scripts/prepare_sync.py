@@ -101,7 +101,7 @@ with LockContext(lockfile) as lock_c:
     # write out distributions file
     print "Creating distributions file %s" % distributions_filename
     with open(distributions_filename, 'w') as fh:
-        fh.write(dist.generate_file_contents(options.rosdistro, options.distro, options.arch))
+        fh.write(dist.generate_file_contents(options.rosdistro, options.arch))
 
     if options.commit:
         if options.upstream:

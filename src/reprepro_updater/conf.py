@@ -89,12 +89,16 @@ Update: %(update_rule)s
 
 """
 
-    def generate_file_contents(self, rosdistro, distro, arch):
+    #TODO remove arch from arguments add to for loop?
+    def generate_file_contents(self, rosdistro, arch):
         out = ''
 
         # all distros must be listed in the distributions file for reprepro to be happy
         for dist in self.distros:
-            update_rule = ' '.join(self.update_objects.get_update_names(rosdistro, dist, arch) )
+            if self.update_objects:
+                update_rule = ' '.join(self.update_objects.get_update_names(rosdistro, dist, arch) )
+            else:
+                update_rule = ''
             d = {'distro': dist, 
                  'archs': ' '.join(self.arches),
                  'repo_key': self.repo_key,
