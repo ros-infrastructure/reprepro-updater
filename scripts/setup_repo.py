@@ -32,8 +32,10 @@ if not os.path.isdir(conf_dir):
 
 
 dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, 'B01FA116' , None)
+inc = conf.IncomingFile(ALL_DISTROS)
 
 distributions_filename = os.path.join(conf_dir, 'distributions')
+incoming_filename = os.path.join(conf_dir, 'incoming')
 
 
 
@@ -48,6 +50,11 @@ with LockContext(lockfile) as lock_c:
     print "Creating distributions file %s" % distributions_filename
     with open(distributions_filename, 'w') as fh:
         fh.write(dist.generate_file_contents('n/a', 'n/a'))
+
+    # write out incoming file
+    print "Creating incoming file %s" % incoming_filename
+    with open(incoming_filename, 'w') as fh:
+        fh.write(inc.generate_file_contents())
 
     if options.commit:
         print "running command", export_command
