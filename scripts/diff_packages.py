@@ -7,10 +7,12 @@ def main():
     Usage: python syncdiff.py beforefile afterfile
     Output: list of added/removed/versioned packages
     """
-    usage = "usage: %prog fromfile tofile"
+    usage = "usage: %prog fromfile tofile [rosdistro]"
     parser = argparse.ArgumentParser(usage)
     parser.add_argument('fromfile', type=str, nargs='+', default=None)
     parser.add_argument('tofile', type=str, nargs='+', default=None)
+    parser.add_argument('rosdistro', type=str, default='groovy')
+
     args = parser.parse_args()
 
     files = [args.fromfile[0], args.tofile[0]]
@@ -70,12 +72,18 @@ def main():
 
     print "\nPackages Added: "
     for line in sorted(added_packages):
+        if args.rosdistro not in line:
+            continue
         print line, ':', added_packages[line]
     print "\nPackages Removed: "
     for line in sorted(removed_packages):
+        if args.rosdistro not in line:
+            continue
         print line, ':', removed_packages[line]
     print "\nPackages Updated: "
     for line in sorted(versioned_packages):
+        if args.rosdistro not in line:
+            continue
         print_package = versioned_packages[line]
         if len(print_package) == 2 and print_package[0] != print_package[1]:
             print line, ':', print_package[0], '->', print_package[1]
