@@ -10,7 +10,7 @@ import subprocess
 import time
 import yaml
 
-ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'wheezy']
+ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring', 'wheezy']
 ALL_ARCHES =  ['amd64', 'i386', 'armel', 'armhf', 'source']
 
 parser = OptionParser()
