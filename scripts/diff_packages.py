@@ -30,45 +30,48 @@ def main():
     current_version = None
     current_version_mod = None
     for line in diff:
-        if 'Package:' == line[1:9]:
-            current_package = line[line.index(':') + 2:-1]
-            current_package_mod = line[0]
-        elif 'Version:' == line[1:9]:
-            current_version = version(line[line.index(':') + 2:-1])
-            current_version_mod = line[0]
-            if current_package_mod is ' ':
-                if current_package not in versioned_packages:
-                    versioned_packages[current_package] = [None, None]
-                if current_version_mod == '-':
-                    versioned_packages[current_package][0] = current_version
-                elif current_version_mod == '+':
-                    versioned_packages[current_package][1] = current_version
+        try:
+            if 'Package:' == line[1:9]:
+                current_package = line[line.index(':') + 2:-1]
+                current_package_mod = line[0]
+            elif 'Version:' == line[1:9]:
+                current_version = version(line[line.index(':') + 2:-1])
+                current_version_mod = line[0]
+                if current_package_mod is ' ':
+                    if current_package not in versioned_packages:
+                        versioned_packages[current_package] = [None, None]
+                    if current_version_mod == '-':
+                        versioned_packages[current_package][0] = current_version
+                    elif current_version_mod == '+':
+                        versioned_packages[current_package][1] = current_version
+                    else:
+                        pass  # Diff static, Version not changed, ignore
+                elif current_package_mod is '+':
+                    if current_version_mod is not '+':
+                        raise Exception(current_package + " add package odd ver")
+                    if current_package in removed_packages:
+                        temp = [current_version, removed_packages[current_package]]
+                        del removed_packages[current_package]
+                        versioned_packages[current_package] = temp
+                        versioned_packages[current_package].sort()
+                    else:
+                        added_packages[current_package] = current_version
+                elif current_package_mod is '-':
+                    if current_version_mod is not '-':
+                        raise Exception(current_package + " rem package odd ver")
+                    if current_package in added_packages:
+                        temp = [current_version, added_packages[current_package]]
+                        del added_packages[current_package]
+                        versioned_packages[current_package] = temp
+                        versioned_packages[current_package].sort()
+                    else:
+                        removed_packages[current_package] = current_version
                 else:
-                    pass  # Diff static, Version not changed, ignore
-            elif current_package_mod is '+':
-                if current_version_mod is not '+':
-                    raise Exception(current_package + " add package odd ver")
-                if current_package in removed_packages:
-                    temp = [current_version, removed_packages[current_package]]
-                    del removed_packages[current_package]
-                    versioned_packages[current_package] = temp
-                    versioned_packages[current_package].sort()
-                else:
-                    added_packages[current_package] = current_version
-            elif current_package_mod is '-':
-                if current_version_mod is not '-':
-                    raise Exception(current_package + " rem package odd ver")
-                if current_package in added_packages:
-                    temp = [current_version, added_packages[current_package]]
-                    del added_packages[current_package]
-                    versioned_packages[current_package] = temp
-                    versioned_packages[current_package].sort()
-                else:
-                    removed_packages[current_package] = current_version
+                    raise Exception("Erronious character: " + current_package_mod)
             else:
-                raise Exception("Erronious character: " + current_package_mod)
-        else:
-            raise Exception("Erronious line found: " + line)
+                raise Exception("Erronious line found: " + line)
+        except Exception as ex:
+            print "Excption parsing line:", ex
 
     print "\nPackages Added: "
     for line in sorted(added_packages):
