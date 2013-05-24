@@ -1,6 +1,6 @@
 name: opennippa
 method: http://ppa.launchpad.net/v-launchpad-jochen-sprickerhof-de/pcl/ubuntu
-suites: [lucid, maverick, natty, oneiric, precise, quantal]
+suites: [lucid, maverick, natty, oneiric, precise, quantal, raring]
 component: main
 architectures: [i386, amd64, source, armel]
 filter_formula: Package (% *openni* )
