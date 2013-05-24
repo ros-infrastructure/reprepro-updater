@@ -20,3 +20,5 @@ python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/bu
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/building -y /home/rosbuild/reprepro_updater/config/openni.upstream.yaml -r electric -d quantal -a i386  -c
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/building -y /home/rosbuild/reprepro_updater/config/openni.upstream.yaml -r electric -d quantal -a amd64  -c
 
+python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/building -y /home/rosbuild/reprepro_updater/config/openni.upstream.yaml -r electric -d raring -a i386  -c
+python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/building -y /home/rosbuild/reprepro_updater/config/openni.upstream.yaml -r electric -d raring -a amd64  -c
