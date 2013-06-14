@@ -10,12 +10,25 @@ import subprocess
 import time
 import yaml
 
+def run_cleanup(repo_dir, rosdistro, distro, arch, commit):
+    cleanup_command = ['reprepro', '-v', '-b', repo_dir, '-A', arch, 'removefilter', distro, "Package (%% ros-%s-* )"% rosdistro]
+
+
+    lockfile = os.path.join(repo_dir, 'lock')
+    with LockContext(lockfile) as lock_c:
+
+        if commit:
+            print "running command", cleanup_command
+            subprocess.check_call(cleanup_command)
+        else:
+            print "Not cleaning up I would have executed"
+            print "[%s]" % cleanup_command
+
 def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, arch, commit, invalidate=True):
 
 
 
 
-    cleanup_command = ['reprepro', '-v', '-b', repo_dir, '-A', arch, 'removefilter', distro, "Package (%% ros-%s-* )"% rosdistro]
 
     update_command = ['reprepro', '-v', '-b', repo_dir, '--noskipold', 'update', distro]
 
@@ -36,18 +49,10 @@ def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, a
             fh.write(dist_generator.generate_file_contents(rosdistro, arch))
 
         if commit:
-            if invalidate:
-                print "running command", cleanup_command
-                subprocess.check_call(cleanup_command)
-            else:
-                print "Skipping removal of ros packages as upstream not declared"
-
             print "running command", update_command
             subprocess.check_call(update_command)
         else:
             print "Not executing sync I would have executed:"
-            if invalidate:
-                print "[%s]" % cleanup_command
             print"[%s]" % (  update_command)
 
 
@@ -57,7 +62,7 @@ ALL_ARCHES =  ['amd64', 'i386', 'armel', 'armhf', 'source']
 parser = OptionParser()
 parser.add_option("-r", "--rosdistro", dest="rosdistro")
 parser.add_option("-a", "--arch", dest="arch")
-parser.add_option("-d", "--distro", dest="distro")
+parser.add_option("-d", "--distro", dest="distro", action='append', default=[])
 parser.add_option("-u", "--upstream-ros", dest="upstream_ros", default=None)
 parser.add_option("-y", "--yaml-upstream", dest="yaml_upstream", default=[], action='append')
 
@@ -77,8 +82,8 @@ elif options.upstream_ros and options.yaml_upstream:
 if not options.distro and options.upstream_ros:
     parser.error("distro required  with upstream ros")
 
-if options.upstream_ros and not options.distro in ALL_DISTROS:
-    parser.error("invalid distro %s, not in %s" % (options.distro, ALL_DISTROS))
+if options.upstream_ros and not [d for d in options.distro if d in ALL_DISTROS]:
+    parser.error("invalid distros %s, not in %s" % (options.distro, ALL_DISTROS))
 
 if not options.rosdistro and options.upstream_ros:
     parser.error("rosdistro required  with upstream ros")
@@ -110,24 +115,29 @@ dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, 'B01FA116' , updates_gene
 distributions_filename = os.path.join(conf_dir, 'distributions')
 
 
-if options.upstream_ros:
-    d = {'name': 'ros-%s-%s-%s' % \
-             (options.rosdistro, options.distro, options.arch),
-         'method': options.upstream_ros,
-         #'rosdistro': options.rosdistro,
-         'suites': options.distro,
-         'component': 'main',
-         'architectures': options.arch,
-         'filter_formula': 'Package (%% ros-%s-*)'%options.rosdistro,
-         }
-
-    updates_generator.add_update_element(conf.UpdateElement(**d))
-
 target_arches = set()
 target_distros = set()
 
+
+
+if options.upstream_ros:
+    for ubuntu_distro in options.distro:
+        
+        d = {'name': 'ros-%s-%s-%s' % \
+                 (options.rosdistro, ubuntu_distro, options.arch),
+             'method': options.upstream_ros,
+             #'rosdistro': options.rosdistro,
+             'suites': ubuntu_distro,
+             'component': 'main',
+             'architectures': options.arch,
+             'filter_formula': 'Package (%% ros-%s-*)'%options.rosdistro,
+             }
+
+        updates_generator.add_update_element(conf.UpdateElement(**d))
+
+elif options.yaml_upstream:
+
 # Parse the upstream yaml files for addtional upstream sources
-if options.yaml_upstream:
     for fname in options.yaml_upstream:
         with open(fname) as fh:
             yaml_dict = yaml.load(fh.read())
@@ -145,12 +155,17 @@ if options.yaml_upstream:
 
 
 if options.upstream_ros:
-    run_update(repo_dir, dist, updates_generator, options.rosdistro, options.distro, options.arch, options.commit, invalidate=True)
+
+    # clean up first
+    for distro in options.distro:
+        run_cleanup(repo_dir, options.rosdistro, distro, options.arch, options.commit)
+    for distro in options.distro:
+        run_update(repo_dir, dist, updates_generator, options.rosdistro, distro, options.arch, options.commit)
 
 else:
     
     for distro in target_distros:
         for arch in target_arches:
             print "Updating for %s %s to update into repo %s" % (distro, arch, repo_dir)
-            run_update(repo_dir, dist, updates_generator, 'rosdistro_na', distro, arch, options.commit, invalidate=False)
+            run_update(repo_dir, dist, updates_generator, 'rosdistro_na', distro, arch, options.commit)
 
