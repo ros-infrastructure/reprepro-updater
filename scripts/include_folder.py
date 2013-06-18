@@ -56,7 +56,8 @@ for f in os.listdir(options.folder):
 if not changesfile:
     parser.error("Folder %s doesn't contain a changes file. %s" % (options.folder, os.listdir(options.folder)))
 
-update_command = ['reprepro', '-v', '-b', options.repo_path, 'include', options.distro, changesfile]
+# Force misc due to dry packages having invalid "unknown" section, the -S misc can be removed when dry is deprecated. 
+update_command = ['reprepro', '-v', '-b', options.repo_path, '-S', 'misc', 'include', options.distro, changesfile]
 
 
 debtype = 'deb' if options.arch != 'source' else 'dsc'
