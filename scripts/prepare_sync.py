@@ -12,6 +12,8 @@ import yaml
 
 def run_cleanup(repo_dir, rosdistro, distro, arch, commit):
     cleanup_command = ['reprepro', '-v', '-b', repo_dir, '-A', arch, 'removefilter', distro, "Package (%% ros-%s-* )"% rosdistro]
+    # If you don't clean up the unreferenced 
+    cleanup_command2 = ['reprepro', '-v', '-b', repo_dir, 'deleteunreferenced']
 
 
     lockfile = os.path.join(repo_dir, 'lock')
@@ -20,9 +22,11 @@ def run_cleanup(repo_dir, rosdistro, distro, arch, commit):
         if commit:
             print "running command", cleanup_command
             subprocess.check_call(cleanup_command)
+            print "running command", cleanup_command2
+            subprocess.check_call(cleanup_command2)
         else:
             print "Not cleaning up I would have executed"
-            print "[%s]" % cleanup_command
+            print "[%s] && [%s]" % (cleanup_command, cleanup_command2)
 
 def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, arch, commit, invalidate=True):
 
