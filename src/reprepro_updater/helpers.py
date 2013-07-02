@@ -3,8 +3,7 @@
 import subprocess
 import fcntl
 import time
-
-
+import sys
 
 class LockContext:
     def __init__(self, lockfilename = None, timeout = 3000):
