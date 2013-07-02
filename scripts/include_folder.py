@@ -4,7 +4,7 @@ import os
 import sys
 import shutil 
 
-from reprepro_updater.helpers import try_run_command, LockContext
+from reprepro_updater.helpers import try_run_command, LockContext, delete_unreferenced
 
 ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring', 'wheezy']
 
@@ -86,6 +86,9 @@ if options.commit:
 
             print >>sys.stderr, "running", invalidate_package_command
             if not try_run_command(invalidate_package_command):
+                sys.exit(1)
+                
+            if not delete_unreferenced(options.repo_path):
                 sys.exit(1)
 
 

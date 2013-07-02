@@ -47,3 +47,10 @@ def try_run_command(command):
         except Exception, ex:
             print "Execution of [%s] Failed:" % command, ex
             return False
+
+
+
+def delete_unreferenced(repo_dir):
+    cleanup_command = ['reprepro', '-v', '-b', repo_dir, 'deleteunreferenced']
+    print >>sys.stderr, "running", cleanup_command
+    return try_run_command(cleanup_command)
