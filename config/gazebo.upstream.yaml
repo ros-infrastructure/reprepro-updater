@@ -1,6 +1,6 @@
 name: gazebo
 method: http://packages.osrfoundation.org/gazebo/ubuntu
-suites: [precise, quantal]
+suites: [precise, quantal, raring]
 component: main
 architectures: [i386, amd64, source]
 filter_formula: Package (% *gazebo* ) | Package (% *sdformat*)
