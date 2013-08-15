@@ -1,4 +1,4 @@
-name: opennippa
+name: pclppa
 method: http://ppa.launchpad.net/v-launchpad-jochen-sprickerhof-de/pcl/ubuntu
 suites: [lucid, maverick, natty, oneiric, precise, quantal, raring]
 component: main
