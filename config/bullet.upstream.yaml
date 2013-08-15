@@ -1,4 +1,4 @@
-name: opennippa
+name: bulletppa
 method: http://ppa.launchpad.net/blk/ppa/ubuntu/
 suites: [precise]
 component: main

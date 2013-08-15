@@ -1,4 +1,4 @@
-name: opennippa
+name: colladadomppa
 method: http://ppa.launchpad.net/openrave/release/ubuntu
 suites: [lucid, maverick, natty, oneiric, precise, quantal, raring]
 component: main
