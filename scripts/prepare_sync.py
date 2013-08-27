@@ -69,7 +69,7 @@ parser.add_option("-a", "--arch", dest="arch")
 parser.add_option("-d", "--distro", dest="distro", action='append', default=[])
 parser.add_option("-u", "--upstream-ros", dest="upstream_ros", default=None)
 parser.add_option("-y", "--yaml-upstream", dest="yaml_upstream", default=[], action='append')
-
+parser.add_option("-n", "--no-cleanup", dest="no_cleanup", default=False, action='store_true')
 parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
 
 
@@ -161,8 +161,9 @@ elif options.yaml_upstream:
 if options.upstream_ros:
 
     # clean up first
-    for distro in options.distro:
-        run_cleanup(repo_dir, options.rosdistro, distro, options.arch, options.commit)
+    if not options.no_cleanup:
+        for distro in options.distro:
+            run_cleanup(repo_dir, options.rosdistro, distro, options.arch, options.commit)
     for distro in options.distro:
         run_update(repo_dir, dist, updates_generator, options.rosdistro, distro, options.arch, options.commit)
 
