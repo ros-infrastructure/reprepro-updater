@@ -32,9 +32,9 @@ def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, a
 
 
 
+    command_argument = 'update' if commit else 'dumpupdate'
 
-
-    update_command = ['reprepro', '-v', '-b', repo_dir, '--noskipold', 'update', distro]
+    update_command = ['reprepro', '-v', '-b', repo_dir, '--noskipold', command_argument, distro]
 
     lockfile = os.path.join(repo_dir, 'lock')
 
@@ -52,12 +52,8 @@ def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, a
         with open(distributions_filename, 'w') as fh:
             fh.write(dist_generator.generate_file_contents(rosdistro, arch))
 
-        if commit:
-            print "running command", update_command
-            subprocess.check_call(update_command)
-        else:
-            print "Not executing sync I would have executed:"
-            print"[%s]" % (  update_command)
+        print "running command", update_command
+        subprocess.check_call(update_command)
 
 
 ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring', 'wheezy']
