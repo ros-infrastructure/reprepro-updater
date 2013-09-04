@@ -30,6 +30,8 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import os
+
 
 class ConfParameters(object):
 
@@ -68,6 +70,16 @@ Options: multiple_distributions
             out += self.standard_snippet % {'distro': d}
         out += self.all_snippet % {'distros': ' '.join(self.distros) }
         return out
+
+    def create_required_directories(self, repo_root):
+        incoming_dirs = ['queue/%s' % d for d in self.distros]
+        incoming_dirs.append('queue/all')
+        for d in incoming_dirs:
+            p = os.path.join(repo_root, d)
+            if not os.path.isdir(p):
+                print "Incoming dir %s did not exist, creating" % p
+                os.makedirs(p)
+
 
 
 class DistributionsFile(object):

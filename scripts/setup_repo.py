@@ -55,6 +55,7 @@ with LockContext(lockfile) as lock_c:
     print "Creating incoming file %s" % incoming_filename
     with open(incoming_filename, 'w') as fh:
         fh.write(inc.generate_file_contents())
+    inc.create_required_directories(repo_dir)
 
     if options.commit:
         print "running command", export_command
