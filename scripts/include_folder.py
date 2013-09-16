@@ -59,10 +59,9 @@ if options.commit:
 
         #invalidate and clear all first
 
-        for changes in valid_changes:
-            # only invalidate dependencies if invalidation is asked for
-            if options.invalidate:
-
+        # only invalidate dependencies if invalidation is asked for
+        if options.invalidate:
+            for changes in valid_changes:
                 if changes.arch != 'source':
                     if not invalidate_dependent(options.repo_path,
                                                 changes.distro,

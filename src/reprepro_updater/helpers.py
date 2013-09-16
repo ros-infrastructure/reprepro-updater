@@ -71,9 +71,10 @@ def invalidate_dependent(repo_path, distro, arch, package):
     invalidate_dependent_command = ['reprepro', '-b', repo_path,
                                     '-T deb -V',
                                     'removefilter', distro,
-                                    "Package (% ros-* ), Architecture (== " +
-                                    arch + " ), ( Depends (% *" + package +
-                                    "[, ]* ) | Depends (% *"+package+" ) )"]
+                                    "Package (% ros-* ), " +
+                                    "Architecture (== " + arch + " ), " +
+                                    "( Depends (% *" + package + "[, ]* ) " +
+                                    "| Depends (% *"+package+" ) )"]
 
     print >>sys.stderr, "running", invalidate_dependent_command
     return try_run_command(invalidate_dependent_command)
