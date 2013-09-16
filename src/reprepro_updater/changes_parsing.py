@@ -13,7 +13,7 @@ class ChangesFile:
             self.folder = os.path.dirname(filename)
         except Exception, ex:
             raise Exception("Failed to load changes file %s.  [[%s]]" %
-                            (filename, ex.what()))
+                            (filename, ex))
 
 
 def find_changes_files(folder):

@@ -39,7 +39,10 @@ for f in options.folders:
     if not os.path.isdir(f):
         parser.error("Folder option must be a folder: %s" % f)
 
-changefiles = load_changes_files(find_changes_files(options.folders))
+changes_filenames = []
+for folder in options.folders:
+    changes_filenames.extend(find_changes_files(folder))
+changefiles = load_changes_files(changes_filenames)
 
 if not changefiles:
     parser.error("Folders %s doesn't contain a changes file. %s" %
@@ -62,7 +65,7 @@ if options.commit:
         # only invalidate dependencies if invalidation is asked for
         if options.invalidate:
             for changes in valid_changes:
-                if changes.arch != 'source':
+                if changes.architecture != 'source':
                     if not invalidate_dependent(options.repo_path,
                                                 changes.distro,
                                                 changes.architecture,

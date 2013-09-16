@@ -68,8 +68,8 @@ def invalidate_dependent(repo_path, distro, arch, package):
     """ Remove This all dependencies of the package with the same arch. 
     This is only valid for binary packages. """
 
-    invalidate_dependent_command = ['reprepro', '-b', repo_path,
-                                    '-T deb -V',
+    invalidate_dependent_command = ['reprepro', '-V', '-b', repo_path,
+                                    '-T', 'deb',
                                     'removefilter', distro,
                                     "Package (% ros-* ), " +
                                     "Architecture (== " + arch + " ), " +
