@@ -48,7 +48,7 @@ if not changefiles:
     parser.error("Folders %s doesn't contain a changes file. %s" %
                  (options.folders, [os.listdir(f) for f in options.folders]))
 
-valid_changes = [c for c in changefiles if c.package == options.package]
+valid_changes = [c for c in changefiles if c.content['Binary'] == options.package]
 
 extraneous_packages = set(changefiles) - set(valid_changes)
 if extraneous_packages:
@@ -63,21 +63,22 @@ if options.commit:
         #invalidate and clear all first
 
         # only invalidate dependencies if invalidation is asked for
-        if options.invalidate:
-            for changes in valid_changes:
-                if changes.architecture != 'source':
+        for changes in valid_changes:
+            if options.invalidate:
+                if changes.content['Architecture'] != 'source':
                     if not invalidate_dependent(options.repo_path,
-                                                changes.distro,
-                                                changes.architecture,
+                                                changes.content['Distribution'],
+                                                changes.content['Architecture'],
                                                 options.package):
                         sys.exit(1)
 
-        # invalidate this package always as we're about to upload the new one
-        if not invalidate_package(options.repo_path,
-                                  changes.distro,
-                                  changes.architecture,
-                                  options.package):
-            sys.exit(1)
+            # invalidate this package always as we're about to upload the new one
+            if not invalidate_package(options.repo_path,
+                                      changes.content['Distribution'],
+                                      changes.content['Architecture'],
+                                      options.package):
+                sys.exit(1)
+
         # delete_unreferenced before uploading if invalidating
         if not delete_unreferenced(options.repo_path):
             sys.exit(1)
@@ -86,7 +87,7 @@ if options.commit:
         for changes in valid_changes:
 
             if not run_update_command(options.repo_path,
-                                      changes.distro,
+                                      changes.content['Distribution'],
                                       changes.filename):
                 sys.exit(1)
             if options.do_delete:

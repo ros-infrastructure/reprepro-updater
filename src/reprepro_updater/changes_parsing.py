@@ -1,15 +1,13 @@
 import os
 import yaml
 
+from debian.deb822 import Changes
 
 class ChangesFile:
     def __init__(self, filename):
         try:
             self.filename = filename
-            self.yaml_content = yaml.load(open(filename).read())
-            self.architecture = self.yaml_content['Architecture']
-            self.distro = self.yaml_content['Distribution']
-            self.package = self.yaml_content['Binary']
+            self.content = Changes(open(filename))
             self.folder = os.path.dirname(filename)
         except Exception, ex:
             raise Exception("Failed to load changes file %s.  [[%s]]" %
