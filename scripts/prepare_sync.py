@@ -1,5 +1,5 @@
 from reprepro_updater import conf
-
+from reprepro_updater.conf import ALL_ARCHES, ALL_DISTROS
 from reprepro_updater.helpers import LockContext
 
 from optparse import OptionParser
@@ -55,9 +55,6 @@ def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, a
         print "running command", update_command
         subprocess.check_call(update_command)
 
-
-ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring', 'wheezy']
-ALL_ARCHES =  ['amd64', 'i386', 'armel', 'armhf', 'source']
 
 parser = OptionParser()
 parser.add_option("-r", "--rosdistro", dest="rosdistro")

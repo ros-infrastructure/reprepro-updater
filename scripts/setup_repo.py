@@ -1,5 +1,5 @@
 from reprepro_updater import conf
-
+from reprepro_updater.conf import ALL_ARCHES, ALL_DISTROS
 from reprepro_updater.helpers import LockContext
 
 from optparse import OptionParser
@@ -9,9 +9,6 @@ import sys
 import subprocess
 import time
 import yaml
-
-ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring', 'saucy', 'wheezy']
-ALL_ARCHES =  ['amd64', 'i386', 'armel', 'armhf', 'source']
 
 parser = OptionParser()
 
