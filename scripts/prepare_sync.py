@@ -28,7 +28,7 @@ def run_cleanup(repo_dir, rosdistro, distro, arch, commit):
             print "Not cleaning up I would have executed"
             print "[%s] && [%s]" % (cleanup_command, cleanup_command2)
 
-def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, arch, commit, invalidate=True):
+def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, arch, commit):
 
 
 
