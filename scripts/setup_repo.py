@@ -1,5 +1,5 @@
 from reprepro_updater import conf
-
+from reprepro_updater.conf import ALL_ARCHES, ALL_DISTROS
 from reprepro_updater.helpers import LockContext
 
 from optparse import OptionParser
@@ -9,9 +9,6 @@ import sys
 import subprocess
 import time
 import yaml
-
-ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'wheezy']
-ALL_ARCHES =  ['amd64', 'i386', 'armel', 'armhf', 'source']
 
 parser = OptionParser()
 
@@ -55,6 +52,7 @@ with LockContext(lockfile) as lock_c:
     print "Creating incoming file %s" % incoming_filename
     with open(incoming_filename, 'w') as fh:
         fh.write(inc.generate_file_contents())
+    inc.create_required_directories(repo_dir)
 
     if options.commit:
         print "running command", export_command

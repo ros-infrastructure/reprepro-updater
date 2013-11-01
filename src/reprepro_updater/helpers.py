@@ -3,7 +3,7 @@
 import subprocess
 import fcntl
 import time
-
+import sys
 
 
 class LockContext:
@@ -38,6 +38,7 @@ class LockContext:
         self.lfh.close()
         return False
 
+
 def try_run_command(command):
 
         try:
@@ -47,3 +48,47 @@ def try_run_command(command):
         except Exception, ex:
             print "Execution of [%s] Failed:" % command, ex
             return False
+
+
+def delete_unreferenced(repo_dir):
+    cleanup_command = ['reprepro', '-v', '-b', repo_dir, 'deleteunreferenced']
+    print >>sys.stderr, "running", cleanup_command
+    return try_run_command(cleanup_command)
+
+
+def run_update_command(repo_path, distro, changesfile):
+    """ Update the repo to add the files in this changes file """
+    # Force misc due to dry packages having invalid "unknown" section, the -S misc can be removed when dry is deprecated. 
+    update_command = ['reprepro', '-v', '-b', repo_path, '-S', 'misc', 'include', distro, changesfile]
+    print >>sys.stderr, "running command %s" % update_command
+    return try_run_command(update_command)
+
+
+def invalidate_dependent(repo_path, distro, arch, package):
+    """ Remove This all dependencies of the package with the same arch. 
+    This is only valid for binary packages. """
+
+    invalidate_dependent_command = ['reprepro', '-V', '-b', repo_path,
+                                    '-T', 'deb',
+                                    'removefilter', distro,
+                                    "Package (% ros-* ), " +
+                                    "Architecture (== " + arch + " ), " +
+                                    "( Depends (% *" + package + "[, ]* ) " +
+                                    "| Depends (% *"+package+" ) )"]
+
+    print >>sys.stderr, "running", invalidate_dependent_command
+    return try_run_command(invalidate_dependent_command)
+
+
+def invalidate_package(repo_path, distro, arch, package):
+    """Remove this package itself from the repo"""
+    debtype = 'deb' if arch != 'source' else 'dsc'
+    arch_match = ', Architecture (== ' + arch + ' )' if arch != 'source' else ''
+
+    invalidate_package_command = ['reprepro', '-b', repo_path,
+                                  '-T', debtype, '-V',
+                                  'removefilter', distro,
+                                  "Package (== "+package+" )"+arch_match]
+
+    print >>sys.stderr, "running", invalidate_package_command
+    return try_run_command(invalidate_package_command)

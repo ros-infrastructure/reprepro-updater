@@ -2,11 +2,10 @@
 
 export PYTHONPATH=/home/rosbuild/reprepro_updater/src
 
-python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/packages/ros/ubuntu -r fuerte -d lucid -a i386 -u file:/var/packages/ros-shadow-fixed/ubuntu -c
-python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/packages/ros/ubuntu -r fuerte -d lucid -a amd64 -u file:/var/packages/ros-shadow-fixed/ubuntu -c
+# export dump of change
+python ~/reprepro_updater/scripts/diff_packages.py /var/www/repos/ros/ubuntu/dists/precise/main/binary-amd64/Packages /var/www/repos/ros-shadow-fixed/ubuntu/dists/precise/main/binary-amd64/Packages fuerte > logs/fuerte_sync_`date +%Y-%m-%d-%T`
 
-python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/packages/ros/ubuntu -r fuerte -d oneiric -a i386 -u file:/var/packages/ros-shadow-fixed/ubuntu -c
-python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/packages/ros/ubuntu -r fuerte -d oneiric -a amd64 -u file:/var/packages/ros-shadow-fixed/ubuntu -c
 
-python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/packages/ros/ubuntu -r fuerte -d precise -a i386 -u file:/var/packages/ros-shadow-fixed/ubuntu -c
-python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/packages/ros/ubuntu -r fuerte -d precise -a amd64 -u file:/var/packages/ros-shadow-fixed/ubuntu -c
+python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -r groovy -d lucid -d oneiric -d precise -a i386 -u file:/var/www/repos/ros-shadow-fixed/ubuntu
+python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -r groovy -d lucid -d oneiric -d precise -a amd64 -u file:/var/www/repos/ros-shadow-fixed/ubuntu
+python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -r groovy -d lucid -d oneiric -d precise -a source -u file:/var/www/repos/ros-shadow-fixed/ubuntu

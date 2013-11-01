@@ -1,0 +1,6 @@
+name: bulletppa
+method: http://ppa.launchpad.net/blk/ppa/ubuntu/
+suites: [precise]
+component: main
+architectures: [i386, amd64, source]
+filter_formula: Package (% *libbullet* )

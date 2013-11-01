@@ -1,0 +1,6 @@
+name: colladadomppa
+method: http://ppa.launchpad.net/openrave/release/ubuntu
+suites: [lucid, maverick, natty, oneiric, precise, quantal, raring]
+component: main
+architectures: [i386, amd64, source]
+filter_formula: Package (% *collada-dom* )

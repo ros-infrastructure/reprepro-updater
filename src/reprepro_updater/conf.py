@@ -30,6 +30,10 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
+import os
+
+ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring', 'saucy', 'wheezy']
+ALL_ARCHES =  ['amd64', 'i386', 'armel', 'armhf', 'source']
 
 class ConfParameters(object):
 
@@ -68,6 +72,16 @@ Options: multiple_distributions
             out += self.standard_snippet % {'distro': d}
         out += self.all_snippet % {'distros': ' '.join(self.distros) }
         return out
+
+    def create_required_directories(self, repo_root):
+        incoming_dirs = ['queue/%s' % d for d in self.distros]
+        incoming_dirs.append('queue/all')
+        for d in incoming_dirs:
+            p = os.path.join(repo_root, d)
+            if not os.path.isdir(p):
+                print "Incoming dir %s did not exist, creating" % p
+                os.makedirs(p)
+
 
 
 class DistributionsFile(object):
@@ -135,33 +149,16 @@ class UpdateElement(object):
         return output
 
 class UpdatesFile(object):
-    def __init__(self, rosdistros, distros, arches, repo_key, upstream_method):
+    def __init__(self, rosdistros, distros, arches, repo_key):
         self.rosdistros = rosdistros
-        self.upstream_method = upstream_method
         self.distros = distros
         self.arches = arches
         self.repo_key = repo_key
         
         self.update_elements = []
 
-        self.standard_ros_snippet = """Name: ros-%(rosdistro)s-%(distro)s-%(arch)s
-Method: %(upstream_method)s
-Suite: %(distro)s
-Components: main
-Architectures: %(arch)s
-FilterFormula: Package (%% ros-%(rosdistro)s-*)
-
-"""
-
     def generate_file_contents(self, rosdistro, distro, arch):
         out = ''
-        if self.upstream_method:
-            d = {'name': 'ros-%(rosdistro)s-%(distro)s-%(arch)s'%locals(),
-                 'upstream_method': self.upstream_method,
-                 'rosdistro': rosdistro,
-                 'distro': distro,
-                 'arch': arch}
-            out += self.standard_ros_snippet % d
 
         for update_element in self.update_elements:
             out += update_element.generate_update_rule(distro, arch)
@@ -173,9 +170,6 @@ FilterFormula: Package (%% ros-%(rosdistro)s-*)
 
     def get_update_names(self, rosdistro, suite, arch):
         update_names = []
-        # default ros rule
-        if self.upstream_method:
-            update_names.append('ros-%(rosdistro)s-%(suite)s-%(arch)s'%locals())
         for c in self.update_elements:
             if suite in c.suites:
                 if arch in c.architectures:

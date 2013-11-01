@@ -1,0 +1,6 @@
+name: pclppa
+method: http://ppa.launchpad.net/v-launchpad-jochen-sprickerhof-de/pcl/ubuntu
+suites: [lucid, maverick, natty, oneiric, precise, quantal, raring]
+component: main
+architectures: [i386, amd64, source]
+filter_formula: Package (% *openni* ) | Package (% *pcl*-1.7* )

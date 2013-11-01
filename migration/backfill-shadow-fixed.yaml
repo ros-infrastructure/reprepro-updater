@@ -1,0 +1,6 @@
+name: backfill-shadow-fixed
+method: http://packages.ros.org/ros-shadow-fixed/ubuntu/
+suites: [hardy, jaunty, karmic, lucid, maverick, natty, oneiric, precise, quantal, raring, wheezy]
+component: main
+architectures: [i386, amd64, source]
+
