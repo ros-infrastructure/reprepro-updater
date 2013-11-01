@@ -1,0 +1,6 @@
+This is a set of scripts intended to create/update a debian repository.
+
+A lot of things are currently hard-coded inside.
+For example, the default (private) signing key signature (-__-)
+
+Refactoring in progres...

@@ -62,6 +62,7 @@ parser.add_option("-a", "--arch", dest="arch")
 parser.add_option("-d", "--distro", dest="distro", action='append', default=[])
 parser.add_option("-u", "--upstream-ros", dest="upstream_ros", default=None)
 parser.add_option("-y", "--yaml-upstream", dest="yaml_upstream", default=[], action='append')
+parser.add_option("-k", "--sign-key", dest="key", default="B01FA116")
 parser.add_option("-n", "--no-cleanup", dest="no_cleanup", default=False, action='store_true')
 parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
 
@@ -105,7 +106,7 @@ if not os.path.isdir(conf_dir):
 
 
 
-updates_generator = conf.UpdatesFile([options.rosdistro], ALL_DISTROS, ALL_ARCHES, 'B01FA116')
+updates_generator = conf.UpdatesFile([options.rosdistro], ALL_DISTROS, ALL_ARCHES, options.key)
 update_filename = os.path.join(conf_dir, 'updates')
 
 dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, 'B01FA116' , updates_generator)
@@ -145,9 +146,6 @@ elif options.yaml_upstream:
             target_distros.update(set(yaml_dict['suites']))
             # TODO add more verification
             updates_generator.add_update_element(conf.UpdateElement(**yaml_dict))
-
-
-
 
 
 
