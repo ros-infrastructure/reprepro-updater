@@ -32,7 +32,10 @@
 
 import os
 
-ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick', 'natty', 'oneiric', 'precise', 'quantal', 'raring', 'saucy', 'wheezy']
+ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick',
+               'natty', 'oneiric', 'precise', 'quantal', 'raring',
+               'saucy', 'trusty',
+               'wheezy']
 ALL_ARCHES =  ['amd64', 'i386', 'armel', 'armhf', 'source']
 
 class ConfParameters(object):
