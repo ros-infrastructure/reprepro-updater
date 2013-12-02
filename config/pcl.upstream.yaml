@@ -1,6 +1,8 @@
 name: pclppa
 method: http://ppa.launchpad.net/v-launchpad-jochen-sprickerhof-de/pcl/ubuntu
-suites: [lucid, maverick, natty, oneiric, precise, quantal, raring]
+# For now only import saucy, trusty. PQR have patched versions for openni compatibility
+# suites: [lucid, maverick, natty, oneiric, precise, quantal, raring, saucy, trusty]
+suites: [saucy, trusty]
 component: main
 architectures: [i386, amd64, source]
 filter_formula: Package (% *openni* ) | Package (% *pcl*-1.7* )

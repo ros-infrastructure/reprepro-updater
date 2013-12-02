@@ -1,6 +1,9 @@
 name: colladadomppa
-method: http://ppa.launchpad.net/openrave/release/ubuntu
-suites: [lucid, maverick, natty, oneiric, precise, quantal, raring]
+#Switching to testing for newer colladadom
+#method: http://ppa.launchpad.net/openrave/release/ubuntu
+#suites: [lucid, maverick, natty, oneiric, precise, quantal, raring, saucy, trusty]
+method: http://ppa.launchpad.net/openrave/testing/ubuntu
+suites: [saucy]
 component: main
 architectures: [i386, amd64, source]
 filter_formula: Package (% *collada-dom* )
