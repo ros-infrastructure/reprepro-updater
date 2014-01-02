@@ -10,12 +10,6 @@ from reprepro_updater.helpers import \
 from reprepro_updater.changes_parsing import \
     find_changes_files, load_changes_files
 
-ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid',
-               'maverick', 'natty', 'oneiric',
-               'precise', 'quantal', 'raring', 'wheezy']
-
-ALL_ARCHES = ['amd64', 'i386', 'armel', 'armhf', 'source']
-
 parser = OptionParser()
 
 parser.add_option("--delete-folder", dest="do_delete", action='store_true', default=False)
