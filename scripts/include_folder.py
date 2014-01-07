@@ -49,11 +49,12 @@ if not changefiles:
                  (options.folders, [os.listdir(f) for f in options.folders]))
 
 valid_changes = [c for c in changefiles if c.content['Binary'] == options.package]
+invalid_changes = [c.content['Binary'] for c in changefiles if c.content['Binary'] != options.package]
 
 extraneous_packages = set(changefiles) - set(valid_changes)
 if extraneous_packages:
     parser.error("Invalid packages detected in folders %s. [%s]" %
-                 (options.folders, extraneous_packages))
+                 (options.folders, invalid_changes))
 
 lockfile = os.path.join(options.repo_path, 'lock')
 
