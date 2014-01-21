@@ -122,7 +122,7 @@ def main():
 
         fh.write("Removed Packages [%s]:\n" % len(removed_packages))
         for p in removed_packages:
-            fh.write("- %s\n" % (p, core_version(old_packages[p]['Version'])))
+            fh.write("- %s\n" % (p))
         fh.write("\n\n")
 
         fh.write("Thanks to all ROS maintainers who make packages"
