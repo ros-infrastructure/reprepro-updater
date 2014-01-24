@@ -3,4 +3,4 @@ method: http://packages.osrfoundation.org/gazebo/ubuntu
 suites: [precise, quantal, raring, saucy]
 component: main
 architectures: [i386, amd64, source]
-filter_formula: Package (% gazebo-dbg ) | Package (% gazebo ) | Package (% libsdformat1) | Package (% libsdformat1-dbg) | Package (% libsdformat-dev) | Package (% sdformat)
+filter_formula: Package (% gazebo-dbg ) | Package (% gazebo ) | Package (% sdformat)
