@@ -1,0 +1,6 @@
+name: gazebo
+method: http://packages.osrfoundation.org/gazebo/ubuntu
+suites: [saucy, trusty]
+component: main
+architectures: [i386, amd64, source]
+filter_formula: Package (% gazebo2-dbg ) | Package (% gazebo2 ) | Package (% libsdformat1) | Package (% libsdformat1-dbg) | Package (% libsdformat-dev)
