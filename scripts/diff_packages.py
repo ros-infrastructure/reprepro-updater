@@ -109,19 +109,19 @@ def main():
     with open(filename, 'w') as fh:
         fh.write("Updates to %s\n\n" % args.rosdistro)
         fh.write("Added Packages [%s]:\n" % len(added_packages))
-        for p in added_packages:
+        for p in sorted(added_packages):
             fh.write("- %s: %s\n" % (p, core_version(new_packages[p]['Version'])))
         fh.write("\n\n")
 
         fh.write("Updated Packages [%s]:\n" % len(updated_packages))
-        for p in updated_packages:
+        for p in sorted(updated_packages):
             fh.write("- %s: %s -> %s\n" % (p, 
                                             core_version(old_packages[p]['Version']),
                                             core_version(new_packages[p]['Version'])))
         fh.write("\n\n")
 
         fh.write("Removed Packages [%s]:\n" % len(removed_packages))
-        for p in removed_packages:
+        for p in sorted(removed_packages):
             fh.write("- %s\n" % (p))
         fh.write("\n\n")
 
