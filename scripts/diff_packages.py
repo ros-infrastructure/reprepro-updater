@@ -110,12 +110,12 @@ def main():
         fh.write("Updates to %s\n\n" % args.rosdistro)
         fh.write("Added Packages [%s]:\n" % len(added_packages))
         for p in sorted(added_packages):
-            fh.write("- %s: %s\n" % (p, core_version(new_packages[p]['Version'])))
+            fh.write(" * %s: %s\n" % (p, core_version(new_packages[p]['Version'])))
         fh.write("\n\n")
 
         fh.write("Updated Packages [%s]:\n" % len(updated_packages))
         for p in sorted(updated_packages):
-            fh.write(" - %s: %s -> %s\n" % (p, 
+            fh.write(" * %s: %s -> %s\n" % (p, 
                                             core_version(old_packages[p]['Version']),
                                             core_version(new_packages[p]['Version'])))
         fh.write("\n\n")
@@ -130,7 +130,7 @@ def main():
                  "of packages was made possible by the work of the"
                  " following maintainers:\n")
         for maintainer in sorted(maintainers):
-            fh.write(" - %s\n"  % maintainer)
+            fh.write(" * %s\n"  % maintainer)
 
     
 
