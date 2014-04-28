@@ -16,7 +16,17 @@ import argparse
 parser = argparse.ArgumentParser(description='Find and remove packages from ROS repos.')
 parser.add_argument('regex',
                    help='the regex to use in reprepro')
+parser.add_argument('--repo', dest='repos', action='append', default=[],
+                    help="Repos to operate on. Default: %s" % REPOS)
+parser.add_argument('--distro', dest='distros', action='append', default=[],
+                    help="Distros to operate on. Default: %s" % DISTROS)
 args = parser.parse_args()
+
+if not args.repos:
+    args.repos = REPOS
+
+if not args.distros:
+    args.distros = DISTROS
 
 def apply_command_template(repo, command_arg, distro, regex):
     command_template = '/usr/bin/reprepro -b %(repo)s -V %(command_arg)s %(distro)s' % locals()
@@ -27,8 +37,8 @@ def apply_command_template(repo, command_arg, distro, regex):
     time.sleep(1)
     
 
-for repo in REPOS:
-    for distro in DISTROS:
+for repo in args.repos:
+    for distro in args.distros:
         apply_command_template(repo, 'listfilter', distro, args.regex)
 
 
@@ -38,6 +48,6 @@ if confirmation != "yes":
     print('You did not enter "yes" exiting.')
     sys.exit(1)
 
-for repo in REPOS:
-    for distro in DISTROS:
+for repo in args.repos:
+    for distro in args.distros:
         apply_command_template(repo, 'removefilter', distro, args.regex)
