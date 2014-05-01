@@ -19,7 +19,7 @@ def core_version(version):
     return core_debian_version(core_rosbuild_version(version))
 
 def core_debian_version(version): # TODO remove hard coded ubuntu versions here
-    return re.sub("(.*)(precise|quantal)-\d{8}-\d{4}-\+\d{4}",
+    return re.sub("(.*)(precise|quantal|saucy|trusty)-\d{8}-\d{4}-\+\d{4}",
                   "\\1", version)
 
 def core_rosbuild_version(version):
