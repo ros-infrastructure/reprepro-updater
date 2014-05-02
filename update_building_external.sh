@@ -8,3 +8,4 @@ python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/bu
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/building -y /home/rosbuild/reprepro_updater/config/bullet.upstream.yaml -c
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/building -y /home/rosbuild/reprepro_updater/config/gazebo.upstream.yaml -c
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/building -y /home/rosbuild/reprepro_updater/config/gazebo2.upstream.yaml -c
+python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/building/ -y /home/rosbuild/reprepro_updater/config/qtsixa.upstream.yaml -c
