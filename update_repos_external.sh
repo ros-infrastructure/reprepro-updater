@@ -25,3 +25,6 @@ python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ro
 
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros-shadow-fixed/ubuntu -y /home/rosbuild/reprepro_updater/config/catkin_lint.upstream.yaml -c
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -y /home/rosbuild/reprepro_updater/config/catkin_lint.upstream.yaml -c
+
+python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros-shadow-fixed/ubuntu -y /home/rosbuild/reprepro_updater/config/ceres.upstream.yaml -c
+python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -y /home/rosbuild/reprepro_updater/config/ceres.upstream.yaml -c
