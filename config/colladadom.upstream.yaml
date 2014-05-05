@@ -3,7 +3,7 @@ name: colladadomppa
 #method: http://ppa.launchpad.net/openrave/release/ubuntu
 #suites: [lucid, maverick, natty, oneiric, precise, quantal, raring, saucy, trusty]
 method: http://ppa.launchpad.net/openrave/testing/ubuntu
-suites: [saucy]
+suites: [saucy, trusty]
 component: main
 architectures: [i386, amd64, source]
 filter_formula: Package (% *collada-dom* )
