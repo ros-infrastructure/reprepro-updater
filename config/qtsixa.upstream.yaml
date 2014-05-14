@@ -5,4 +5,4 @@ method: http://ppa.launchpad.net/falk-t-j/qtsixa/ubuntu
 suites: [saucy, trusty]
 component: main
 architectures: [i386, amd64, source]
-filter_formula: Package (== qtsixa )
+filter_formula: Package (== qtsixa ) | Package (== sixad)
