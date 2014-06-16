@@ -1,0 +1,6 @@
+name: urdfdom_import
+method: http://packages.osrfoundation.org/gazebo/ubuntu
+suites: [saucy]
+component: main
+architectures: [i386, amd64, source]
+filter_formula: Package (% libconsole-bridge*5~ ) | Package (% liburdfdom* ) | Package (== urdfdom) | Package (== console-bridge5)
