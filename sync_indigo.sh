@@ -11,3 +11,5 @@ python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ro
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -r indigo -d saucy -d trusty -a amd64 -u file:/var/www/repos/ros-shadow-fixed/ubuntu -c
 # source
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -r indigo -d saucy -d trusty -a source -u file:/var/www/repos/ros-shadow-fixed/ubuntu -c
+
+date

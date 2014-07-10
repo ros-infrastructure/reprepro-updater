@@ -11,3 +11,5 @@ python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ro
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -r hydro -d precise -d quantal -d raring -a amd64 -u file:/var/www/repos/ros-shadow-fixed/ubuntu -c
 # source
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -r hydro -d precise -d quantal -d raring -a source -u file:/var/www/repos/ros-shadow-fixed/ubuntu -c
+
+date
