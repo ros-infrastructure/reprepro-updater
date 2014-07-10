@@ -34,7 +34,8 @@ def apply_command_template(repo, command_arg, distro, regex):
     print("Running %s" % _cmd)
     subprocess.Popen(_cmd)
     # sleep to let the lock file cleanup before iterating
-    time.sleep(1)
+    print('Sleeping to allow lock reset')
+    time.sleep(2.0)
     
 
 for repo in args.repos:
