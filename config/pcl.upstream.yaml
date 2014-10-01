@@ -5,4 +5,4 @@ method: http://ppa.launchpad.net/v-launchpad-jochen-sprickerhof-de/pcl/ubuntu
 suites: [saucy, trusty]
 component: main
 architectures: [i386, amd64, source]
-filter_formula: Package (% *openni* ) | Package (% *pcl*-1.7* )
+filter_formula: Package (% *openni2* ) | Package (% *pcl*-1.7* )
