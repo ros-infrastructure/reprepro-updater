@@ -106,7 +106,7 @@ Update: %(update_rule)s
 
         if self.repo_key:
             self.standard_snippet += """
-SignWith: %(repo_key)s
+SignWith: %s
 
 """ % self.repo_key
         else:
