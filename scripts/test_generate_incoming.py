@@ -5,7 +5,7 @@ inc = conf.IncomingFile(['lucid', 'oneiric', 'precise'])
 print inc.generate_file_contents()
 
 
-inc = conf.UpdatesFile(['fuerte', 'groovy'], ['lucid', 'oneiric', 'precise'], ['amd64', 'i386', 'armel'], 'B01FA116', 'http://50.28.27.175/repos/building' )
+inc = conf.UpdatesFile(['fuerte', 'groovy'], ['lucid', 'oneiric', 'precise'], ['amd64', 'i386', 'armel'])
 print inc.generate_file_contents()
 
 
