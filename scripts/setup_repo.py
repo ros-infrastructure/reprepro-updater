@@ -13,7 +13,7 @@ import yaml
 parser = OptionParser()
 
 parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
-
+parser.add_option("-k", "--sign-key", dest="key", default=None)
 
 (options, args) = parser.parse_args()
 if len(args) != 1:
@@ -28,7 +28,7 @@ if not os.path.isdir(conf_dir):
     os.makedirs(conf_dir)
 
 
-dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, 'B01FA116' , None)
+dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, options.key, None)
 inc = conf.IncomingFile(ALL_DISTROS)
 
 distributions_filename = os.path.join(conf_dir, 'distributions')
