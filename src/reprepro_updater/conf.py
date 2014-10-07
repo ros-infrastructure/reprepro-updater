@@ -101,8 +101,16 @@ Suite: %(distro)s
 Architectures: %(archs)s
 Components: main
 Description: ROS %(distro)s Debian Repository
-SignWith: %(repo_key)s
 Update: %(update_rule)s
+"""
+
+        if self.repo_key:
+            self.standard_snippet += """
+SignWith: %(repo_key)s
+
+""" % self.repo_key
+        else:
+            self.standard_snippet += """
 
 """
 
@@ -118,7 +126,6 @@ Update: %(update_rule)s
                 update_rule = ''
             d = {'distro': dist, 
                  'archs': ' '.join(self.arches),
-                 'repo_key': self.repo_key,
                  'update_rule': update_rule}
             out += self.standard_snippet % d
 
@@ -152,11 +159,10 @@ class UpdateElement(object):
         return output
 
 class UpdatesFile(object):
-    def __init__(self, rosdistros, distros, arches, repo_key):
+    def __init__(self, rosdistros, distros, arches):
         self.rosdistros = rosdistros
         self.distros = distros
         self.arches = arches
-        self.repo_key = repo_key
         
         self.update_elements = []
 
