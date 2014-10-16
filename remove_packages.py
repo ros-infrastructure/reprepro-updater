@@ -20,6 +20,10 @@ parser.add_argument('--repo', dest='repos', action='append', default=[],
                     help="Repos to operate on. Default: %s" % REPOS)
 parser.add_argument('--distro', dest='distros', action='append', default=[],
                     help="Distros to operate on. Default: %s" % DISTROS)
+parser.add_argument('--add', dest='add', action='store_true', default=False,
+                    help="Add the filename defined as positional argument.")
+parser.add_argument('-n', dest='dry_run', action='store_true', default=False,
+                    help="Dry run do not execute, only echo the commands.")
 args = parser.parse_args()
 
 if not args.repos:
@@ -28,8 +32,10 @@ if not args.repos:
 if not args.distros:
     args.distros = DISTROS
 
-def apply_command_template(repo, command_arg, distro, regex):
+def apply_command_template(repo, command_arg, distro, regex, dry_run=False):
     command_template = '/usr/bin/reprepro -b %(repo)s -V %(command_arg)s %(distro)s' % locals()
+    if dry_run:
+        command_template = 'echo ' + command_template
     _cmd = command_template.split() + [regex]
     print("Running %s" % _cmd)
     subprocess.Popen(_cmd)
@@ -38,10 +44,19 @@ def apply_command_template(repo, command_arg, distro, regex):
     time.sleep(2.0)
     
 
+
+
 for repo in args.repos:
     for distro in args.distros:
-        apply_command_template(repo, 'listfilter', distro, args.regex)
+        if args.add:
+            apply_command_template(repo, 'includedeb', distro, args.regex, args.dry_run)
+        else:
+            apply_command_template(repo, 'listfilter', distro, args.regex, args.dry_run)
 
+
+if args.add:
+    # short circuit, add was already done
+    sys.exit(0)
 
 confirmation = raw_input('Would you like to remove these packages? If so type "yes":')
 
@@ -51,4 +66,4 @@ if confirmation != "yes":
 
 for repo in args.repos:
     for distro in args.distros:
-        apply_command_template(repo, 'removefilter', distro, args.regex)
+        apply_command_template(repo, 'removefilter', distro, args.regex, args.dry_run)
