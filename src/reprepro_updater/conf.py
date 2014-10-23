@@ -36,7 +36,8 @@ ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick',
                'natty', 'oneiric', 'precise', 'quantal', 'raring',
                'saucy', 'trusty',
                'wheezy', 'jessie']
-ALL_ARCHES =  ['amd64', 'i386', 'armel', 'armhf', 'source']
+ALL_ARCHES = ['amd64', 'i386', 'armel', 'armhf', 'source']
+
 
 class ConfParameters(object):
 
@@ -45,9 +46,6 @@ class ConfParameters(object):
         self.architectures = architectures
         self.rosdistros = rosdistros
 
-
-    
-        
 
 class IncomingFile(object):
     def __init__(self, distros):
@@ -73,7 +71,7 @@ Options: multiple_distributions
         out = ''
         for d in self.distros:
             out += self.standard_snippet % {'distro': d}
-        out += self.all_snippet % {'distros': ' '.join(self.distros) }
+        out += self.all_snippet % {'distros': ' '.join(self.distros)}
         return out
 
     def create_required_directories(self, repo_root):
@@ -84,7 +82,6 @@ Options: multiple_distributions
             if not os.path.isdir(p):
                 print "Incoming dir %s did not exist, creating" % p
                 os.makedirs(p)
-
 
 
 class DistributionsFile(object):
@@ -113,17 +110,18 @@ Update: %(update_rule)s
 
 """
 
-    #TODO remove arch from arguments add to for loop?
+    # TODO remove arch from arguments add to for loop?
     def generate_file_contents(self, rosdistro, arch):
         out = ''
 
-        # all distros must be listed in the distributions file for reprepro to be happy
+        # all distros must be listed in the distributions file for reprepro to
+        # be happy
         for dist in self.distros:
             if self.update_objects:
                 update_rule = ' '.join(self.update_objects.get_update_names(rosdistro, dist, arch) )
             else:
                 update_rule = ''
-            d = {'distro': dist, 
+            d = {'distro': dist,
                  'archs': ' '.join(self.arches),
                  'update_rule': update_rule}
             out += self.standard_snippet % d
@@ -139,7 +137,6 @@ class UpdateElement(object):
         self.component = component
         self.architectures = architectures
         self.filter_formula = filter_formula
-
 
     def generate_update_rule(self, distro, arch):
         if not distro in self.suites:
@@ -157,12 +154,13 @@ class UpdateElement(object):
         output += '\n'
         return output
 
+
 class UpdatesFile(object):
     def __init__(self, rosdistros, distros, arches):
         self.rosdistros = rosdistros
         self.distros = distros
         self.arches = arches
-        
+
         self.update_elements = []
 
     def generate_file_contents(self, rosdistro, distro, arch):
@@ -170,7 +168,7 @@ class UpdatesFile(object):
 
         for update_element in self.update_elements:
             out += update_element.generate_update_rule(distro, arch)
-            
+
         return out
 
     def add_update_element(self, update_element):
@@ -183,24 +181,22 @@ class UpdatesFile(object):
                 if arch in c.architectures:
                     update_names.append(c.name)
         return update_names
-    
+
+
 class ConfGenerator(object):
-    """ A Class for genrating the reprepro conf directory.  
-    It can generate, the distributions and update rules dynamically for more granular updates. 
+    """ A Class for genrating the reprepro conf directory.
+    It can generate, the distributions and update rules
+    dynamically for more granular updates.
     """
 
     def __init__(self, directory, rosdistros):
         """ Read the basic information """
         self.valid_rosdistros = rosdistros
-        
 
-        
         raise NotImplemented
-
 
     def generate_distribution(self):
         raise NotImplemented
-
 
     def generate_updates(self):
         raise NotImplemented
@@ -210,5 +206,3 @@ class ConfGenerator(object):
 
     def run_update(self):
         pass
-
-        

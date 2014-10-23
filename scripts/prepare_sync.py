@@ -10,11 +10,11 @@ import subprocess
 import time
 import yaml
 
+
 def run_cleanup(repo_dir, rosdistro, distro, arch, commit):
     cleanup_command = ['reprepro', '-v', '-b', repo_dir, '-A', arch, 'removefilter', distro, "Package (%% ros-%s-* )"% rosdistro]
-    # If you don't clean up the unreferenced 
+    # If you don't clean up the unreferenced
     cleanup_command2 = ['reprepro', '-v', '-b', repo_dir, 'deleteunreferenced']
-
 
     lockfile = os.path.join(repo_dir, 'lock')
     with LockContext(lockfile) as lock_c:
@@ -28,10 +28,8 @@ def run_cleanup(repo_dir, rosdistro, distro, arch, commit):
             print "Not cleaning up I would have executed"
             print "[%s] && [%s]" % (cleanup_command, cleanup_command2)
 
+
 def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, arch, commit):
-
-
-
     command_argument = 'update' if commit else 'dumpupdate'
 
     update_command = ['reprepro', '-v', '-b', repo_dir, '--noskipold', command_argument, distro]
@@ -39,13 +37,12 @@ def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, a
     lockfile = os.path.join(repo_dir, 'lock')
 
     with LockContext(lockfile) as lock_c:
-        print "I have a lock on %s"% lockfile
+        print "I have a lock on %s" % lockfile
 
         # write out update file
         print "Creating updates file %s" % update_filename
         with open(update_filename, 'w') as fh:
             fh.write(updates_generator.generate_file_contents(rosdistro, distro, arch))
-
 
         # write out distributions file
         print "Creating distributions file %s" % distributions_filename
@@ -92,19 +89,14 @@ if not options.arch and options.upstream_ros:
 if options.upstream_ros and not options.arch in ALL_ARCHES:
     parser.error("invalid arch %s, not in %s" % (options.arch, ALL_ARCHES))
 
-            
-
 repo_dir = args[0]
 conf_dir = os.path.join(args[0], 'conf')
 
 if not os.path.isdir(conf_dir):
     parser.error("Argument must be an existing reprepro")
 
-
-#inc = conf.IncomingFile(['lucid', 'oneiric', 'precise'])
-#print inc.generate_file_contents()
-
-
+# inc = conf.IncomingFile(['lucid', 'oneiric', 'precise'])
+# print inc.generate_file_contents()
 
 updates_generator = conf.UpdatesFile([options.rosdistro], ALL_DISTROS, ALL_ARCHES)
 update_filename = os.path.join(conf_dir, 'updates')
@@ -116,13 +108,11 @@ distributions_filename = os.path.join(conf_dir, 'distributions')
 target_arches = set()
 target_distros = set()
 
-
-
 if options.upstream_ros:
     for ubuntu_distro in options.distro:
-        
+
         d = {'name': 'ros-%s-%s-%s' % \
-                 (options.rosdistro, ubuntu_distro, options.arch),
+             (options.rosdistro, ubuntu_distro, options.arch),
              'method': options.upstream_ros,
              #'rosdistro': options.rosdistro,
              'suites': ubuntu_distro,
@@ -135,7 +125,7 @@ if options.upstream_ros:
 
 elif options.yaml_upstream:
 
-# Parse the upstream yaml files for addtional upstream sources
+    # Parse the upstream yaml files for addtional upstream sources
     for fname in options.yaml_upstream:
         with open(fname) as fh:
             yaml_dict = yaml.load(fh.read())
@@ -147,8 +137,6 @@ elif options.yaml_upstream:
             # TODO add more verification
             updates_generator.add_update_element(conf.UpdateElement(**yaml_dict))
 
-
-
 if options.upstream_ros:
 
     # clean up first
@@ -159,9 +147,8 @@ if options.upstream_ros:
         run_update(repo_dir, dist, updates_generator, options.rosdistro, distro, options.arch, options.commit)
 
 else:
-    
+
     for distro in target_distros:
         for arch in target_arches:
             print "Updating for %s %s to update into repo %s" % (distro, arch, repo_dir)
             run_update(repo_dir, dist, updates_generator, 'rosdistro_na', distro, arch, options.commit)
-
