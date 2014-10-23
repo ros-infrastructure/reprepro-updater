@@ -1,6 +1,6 @@
 from reprepro_updater import conf
 from reprepro_updater.conf import ALL_ARCHES, ALL_DISTROS
-from reprepro_updater.helpers import LockContext
+from reprepro_updater.helpers import LockContext, run_cleanup, run_update
 
 from optparse import OptionParser
 
@@ -9,49 +9,6 @@ import sys
 import subprocess
 import time
 import yaml
-
-
-def run_cleanup(repo_dir, rosdistro, distro, arch, commit):
-    cleanup_command = ['reprepro', '-v', '-b', repo_dir, '-A', arch, 'removefilter', distro, "Package (%% ros-%s-* )"% rosdistro]
-    # If you don't clean up the unreferenced
-    cleanup_command2 = ['reprepro', '-v', '-b', repo_dir, 'deleteunreferenced']
-
-    lockfile = os.path.join(repo_dir, 'lock')
-    with LockContext(lockfile) as lock_c:
-
-        if commit:
-            print "running command", cleanup_command
-            subprocess.check_call(cleanup_command)
-            print "running command", cleanup_command2
-            subprocess.check_call(cleanup_command2)
-        else:
-            print "Not cleaning up I would have executed"
-            print "[%s] && [%s]" % (cleanup_command, cleanup_command2)
-
-
-def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, arch, commit):
-    command_argument = 'update' if commit else 'dumpupdate'
-
-    update_command = ['reprepro', '-v', '-b', repo_dir, '--noskipold', command_argument, distro]
-
-    lockfile = os.path.join(repo_dir, 'lock')
-
-    with LockContext(lockfile) as lock_c:
-        print "I have a lock on %s" % lockfile
-
-        # write out update file
-        print "Creating updates file %s" % update_filename
-        with open(update_filename, 'w') as fh:
-            fh.write(updates_generator.generate_file_contents(rosdistro, distro, arch))
-
-        # write out distributions file
-        print "Creating distributions file %s" % distributions_filename
-        with open(distributions_filename, 'w') as fh:
-            fh.write(dist_generator.generate_file_contents(rosdistro, arch))
-
-        print "running command", update_command
-        subprocess.check_call(update_command)
-
 
 parser = OptionParser()
 parser.add_option("-r", "--rosdistro", dest="rosdistro")

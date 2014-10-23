@@ -1,5 +1,5 @@
 
-
+import os
 import subprocess
 import fcntl
 import time
@@ -42,6 +42,7 @@ class LockContext:
 def try_run_command(command):
 
         try:
+            print >>sys.stderr, "running command %s" % command
             subprocess.check_call(command)
             return True
 
@@ -50,45 +51,87 @@ def try_run_command(command):
             return False
 
 
-def delete_unreferenced(repo_dir):
-    cleanup_command = ['reprepro', '-v', '-b', repo_dir, 'deleteunreferenced']
+def delete_unreferenced(repo_dir, commit):
+    command_argument = 'deleteunreferenced' if commit else 'dumpunreferenced'
+    cleanup_command = ['reprepro', '-v', '-b', repo_dir, command_argument]
     print >>sys.stderr, "running", cleanup_command
     return try_run_command(cleanup_command)
 
 
-def run_update_command(repo_path, distro, changesfile):
+def run_include_command(repo_dir, distro, changesfile):
     """ Update the repo to add the files in this changes file """
-    # Force misc due to dry packages having invalid "unknown" section, the -S misc can be removed when dry is deprecated. 
-    update_command = ['reprepro', '-v', '-b', repo_path, '-S', 'misc', 'include', distro, changesfile]
-    print >>sys.stderr, "running command %s" % update_command
+    # Force misc due to dry packages having invalid "unknown" section, the -S misc can be removed when dry is deprecated.
+    include_command = ['reprepro', '-v', '-b', repo_dir, '-S', 'misc', 'include', distro, changesfile]
+    return try_run_command(include_command)
+
+
+def _run_update_command(repo_dir, distro, commit):
+    """ Update the repo to add the files in this changes file """
+    command_argument = 'update' if commit else 'dumpupdate'
+    update_command = ['reprepro', '-v', '-b', repo_dir, '--noskipold', command_argument, distro]
     return try_run_command(update_command)
 
 
-def invalidate_dependent(repo_path, distro, arch, package):
-    """ Remove This all dependencies of the package with the same arch. 
+def invalidate_dependent(repo_dir, distro, arch, package):
+    """ Remove This all dependencies of the package with the same arch.
     This is only valid for binary packages. """
 
-    invalidate_dependent_command = ['reprepro', '-V', '-b', repo_path,
+    invalidate_dependent_command = ['reprepro', '-V', '-b', repo_dir,
                                     '-T', 'deb',
                                     'removefilter', distro,
                                     "Package (% ros-* ), " +
                                     "Architecture (== " + arch + " ), " +
                                     "( Depends (% *" + package + "[, ]* ) " +
                                     "| Depends (% *"+package+" ) )"]
-
-    print >>sys.stderr, "running", invalidate_dependent_command
     return try_run_command(invalidate_dependent_command)
 
 
-def invalidate_package(repo_path, distro, arch, package):
+def invalidate_package(repo_dir, distro, arch, package):
     """Remove this package itself from the repo"""
     debtype = 'deb' if arch != 'source' else 'dsc'
     arch_match = ', Architecture (== ' + arch + ' )' if arch != 'source' else ''
 
-    invalidate_package_command = ['reprepro', '-b', repo_path,
+    invalidate_package_command = ['reprepro', '-b', repo_dir,
                                   '-T', debtype, '-V',
                                   'removefilter', distro,
                                   "Package (== "+package+" )"+arch_match]
 
-    print >>sys.stderr, "running", invalidate_package_command
     return try_run_command(invalidate_package_command)
+
+
+def _clear_ros_distro(repo_dir, rosdistro, distro, arch, commit):
+    command_argument = 'removefilter' if commit else 'listfilter'
+    cleanup_command = ['reprepro', '-v', '-b', repo_dir, '-A', arch, command_argument, distro, "Package (%% ros-%s-* )"% rosdistro]
+    return try_run_command(cleanup_command)
+
+
+def run_cleanup(repo_dir, rosdistro, distro, arch, commit):
+
+    lockfile = os.path.join(repo_dir, 'lock')
+    with LockContext(lockfile) as lock_c:
+
+        _clear_ros_distro(repo_dir, rosdistro, distro, arch, commit)
+        delete_unreferenced(repo_dir, commit)
+
+
+def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, arch, commit):
+
+    lockfile = os.path.join(repo_dir, 'lock')
+    conf_dir = os.path.join(repo_dir, 'conf')
+    update_filename = os.path.join(conf_dir, 'updates')
+    distributions_filename = os.path.join(conf_dir, 'distributions')
+
+    with LockContext(lockfile) as lock_c:
+        print "I have a lock on %s" % lockfile
+
+        # write out update file
+        print "Creating updates file %s" % update_filename
+        with open(update_filename, 'w') as fh:
+            fh.write(updates_generator.generate_file_contents(rosdistro, distro, arch))
+
+        # write out distributions file
+        print "Creating distributions file %s" % distributions_filename
+        with open(distributions_filename, 'w') as fh:
+            fh.write(dist_generator.generate_file_contents(rosdistro, arch))
+
+        _run_update_command(repo_dir, distro, commit)

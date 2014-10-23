@@ -6,7 +6,7 @@ import shutil
 
 from reprepro_updater.helpers import \
     LockContext, delete_unreferenced,\
-    run_update_command, invalidate_dependent, invalidate_package
+    run_include_command, invalidate_dependent, invalidate_package
 from reprepro_updater.changes_parsing import \
     find_changes_files, load_changes_files
 
@@ -74,13 +74,13 @@ if options.commit:
                 sys.exit(1)
 
         # delete_unreferenced before uploading if invalidating
-        if not delete_unreferenced(options.repo_path):
+        if not delete_unreferenced(options.repo_path, options.commit):
             sys.exit(1)
 
         # update after clearing all
         for changes in valid_changes:
 
-            if not run_update_command(options.repo_path,
+            if not run_include_command(options.repo_path,
                                       changes.content['Distribution'],
                                       changes.filename):
                 sys.exit(1)
