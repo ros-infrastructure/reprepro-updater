@@ -37,8 +37,6 @@ updates_generator = conf.UpdatesFile([options.rosdistro], ALL_DISTROS, ALL_ARCHE
 
 dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, options.key , updates_generator)
 
-
-
 target_arches = set()
 target_distros = set()
 
@@ -46,7 +44,7 @@ target_distros = set()
 for fname in yaml_files:
     with open(fname) as fh:
         yaml_dict = yaml.load(fh.read())
-        if not 'name' in yaml_dict:
+        if 'name' not in yaml_dict:
             print "error %s does not include a name element" % fname
             continue
         target_arches.update(set(yaml_dict['architectures']))
