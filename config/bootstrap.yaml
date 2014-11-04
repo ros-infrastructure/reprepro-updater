@@ -3,4 +3,4 @@ method: http://packages.ros.org/ros/ubuntu
 suites: [lucid, maverick, natty, oneiric, precise, quantal, raring, saucy, trusty]
 component: main
 architectures: [i386, amd64, armel, armhf, source]
-#filter_formula: Package (% * )
+filter_formula: Package (% python* )
