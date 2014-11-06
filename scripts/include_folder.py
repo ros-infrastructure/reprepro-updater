@@ -14,17 +14,13 @@ parser = OptionParser()
 
 parser.add_option("--delete-folder", dest="do_delete", action='store_true', default=False)
 
-parser.add_option("-d", "--distro", dest="distro", help="unused")
-parser.add_option("-a", "--arch", dest="arch", help="unused")
-
 parser.add_option("-f", "--folder", dest="folders", action="append")
 parser.add_option("-p", "--package", dest="package")
 
 parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
 parser.add_option("--invalidate", dest="invalidate", action='store_true', default=False)
 
-parser.add_option("--repo-path", dest="repo_path", default='/var/www/repos/building')
-
+parser.add_option("--repo-path", dest="repo_path", default='/var/repos/ubuntu/building')
 
 (options, args) = parser.parse_args()
 
