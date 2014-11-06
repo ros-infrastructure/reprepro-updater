@@ -38,12 +38,14 @@ if not changefiles:
     parser.error("Folders %s doesn't contain a changes file. %s" %
                  (options.folders, [os.listdir(f) for f in options.folders]))
 
-valid_changes = [c for c in changefiles if c.content['Binary'] == options.package]
+valid_changes = [c for c in changefiles if options.package in c.content['Binary'].split()]
 
 extraneous_packages = set(changefiles) - set(valid_changes)
 if extraneous_packages:
-    parser.error("Invalid packages detected in folders %s. [%s]" %
-                 (options.folders, extraneous_packages))
+    parser.error("Invalid packages detected in folders %s. Expected [%s], got [%s] from file %s" %
+                 (options.folders, options.package,
+                  [e.content['Binary'] for e in extraneous_packages],
+                  [e.filename for e in extraneous_packages]))
 
 lockfile = os.path.join(options.repo_path, 'lock')
 
