@@ -84,6 +84,17 @@ if options.commit:
                                       changes.content['Distribution'],
                                       changes.filename):
                 sys.exit(1)
+
+            package_str_parts = []
+            if changes.content['Architecture'] == 'source':
+                package_str_parts.append(changes.content['Source'])
+            else:
+                package_str_parts.append(changes.content['Binary'])
+            package_str_parts.append(changes.content['Version'])
+            package_str_parts.append(changes.content['Distribution'])
+            package_str_parts.append(changes.content['Architecture'])
+            print('Imported package: %s' % ':'.join(package_str_parts))
+
             if options.do_delete:
                 print "Removing %s" % changes.folder
                 shutil.rmtree(changes.folder)
