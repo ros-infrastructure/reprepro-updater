@@ -16,13 +16,15 @@ usage = "usage: %prog [options] reprepro_repo yaml_config_file[s]..."
 
 parser = OptionParser(usage=usage)
 
-parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
+parser.add_option("-c", "--commit", dest="commit",
+                  action='store_true', default=False)
 
 
 (options, args) = parser.parse_args()
 
 if len(args) < 1:
-    parser.error("must be at least two argument, the repository to write into and one or more yaml files")
+    parser.error("must be at least two argument, the repository"
+                 " to write into and one or more yaml files")
 
 conf_params = conf.load_conf(args[0])
 
@@ -54,5 +56,7 @@ for fname in yaml_files:
 
 for distro in target_distros:
     for arch in target_arches:
-        print "Updating for %s %s to update into repo %s" % (distro, arch, conf_params.repository_path)
-        run_update(conf_params.repository_path, dist, updates_generator, distro, arch, options.commit)
+        print ("Updating for %s %s to update into repo %s" %
+               (distro, arch, conf_params.repository_path))
+        run_update(conf_params.repository_path, dist,
+                   updates_generator, distro, arch, options.commit)

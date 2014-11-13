@@ -70,6 +70,7 @@ class ConfParameters(object):
     def repo_exists(self):
         return os.path.isdir(os.path.join(self.repository_path, 'conf'))
 
+
 class IncomingFile(object):
     def __init__(self, distros):
         self.distros = distros
@@ -141,7 +142,7 @@ Update: %(update_rule)s
         # be happy
         for dist in self.distros:
             if self.update_objects:
-                update_rule = ' '.join(self.update_objects.get_update_names(dist, arch) )
+                update_rule = ' '.join(self.update_objects.get_update_names(dist, arch))
             else:
                 update_rule = ''
             d = {'distro': dist,
@@ -153,7 +154,8 @@ Update: %(update_rule)s
 
 
 class UpdateElement(object):
-    def __init__(self, name, method, suites, component, architectures, filter_formula=None, verify_release=None):
+    def __init__(self, name, method, suites, component, architectures,
+                 filter_formula=None, verify_release=None):
         self.name = name
         self.method = method
         self.suites = suites
@@ -163,9 +165,9 @@ class UpdateElement(object):
         self.verify_release = verify_release
 
     def generate_update_rule(self, distro, arch):
-        if not distro in self.suites:
+        if distro not in self.suites:
             return ''
-        if not arch in self.architectures:
+        if arch not in self.architectures:
             return ''
         output = ''
         output += 'Name: %s\n' % self.name

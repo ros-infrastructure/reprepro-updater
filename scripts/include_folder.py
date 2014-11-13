@@ -14,15 +14,19 @@ from reprepro_updater.changes_parsing import \
 
 parser = OptionParser()
 
-parser.add_option("--delete-folder", dest="do_delete", action='store_true', default=False)
+parser.add_option("--delete-folder", dest="do_delete",
+                  action='store_true', default=False)
 
 parser.add_option("-f", "--folder", dest="folders", action="append")
 parser.add_option("-p", "--package", dest="package")
 
-parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
-parser.add_option("--invalidate", dest="invalidate", action='store_true', default=False)
+parser.add_option("-c", "--commit", dest="commit",
+                  action='store_true', default=False)
+parser.add_option("--invalidate", dest="invalidate",
+                  action='store_true', default=False)
 
-parser.add_option("--repo-path", dest="repo_path", default='/var/repos/ubuntu/building')
+parser.add_option("--repo-path", dest="repo_path",
+                  default='/var/repos/ubuntu/building')
 
 (options, args) = parser.parse_args()
 
@@ -40,11 +44,13 @@ if not changefiles:
     parser.error("Folders %s doesn't contain a changes file. %s" %
                  (options.folders, [os.listdir(f) for f in options.folders]))
 
-valid_changes = [c for c in changefiles if options.package in c.content['Binary'].split()]
+valid_changes = [c for c in changefiles
+                 if options.package in c.content['Binary'].split()]
 
 extraneous_packages = set(changefiles) - set(valid_changes)
 if extraneous_packages:
-    parser.error("Invalid packages detected in folders %s. Expected [%s], got [%s] from file %s" %
+    parser.error("Invalid packages detected in folders %s."
+                 " Expected [%s], got [%s] from file %s" %
                  (options.folders, options.package,
                   [e.content['Binary'] for e in extraneous_packages],
                   [e.filename for e in extraneous_packages]))
@@ -54,7 +60,7 @@ lockfile = os.path.join(options.repo_path, 'lock')
 if options.commit:
     with LockContext(lockfile) as lock_c:
 
-        #invalidate and clear all first
+        # invalidate and clear all first
 
         # only invalidate dependencies if invalidation is asked for
         for changes in valid_changes:
@@ -66,7 +72,7 @@ if options.commit:
                                                 options.package):
                         sys.exit(1)
 
-            # invalidate this package always as we're about to upload the new one
+            # always invalidate this package we're about to upload the new one
             if not invalidate_package(options.repo_path,
                                       changes.content['Distribution'],
                                       changes.content['Architecture'],
@@ -81,8 +87,8 @@ if options.commit:
         for changes in valid_changes:
 
             if not run_include_command(options.repo_path,
-                                      changes.content['Distribution'],
-                                      changes.filename):
+                                       changes.content['Distribution'],
+                                       changes.filename):
                 sys.exit(1)
 
             package_str_parts = []
@@ -100,4 +106,6 @@ if options.commit:
                 shutil.rmtree(changes.folder)
 
 else:
-    print >>sys.stderr, "NO COMMIT OPTION\nWould have run invalidation of dependent packages, invalidation of %s package and uploaded new package" % (options.package)
+    print >>sys.stderr, "NO COMMIT OPTION\nWould have run invalidation of"\
+                        " dependent packages, invalidation of %s package and "\
+                        "uploaded new package" % (options.package)

@@ -7,7 +7,7 @@ import sys
 
 
 class LockContext:
-    def __init__(self, lockfilename = None, timeout = 3000):
+    def __init__(self, lockfilename=None, timeout=3000):
         if lockfilename:
             self.lockfilename = lockfilename
         else:
@@ -27,10 +27,12 @@ class LockContext:
                 file_locked = True
                 break
             except IOError, ex:
-                print "could not get lock on %s. Waiting one second (%d of %d)" % (self.lockfilename, i, self.timeout)
+                print "could not get lock on %s." % self.lockfilename
+                print "Waiting one second (%d of %d)" % (i, self.timeout)
                 time.sleep(1)
         if not file_locked:
-            raise IOError("Could not lock file %s with %d retries"% (self.lockfilename, self.timeout) )
+            raise IOError("Could not lock file %s with %d retries" %
+                          (self.lockfilename, self.timeout))
 
         return self
 
@@ -60,15 +62,18 @@ def delete_unreferenced(repo_dir, commit):
 
 def run_include_command(repo_dir, distro, changesfile):
     """ Update the repo to add the files in this changes file """
-    # Force misc due to dry packages having invalid "unknown" section, the -S misc can be removed when dry is deprecated.
-    include_command = ['reprepro', '-v', '-b', repo_dir, '-S', 'misc', 'include', distro, changesfile]
+    # Force misc due to dry packages having invalid "unknown" section,
+    # the -S misc can be removed when dry is deprecated.
+    include_command = ['reprepro', '-v', '-b', repo_dir, '-S', 'misc',
+                       'include', distro, changesfile]
     return try_run_command(include_command)
 
 
 def _run_update_command(repo_dir, distro, commit):
     """ Update the repo to add the files in this changes file """
     command_argument = 'update' if commit else 'dumpupdate'
-    update_command = ['reprepro', '-v', '-b', repo_dir, '--noskipold', command_argument, distro]
+    update_command = ['reprepro', '-v', '-b', repo_dir,
+                      '--noskipold', command_argument, distro]
     return try_run_command(update_command)
 
 
@@ -89,7 +94,8 @@ def invalidate_dependent(repo_dir, distro, arch, package):
 def invalidate_package(repo_dir, distro, arch, package):
     """Remove this package itself from the repo"""
     debtype = 'deb' if arch != 'source' else 'dsc'
-    arch_match = ', Architecture (== ' + arch + ' )' if arch != 'source' else ''
+    arch_match = ', Architecture (== ' + arch + ' )' \
+                 if arch != 'source' else ''
 
     invalidate_package_command = ['reprepro', '-b', repo_dir,
                                   '-T', debtype, '-V',
@@ -101,7 +107,9 @@ def invalidate_package(repo_dir, distro, arch, package):
 
 def _clear_ros_distro(repo_dir, rosdistro, distro, arch, commit):
     command_argument = 'removefilter' if commit else 'listfilter'
-    cleanup_command = ['reprepro', '-v', '-b', repo_dir, '-A', arch, command_argument, distro, "Package (%% ros-%s-* )"% rosdistro]
+    cleanup_command = ['reprepro', '-v', '-b', repo_dir, '-A', arch,
+                       command_argument, distro,
+                       "Package (%% ros-%s-* )" % rosdistro]
     return try_run_command(cleanup_command)
 
 
@@ -114,7 +122,8 @@ def run_cleanup(repo_dir, rosdistro, distro, arch, commit):
         delete_unreferenced(repo_dir, commit)
 
 
-def run_update(repo_dir, dist_generator, updates_generator, distro, arch, commit):
+def run_update(repo_dir, dist_generator, updates_generator,
+               distro, arch, commit):
 
     lockfile = os.path.join(repo_dir, 'lock')
     conf_dir = os.path.join(repo_dir, 'conf')
