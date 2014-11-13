@@ -4,3 +4,5 @@ suites: [lucid, maverick, natty, oneiric, precise, quantal, raring, saucy, trust
 component: main
 architectures: [i386, amd64, armel, armhf, source]
 filter_formula: Package (% python* )
+# needed until we deploy the gpg key
+# verify_release: blindtrust
