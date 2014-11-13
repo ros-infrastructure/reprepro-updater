@@ -114,7 +114,7 @@ def run_cleanup(repo_dir, rosdistro, distro, arch, commit):
         delete_unreferenced(repo_dir, commit)
 
 
-def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, arch, commit):
+def run_update(repo_dir, dist_generator, updates_generator, distro, arch, commit):
 
     lockfile = os.path.join(repo_dir, 'lock')
     conf_dir = os.path.join(repo_dir, 'conf')
@@ -127,11 +127,11 @@ def run_update(repo_dir, dist_generator, updates_generator, rosdistro, distro, a
         # write out update file
         print "Creating updates file %s" % update_filename
         with open(update_filename, 'w') as fh:
-            fh.write(updates_generator.generate_file_contents(rosdistro, distro, arch))
+            fh.write(updates_generator.generate_file_contents(distro, arch))
 
         # write out distributions file
         print "Creating distributions file %s" % distributions_filename
         with open(distributions_filename, 'w') as fh:
-            fh.write(dist_generator.generate_file_contents(rosdistro, arch))
+            fh.write(dist_generator.generate_file_contents(arch))
 
         _run_update_command(repo_dir, distro, commit)

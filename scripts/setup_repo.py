@@ -45,7 +45,7 @@ with LockContext(conf_params.lockfile) as lock_c:
     distributions_filename = conf_params.distributions_filename()
     print "Creating distributions file %s" % distributions_filename
     with open(distributions_filename, 'w') as fh:
-        fh.write(dist.generate_file_contents('n/a', 'n/a'))
+        fh.write(dist.generate_file_contents('n/a'))
 
     # write out incoming file
     incoming_filename = conf_params.incoming_filename()

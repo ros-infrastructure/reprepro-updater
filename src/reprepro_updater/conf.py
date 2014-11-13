@@ -111,7 +111,6 @@ class DistributionsFile(object):
     def __init__(self, distros, arches, repo_key, update_objects):
         self.distros = distros
         self.arches = arches
-        print ("self.arches is ", self.arches)
         self.repo_key = repo_key
         self.update_objects = update_objects
 
@@ -135,14 +134,14 @@ Update: %(update_rule)s
 """
 
     # TODO remove arch from arguments add to for loop?
-    def generate_file_contents(self, rosdistro, arch):
+    def generate_file_contents(self, arch):
         out = ''
 
         # all distros must be listed in the distributions file for reprepro to
         # be happy
         for dist in self.distros:
             if self.update_objects:
-                update_rule = ' '.join(self.update_objects.get_update_names(rosdistro, dist, arch) )
+                update_rule = ' '.join(self.update_objects.get_update_names(dist, arch) )
             else:
                 update_rule = ''
             d = {'distro': dist,
@@ -183,14 +182,13 @@ class UpdateElement(object):
 
 
 class UpdatesFile(object):
-    def __init__(self, rosdistros, distros, arches):
-        self.rosdistros = rosdistros
+    def __init__(self, distros, arches):
         self.distros = distros
         self.arches = arches
 
         self.update_elements = []
 
-    def generate_file_contents(self, rosdistro, distro, arch):
+    def generate_file_contents(self, distro, arch):
         out = ''
 
         for update_element in self.update_elements:
@@ -201,7 +199,7 @@ class UpdatesFile(object):
     def add_update_element(self, update_element):
         self.update_elements.append(update_element)
 
-    def get_update_names(self, rosdistro, suite, arch):
+    def get_update_names(self, suite, arch):
         update_names = []
         for c in self.update_elements:
             if suite in c.suites:

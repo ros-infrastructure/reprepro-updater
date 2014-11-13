@@ -64,7 +64,6 @@ for ubuntu_distro in options.distro:
     d = {'name': 'ros-%s-%s-%s' % \
          (options.rosdistro, ubuntu_distro, options.arch),
          'method': options.upstream_ros,
-         #'rosdistro': options.rosdistro,
          'suites': ubuntu_distro,
          'component': 'main',
          'architectures': options.arch,
@@ -80,4 +79,4 @@ if not options.no_cleanup:
     for distro in options.distro:
         run_cleanup(repo_dir, options.rosdistro, distro, options.arch, options.commit)
 for distro in options.distro:
-    run_update(repo_dir, dist, updates_generator, options.rosdistro, distro, options.arch, options.commit)
+    run_update(repo_dir, dist, updates_generator, distro, options.arch, options.commit)

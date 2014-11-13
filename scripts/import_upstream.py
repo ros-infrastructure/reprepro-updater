@@ -16,7 +16,6 @@ usage = "usage: %prog [options] reprepro_repo yaml_config_file[s]..."
 
 parser = OptionParser(usage=usage)
 
-parser.add_option("-r", "--rosdistro", dest="rosdistro")
 parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
 
 
@@ -33,8 +32,7 @@ if not conf_params.repo_exists():
     parser.error("Repository must have been initialized already")
 
 
-updates_generator = conf.UpdatesFile([options.rosdistro],
-                                     ALL_DISTROS, ALL_ARCHES)
+updates_generator = conf.UpdatesFile(ALL_DISTROS, ALL_ARCHES)
 
 dist = conf_params.create_distributions_file(updates_generator)
 
@@ -57,4 +55,4 @@ for fname in yaml_files:
 for distro in target_distros:
     for arch in target_arches:
         print "Updating for %s %s to update into repo %s" % (distro, arch, conf_params.repository_path)
-        run_update(conf_params.repository_path, dist, updates_generator, 'rosdistro_na', distro, arch, options.commit)
+        run_update(conf_params.repository_path, dist, updates_generator, distro, arch, options.commit)
