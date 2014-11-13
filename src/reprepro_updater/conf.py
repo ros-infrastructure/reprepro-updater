@@ -67,6 +67,9 @@ class ConfParameters(object):
     def updates_filename(self):
         return os.path.join(self.repository_path, 'conf', 'updates')
 
+    def repo_exists(self):
+        return os.path.isdir(os.path.join(self.repository_path, 'conf'))
+
 class IncomingFile(object):
     def __init__(self, distros):
         self.distros = distros

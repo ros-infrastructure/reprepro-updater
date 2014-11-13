@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from reprepro_updater import conf
 from reprepro_updater.conf import ALL_ARCHES, ALL_DISTROS
 from reprepro_updater.helpers import LockContext, run_update
@@ -15,27 +17,26 @@ usage = "usage: %prog [options] reprepro_repo yaml_config_file[s]..."
 parser = OptionParser(usage=usage)
 
 parser.add_option("-r", "--rosdistro", dest="rosdistro")
-parser.add_option("-k", "--sign-key", dest="key", default=None)
 parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
 
 
 (options, args) = parser.parse_args()
 
 if len(args) < 1:
-    parser.error("must be at least two argument, the directory to write into")
+    parser.error("must be at least two argument, the repository to write into and one or more yaml files")
 
-repo_dir = args[0]
-conf_dir = os.path.join(args[0], 'conf')
+conf_params = conf.load_conf(args[0])
 
 yaml_files = args[1:]
 
-if not os.path.isdir(conf_dir):
-    parser.error("Argument must be an existing reprepro")
+if not conf_params.repo_exists():
+    parser.error("Repository must have been initialized already")
 
 
-updates_generator = conf.UpdatesFile([options.rosdistro], ALL_DISTROS, ALL_ARCHES)
+updates_generator = conf.UpdatesFile([options.rosdistro],
+                                     ALL_DISTROS, ALL_ARCHES)
 
-dist = conf.DistributionsFile(ALL_DISTROS, ALL_ARCHES, options.key , updates_generator)
+dist = conf_params.create_distributions_file(updates_generator)
 
 target_arches = set()
 target_distros = set()
@@ -55,5 +56,5 @@ for fname in yaml_files:
 
 for distro in target_distros:
     for arch in target_arches:
-        print "Updating for %s %s to update into repo %s" % (distro, arch, repo_dir)
-        run_update(repo_dir, dist, updates_generator, 'rosdistro_na', distro, arch, options.commit)
+        print "Updating for %s %s to update into repo %s" % (distro, arch, conf_params.repository_path)
+        run_update(conf_params.repository_path, dist, updates_generator, 'rosdistro_na', distro, arch, options.commit)
