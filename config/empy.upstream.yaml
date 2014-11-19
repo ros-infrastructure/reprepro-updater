@@ -1,0 +1,6 @@
+name: empy_updates
+method: http://packages.osrfoundation.org/gazebo/ubuntu
+suites: [trusty]
+component: main
+architectures: [i386, amd64, source]
+filter_formula: Package (% python-empy ) | Package (% python3-empy)
