@@ -70,6 +70,11 @@ class ConfParameters(object):
     def repo_exists(self):
         return os.path.isdir(os.path.join(self.repository_path, 'conf'))
 
+    def get_upstream_config_files(self):
+        return [os.path.join(self.upstream_config_dir, f)
+                for f in os.listdir(self.upstream_config_dir)
+                if f.endswith('.yaml')]
+
 
 class IncomingFile(object):
     def __init__(self, distros):

@@ -23,12 +23,16 @@ parser.add_option("-c", "--commit", dest="commit",
 (options, args) = parser.parse_args()
 
 if len(args) < 1:
-    parser.error("must be at least two argument, the repository"
-                 " to write into and one or more yaml files")
+    parser.error("At least one argument required")
 
 conf_params = conf.load_conf(args[0])
 
-yaml_files = args[1:]
+if len(args) > 1:
+    yaml_files = args[1:]
+else:
+    yaml_files = conf_params.get_upstream_config_files()
+    if not yaml_files:
+        parser.error("No upstream_config section for %s, and nothing passed on the command line" % args[0])
 
 if not conf_params.repo_exists():
     parser.error("Repository must have been initialized already")
