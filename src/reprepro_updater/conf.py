@@ -181,9 +181,9 @@ class UpdateElement(object):
         output += 'Components: %s\n' % self.component
         output += 'Architectures: %s\n' % arch
         if self.filter_formula:
-            output += 'FilterFormula: %s' % self.filter_formula
+            output += 'FilterFormula: %s\n' % self.filter_formula
         if self.verify_release:
-            output += 'VerifyRelease: %s' % self.verify_release
+            output += 'VerifyRelease: %s\n' % self.verify_release
         output += '\n'
         return output
 
