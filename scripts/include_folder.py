@@ -85,12 +85,6 @@ if options.commit:
 
         # update after clearing all
         for changes in valid_changes:
-
-            if not run_include_command(options.repo_path,
-                                       changes.content['Distribution'],
-                                       changes.filename):
-                sys.exit(1)
-
             package_str_parts = []
             if changes.content['Architecture'] == 'source':
                 package_str_parts.append(changes.content['Source'])
@@ -99,8 +93,12 @@ if options.commit:
             package_str_parts.append(changes.content['Version'])
             package_str_parts.append(changes.content['Distribution'])
             package_str_parts.append(changes.content['Architecture'])
-            print('Imported package: %s' % ':'.join(package_str_parts))
+            print('Importing package: %s' % ':'.join(package_str_parts))
 
+            if not run_include_command(options.repo_path,
+                                       changes.content['Distribution'],
+                                       changes.filename):
+                sys.exit(1)
             if options.do_delete:
                 print "Removing %s" % changes.folder
                 shutil.rmtree(changes.folder)
