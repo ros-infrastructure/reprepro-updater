@@ -1,5 +1,5 @@
 name: ros_public_bootstrap
-method: http://packages.ros.org/ros/ubuntu
+method: http://repos.ros.org/ros/ubuntu
 suites: [lucid, maverick, natty, oneiric, precise, quantal, raring, saucy, trusty]
 component: main
 architectures: [i386, amd64, armel, armhf, source]
