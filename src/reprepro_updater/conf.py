@@ -52,7 +52,6 @@ class ConfParameters(object):
         self.lockfile = os.path.join(repository_path, 'lock')
 
     def create_distributions_file(self, updates_file):
-        print ("self.architectures is ", self.architectures)
         return DistributionsFile(self.distros,
                                  self.architectures,
                                  self.signing_key,
