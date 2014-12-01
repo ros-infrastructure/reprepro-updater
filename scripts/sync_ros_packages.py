@@ -18,7 +18,8 @@ parser.add_option("-a", "--arch", dest="arches", action='append',
 parser.add_option("-d", "--distro", dest="distros", action='append',
                   default=[], help='Override repo configuration distros')
 parser.add_option("-u", "--upstream-ros", dest="upstream_ros", default=None,
-                  help="The upstream repository url to pull from")
+                  help="The upstream repository url to pull from, if not a"
+                  " local reprepro_config ID")
 parser.add_option("-n", "--no-cleanup", dest="no_cleanup",
                   default=False, action='store_true')
 parser.add_option("-c", "--commit", dest="commit",
@@ -35,6 +36,14 @@ if not conf_params.repo_exists():
 
 if not options.upstream_ros:
     parser.error("upstream-ros required")
+
+upstream_conf_params = conf.load_conf(options.upstream_ros)
+if upstream_conf_params:
+    method = "file://" + upstream_conf_params.repository_path
+else:
+    print("upstream_ros is not a reprepro config, assuming raw method: %s" %
+          options.upstream_ros)
+    method = options.upstream_ros
 
 invalid_distros = [d for d in options.distros if d not in conf_params.distros]
 if invalid_distros:
@@ -72,7 +81,7 @@ for ubuntu_distro in distros:
 
         d = {'name': 'ros-%s-%s-%s' %
              (options.rosdistro, ubuntu_distro, arch),
-             'method': options.upstream_ros,
+             'method': method,
              'suites': ubuntu_distro,
              'component': 'main',
              'architectures': arch,
