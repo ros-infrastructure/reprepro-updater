@@ -16,7 +16,9 @@ parser = OptionParser()
 
 parser.add_option("-c", "--commit", dest="commit",
                   action='store_true', default=False)
-
+parser.add_option("-q", "--query", dest="query",
+                  action='store_true', default=False,
+                  help='Test if the repository is already configured.')
 
 (options, args) = parser.parse_args()
 if len(args) != 1:
@@ -27,10 +29,16 @@ conf_params = conf.load_conf(args[0])
 
 conf_dir = os.path.join(conf_params.repository_path, 'conf')
 
-if not os.path.isdir(conf_dir):
+already_configured = os.path.isdir(conf_dir)
+
+if options.query:
+    if already_configured:
+        sys.exit(0)
+    sys.exit(1)
+
+if not already_configured:
     print "Conf dir did not exist, creating %s" % conf_params.repository_path
     os.makedirs(conf_dir)
-
 
 dist = conf_params.create_distributions_file(None)
 inc = conf.IncomingFile(ALL_DISTROS)
