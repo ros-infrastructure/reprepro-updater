@@ -1,0 +1,3 @@
+The script import_armhf.sh will import Austin's armhf packages into ros-shadow-fixed. This needs to be run manually to import. After which it should be setup to sync to public with a regular sync to public. 
+
+This will only import the ros-indigo-* packages. The others must be written in the standard config import method. 
