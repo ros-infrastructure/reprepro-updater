@@ -1,0 +1,9 @@
+name: namniart_armhf_import
+# method: http://packages.namniart.com/repos/ros_support/
+method: http://23.239.1.142/repos/ros/
+suites: [trusty]
+component: main
+architectures: [armhf]
+filter_formula: (Package (% ros-indigo-* ))
+# needed until we deploy the gpg key
+verify_release: blindtrust
