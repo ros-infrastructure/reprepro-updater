@@ -6,4 +6,4 @@ component: main
 architectures: [armhf]
 filter_formula: (Package (% ros-indigo-* ))
 # needed until we deploy the gpg key
-verify_release: blindtrust
+# verify_release: blindtrust
