@@ -4,6 +4,6 @@ method: http://23.239.1.142/repos/ros_support/
 suites: [trusty]
 component: main
 architectures: [armhf]
-filter_formula: '(Package (% * ), !Package (% openni2-doc*), !Package(% libpcl*))'
+filter_formula: '(Package (% * ), !Package (% openni2-doc*), !Package(% libpcl-1.7-all*), !Package(% libpcl-1.7-doc*))'
 # needed until we deploy the gpg key
 # verify_release: blindtrust
