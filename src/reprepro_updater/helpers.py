@@ -135,8 +135,11 @@ def run_update(repo_dir, dist_generator, updates_generator,
 
         # write out update file
         print "Creating updates file %s" % update_filename
+        update_contents = updates_generator.generate_file_contents(distro, arch)
+        for l in update_contents.splitlines():
+            print("  %s" % l)
         with open(update_filename, 'w') as fh:
-            fh.write(updates_generator.generate_file_contents(distro, arch))
+            fh.write(updates_contents)
 
         # write out distributions file
         print "Creating distributions file %s" % distributions_filename
