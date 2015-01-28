@@ -139,7 +139,7 @@ def run_update(repo_dir, dist_generator, updates_generator,
         for l in update_contents.splitlines():
             print("  %s" % l)
         with open(update_filename, 'w') as fh:
-            fh.write(updates_contents)
+            fh.write(update_contents)
 
         # write out distributions file
         print "Creating distributions file %s" % distributions_filename
