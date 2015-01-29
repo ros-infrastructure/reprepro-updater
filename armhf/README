@@ -12,3 +12,9 @@ In this directory is a second config for importing the ROS indigo ROS packages.
 To execute these commands add an option -c. 
 
 Also do it for ros in addition to ros-shadow-fixed. 
+
+
+There also are a few architecture any packages which need to be flooded from x86 ( libpcl-1.7-all* and libpcl-1.7-doc See #15 )
+
+`reprepro -v -b /var/www/repos/ros-shadow-fixed/ubuntu/ flood trusty armhf`
+`reprepro -v -b /var/www/repos/ros/ubuntu/ flood trusty armhf`
