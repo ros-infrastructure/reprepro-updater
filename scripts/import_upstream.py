@@ -53,6 +53,7 @@ for fname in yaml_files:
         if 'name' not in yaml_dict:
             print "error %s does not include a name element" % fname
             continue
+        print("adding arches %s and suites: %s" % (set(yaml_dict['architectures']),
                                             set(yaml_dict['suites'])))
         target_arches.update(set(yaml_dict['architectures']))
         target_distros.update(set(yaml_dict['suites']))
