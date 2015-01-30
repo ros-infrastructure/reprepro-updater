@@ -48,10 +48,13 @@ target_distros = set()
 # Parse the upstream yaml files for upstream sources
 for fname in yaml_files:
     with open(fname) as fh:
+        print("loading config file: %s" % fname)
         yaml_dict = yaml.load(fh.read())
         if 'name' not in yaml_dict:
             print "error %s does not include a name element" % fname
             continue
+        print("adding arches and suites" % (set(yaml_dict['architectures']),
+                                            set(yaml_dict['suites'])))
         target_arches.update(set(yaml_dict['architectures']))
         target_distros.update(set(yaml_dict['suites']))
         # TODO add more verification
