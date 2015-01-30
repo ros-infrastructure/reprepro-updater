@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from reprepro_updater import conf
-from reprepro_updater.conf import ALL_ARCHES, ALL_DISTROS
 from reprepro_updater.helpers import LockContext, run_update
 
 from optparse import OptionParser
@@ -38,7 +37,8 @@ if not conf_params.repo_exists():
     parser.error("Repository must have been initialized already")
 
 
-updates_generator = conf.UpdatesFile(ALL_DISTROS, ALL_ARCHES)
+updates_generator = conf.UpdatesFile(conf_params.distros,
+                                     conf_params.architectures)
 
 dist = conf_params.create_distributions_file(updates_generator)
 

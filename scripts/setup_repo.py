@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from reprepro_updater import conf
-from reprepro_updater.conf import ALL_ARCHES, ALL_DISTROS
 from reprepro_updater.helpers import LockContext
 
 from optparse import OptionParser
@@ -41,7 +40,7 @@ if not already_configured:
     os.makedirs(conf_dir)
 
 dist = conf_params.create_distributions_file(None)
-inc = conf.IncomingFile(ALL_DISTROS)
+inc = conf.IncomingFile(conf_params.distros)
 
 export_command = ['reprepro', '-v', '-b',
                   conf_params.repository_path, 'export']
