@@ -1,6 +1,6 @@
 name: ceres
 method: http://ppa.launchpad.net/mikeferguson/ceres-solver/ubuntu
-suites: [trusty]
+suites: [trusty, utopic, vivid]
 component: main
 architectures: [i386, amd64, source]
 filter_formula: Package (== ceres-solver ) | Package (% libceres ) | Package (% libceres-dev )

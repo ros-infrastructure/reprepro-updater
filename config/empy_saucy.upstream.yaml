@@ -1,0 +1,6 @@
+name: empy_saucy_updates
+method: http://packages.osrfoundation.org/gazebo/ubuntu
+suites: [saucy]
+component: main
+architectures: [i386, amd64, source]
+filter_formula: Package (% python3-empy)

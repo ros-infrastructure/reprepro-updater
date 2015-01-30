@@ -9,6 +9,8 @@ python ~/reprepro_updater/scripts/diff_packages.py /var/www/repos/ros/ubuntu/dis
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -r indigo -d saucy -d trusty -a i386 -u file:/var/www/repos/ros-shadow-fixed/ubuntu -c
 # amd64
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -r indigo -d saucy -d trusty -a amd64 -u file:/var/www/repos/ros-shadow-fixed/ubuntu -c
+# armhf
+python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -r indigo -d saucy -d trusty -a armhf -u file:/var/www/repos/ros-shadow-fixed/ubuntu -c
 # source
 python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -r indigo -d saucy -d trusty -a source -u file:/var/www/repos/ros-shadow-fixed/ubuntu -c
 

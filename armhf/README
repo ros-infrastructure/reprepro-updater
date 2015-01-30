@@ -1,0 +1,20 @@
+For importing armhf there are two parts. One is in the config repo for upstream packages. 
+
+to update the upstream configs: 
+
+`python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros-shadow-fixed/ubuntu -y /home/rosbuild/reprepro_updater/config/namniart_armhf.yaml`
+
+
+In this directory is a second config for importing the ROS indigo ROS packages. 
+
+`python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros-shadow-fixed/ubuntu -y /home/rosbuild/reprepro_updater/armhf/namniart_indigo.yaml`
+
+To execute these commands add an option -c. 
+
+Also do it for ros in addition to ros-shadow-fixed. 
+
+
+There also are a few architecture any packages which need to be flooded from x86 ( libpcl-1.7-all* and libpcl-1.7-doc See #15 )
+
+`reprepro -v -b /var/www/repos/ros-shadow-fixed/ubuntu/ flood trusty armhf`
+`reprepro -v -b /var/www/repos/ros/ubuntu/ flood trusty armhf`
