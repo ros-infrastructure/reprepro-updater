@@ -4,4 +4,4 @@ method: http://ppa.launchpad.net/v-launchpad-jochen-sprickerhof-de/pcl/ubuntu
 suites: [saucy]
 component: main
 architectures: [i386, amd64, source]
-filter_formula: Package (% libopenni* )
+filter_formula: Package (% libopenni* ) | Package (== openni-utils)
