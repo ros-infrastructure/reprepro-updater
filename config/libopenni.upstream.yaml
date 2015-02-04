@@ -1,4 +1,4 @@
-name: pclppa
+name: libopenni
 method: http://ppa.launchpad.net/v-launchpad-jochen-sprickerhof-de/pcl/ubuntu
 # Import libopenni from pcl ppa for saucy. It's upstream in trusty and higher.
 suites: [saucy]
