@@ -1,6 +1,5 @@
-name: namniart_armhf_import
-# method: http://packages.namniart.com/repos/ros_support/
-method: http://23.239.1.142/repos/ros/
+name: testfarm_armhf_import
+method: http://54.183.65.232/ubuntu/main/
 suites: [trusty]
 component: main
 architectures: [armhf]

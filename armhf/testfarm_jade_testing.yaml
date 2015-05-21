@@ -1,0 +1,8 @@
+name: testfarm_armhf_import_testing
+method: http://54.183.65.232/ubuntu/testing/
+suites: [trusty]
+component: main
+architectures: [armhf]
+filter_formula: (Package (% ros-jade-* ))
+# needed until we deploy the gpg key
+# verify_release: blindtrust
