@@ -1,7 +1,21 @@
 from debian.debian_support import PackageFile
 import re
-from urllib2 import urlopen
-from urllib2 import URLError
+import sys
+try:
+    from urllib.request import urlopen
+except ImportError:
+    from urllib2 import urlopen
+
+try:
+    from urllib.error import URLError
+except ImportError:
+    from urllib2 import URLError
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
+
 
 def convert_tuples_list_to_dict(tuples_list):
     output = {}
@@ -44,9 +58,13 @@ def construct_packages_url(base_url, dist, component, arch):
 def get_packagefile_from_url(url, name='foo'):
     try:
         fromlines = urlopen(url)
-        return PackageFile(name, fromlines)
-    except URLError, ex:
-        raise RuntimeError("Failed to load from url %s [%s]" % (from_url, ex))
+        contents = fromlines.read()
+        if sys.version_info[0] == 3:
+            contents = contents.decode("utf-8")
+        return PackageFile(name, StringIO(contents))
+    except URLError as ex:
+        raise RuntimeError("Failed to load from url %s [%s]" % (url, ex))
+
 
 def compute_annoucement(rosdistro, pf_old, pf_new):
     """Compute the difference between to debian Packages files per rosdistro
@@ -89,43 +107,34 @@ def compute_annoucement(rosdistro, pf_old, pf_new):
     for p in added_packages | updated_packages:
         maintainers.add(strip_email(new_packages[p]['Maintainer']).strip())
 
-    class OutputAppender:
-        def __init__(self):
-            self.value = ""
+    out = ''
 
-        def append(self, string_value):
-            self.value += string_value + '\n'
-
-    out = OutputAppender()
-
-    out.append("Updates to %s\n" % rosdistro)
-    out.append("Added Packages [%s]:\n" % len(added_packages))
+    out += "Updates to %s\n" % rosdistro
+    out += "Added Packages [%s]:\n" % len(added_packages)
     for p in sorted(added_packages):
-        out.append(
-            " * %s: %s" %
-            (p, core_version(new_packages[p]['Version'])))
-    out.append("\n")
+        out += " * %s: %s\n" % \
+            (p, core_version(new_packages[p]['Version']))
+    out += "\n"
 
-    out.append("Updated Packages [%s]:\n" % len(updated_packages))
+    out += "Updated Packages [%s]:\n" % len(updated_packages)
     for p in sorted(updated_packages):
-        out.append(
-            " * %s: %s -> %s" %
+        out += " * %s: %s -> %s\n" % \
             (p,
              core_version(old_packages[p]['Version']),
-             core_version(new_packages[p]['Version'])))
-    out.append("\n")
+             core_version(new_packages[p]['Version']))
+    out += "\n"
 
-    out.append("Removed Packages [%s]:\n" % len(removed_packages))
+    out += "Removed Packages [%s]:\n" % len(removed_packages)
     for p in sorted(removed_packages):
-        out.append("- %s" % (p))
-    out.append("\n")
+        out += "- %s\n" % (p)
+    out += "\n"
 
-    out.append(
-        "Thanks to all ROS maintainers who make packages"
-        " available to the ROS community. The above list "
-        "of packages was made possible by the work of the"
-        " following maintainers:")
+    out += \
+        "Thanks to all ROS maintainers who make packages "\
+        "available to the ROS community. The above list "\
+        "of packages was made possible by the work of the "\
+        "following maintainers: \n"
     for maintainer in sorted(maintainers):
-        out.append(" * %s" % maintainer)
+        out += " * %s\n" % maintainer
 
-    return out.value
+    return out
