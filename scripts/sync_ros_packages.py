@@ -1,15 +1,14 @@
 #!/usr/bin/env python
+from __future__ import print_function
 
 from reprepro_updater import conf
-from reprepro_updater.helpers import LockContext, run_cleanup, run_update
+from reprepro_updater import diff_repos
+from reprepro_updater.helpers import run_cleanup, run_update
 
 from optparse import OptionParser
 
-import os
+import datetime
 import sys
-import subprocess
-import time
-import yaml
 
 parser = OptionParser()
 parser.add_option("-r", "--rosdistro", dest="rosdistro")
@@ -33,17 +32,18 @@ if not len(args) == 1:
 conf_params = conf.load_conf(args[0])
 if not conf_params.repo_exists():
     parser.error("Repository must have been initialized already")
+target_repo_url = 'file://' + conf_params.repository_path
 
 if not options.upstream_ros:
     parser.error("upstream-ros required")
 
 upstream_conf_params = conf.load_conf(options.upstream_ros)
 if upstream_conf_params:
-    method = "file://" + upstream_conf_params.repository_path
+    upstream_repo_url = "file://" + upstream_conf_params.repository_path
 else:
     print("upstream_ros is not a reprepro config, assuming raw method: %s" %
           options.upstream_ros)
-    method = options.upstream_ros
+    upstream_repo_url = options.upstream_ros
 
 invalid_distros = [d for d in options.distros if d not in conf_params.distros]
 if invalid_distros:
@@ -81,7 +81,7 @@ for ubuntu_distro in distros:
 
         d = {'name': 'ros-%s-%s-%s' %
              (options.rosdistro, ubuntu_distro, arch),
-             'method': method,
+             'method': upstream_repo_url,
              'suites': ubuntu_distro,
              'component': 'main',
              'architectures': arch,
@@ -89,6 +89,37 @@ for ubuntu_distro in distros:
              }
 
         updates_generator.add_update_element(conf.UpdateElement(**d))
+
+        package_architecture = 'source' if arch == 'source' else 'binary-' + arch
+        # Compute the expected diff for this update element.
+        target_url = diff_repos.construct_packages_url(
+            target_repo_url,
+            ubuntu_distro,
+            'main',
+            package_architecture)
+        upstream_url = diff_repos.construct_packages_url(
+            upstream_repo_url,
+            ubuntu_distro,
+            'main',
+            package_architecture)
+        try:
+            pf_old = diff_repos.get_packagefile_from_url(target_url, name='old')
+        except RuntimeError as ex:
+            print("Exeception: %s \n NOT Computing diff" % ex, file=sys.stderr)
+            continue
+        try:
+            pf_new = diff_repos.get_packagefile_from_url(upstream_url, name='new')
+        except RuntimeError as ex:
+            print("Exeception: %s \n NOT Computing diff" % ex, file=sys.stderr)
+            continue
+        dtime = datetime.datetime.now()
+        dtime = dtime.replace(microsecond=0)
+        print("Difference between '%s' and '%s' computed at %s" %
+              (target_url, upstream_url, dtime.isoformat('-')))
+        announcement = diff_repos.compute_annoucement(options.rosdistro, pf_old, pf_new)
+        print('-' * 80)
+        print(announcement)
+        print('-' * 80)
 
 # clean up first
 if not options.no_cleanup:

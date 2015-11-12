@@ -102,7 +102,7 @@ Options: multiple_distributions
         for d in incoming_dirs:
             p = os.path.join(repo_root, d)
             if not os.path.isdir(p):
-                print "Incoming dir %s did not exist, creating" % p
+                print("Incoming dir %s did not exist, creating" % p)
                 os.makedirs(p)
 
 
