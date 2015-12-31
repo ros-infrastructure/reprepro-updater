@@ -1,0 +1,6 @@
+name: sixad
+method: http://ppa.launchpad.net/mikepurvis/sixaxis/ubuntu
+suites: [trusty, vivid]
+component: main
+architectures: [i386, amd64, source]
+filter_formula: Package (== sixad)
