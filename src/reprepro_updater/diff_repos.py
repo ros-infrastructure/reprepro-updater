@@ -29,18 +29,12 @@ def strip_email(maintainer):
 
 
 def core_version(version):
-    return core_debian_version(core_rosbuild_version(version))
-
-
-def core_debian_version(version):  # TODO remove hardcoded ubuntu versions here
-    return re.sub("(.*)(precise|quantal|saucy|trusty)-\d{8}-\d{4}-\+\d{4}",
-                  "\\1", version)
-
-
-def core_rosbuild_version(version):
-    return re.sub("(.*)-s\d{10}~\w*",
-                  "\\1",
-                  version)
+    # Match DPM 5.6.12: https://www.debian.org/doc/debian-policy/ch-controlfields.html
+    result = re.match("\d*:?\d([\d\.\-~0-9]*-\d*|[\d\.~0-9]*)",
+                      version)
+    if result:
+        return result.group()
+    return None
 
 
 def is_substantial_version_change(v1, v2):
