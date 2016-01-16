@@ -77,18 +77,49 @@ def _run_update_command(repo_dir, distro, commit):
     return try_run_command(update_command)
 
 
-def invalidate_dependent(repo_dir, distro, arch, package):
-    """ Remove This all dependencies of the package with the same arch.
-    This is only valid for binary packages. """
+def _get_dependent_packages(repo_dir, distro, arch, package):
+    """ Return a list of packages which were detected as dependant by reprepro.
+    This only returns direct dependencies. """
 
-    invalidate_dependent_command = ['reprepro', '-V', '-b', repo_dir,
-                                    '-T', 'deb',
-                                    'removefilter', distro,
-                                    "Package (% ros-* ), " +
-                                    "Architecture (== " + arch + " ), " +
-                                    "( Depends (% *" + package + "[, ]* ) " +
-                                    "| Depends (% *"+package+" ) )"]
-    return try_run_command(invalidate_dependent_command)
+    reprepro_command = [
+        'reprepro', '-V', '-b', repo_dir,
+        '-T', 'deb',
+        'listfilter', distro,
+        "Package (% ros-* ), " +
+        "Architecture (== " + arch + " ), " +
+        "( Depends (% *" + package + "[, ]* ) " +
+        "| Depends (% *" + package + " ) )"]
+
+    try:
+        output = subprocess.check_output(reprepro_command)
+    except subprocess.CalledProcessError as ex:
+        print "Execution of [%s] Failed:" % reprepro_command, ex
+        return []
+    packages = []
+    for l in output.splitlines():
+        elements = l.split()
+        assert len(elements) == 3, "Expected 3 elements, got %s " % elements
+        packages.append(elements[1])
+    return packages
+
+
+def _invalidate_dependent(repo_dir, distro, arch, package, processed_packages):
+    """Implementation of invalidation for recursion"""
+    # Get all dependents and recursively walk their dependents
+    dependents = _get_dependent_packages(repo_dir, distro, arch, package)
+    for dependent in dependents:
+        # packages may overlap in the walk at different depths
+        # don't try to redelete a package if it's already been processed
+        if dependent in processed_packages:
+            continue
+        # walk to all dependencies
+        if not _invalidate_dependent(repo_dir, distro, arch, dependent, processed_packages):
+            return False
+        # clear the package
+        if not invalidate_package(repo_dir, distro, arch, dependent):
+            return False
+        processed_packages.append(dependent)
+    return True
 
 
 def invalidate_package(repo_dir, distro, arch, package):
@@ -100,9 +131,17 @@ def invalidate_package(repo_dir, distro, arch, package):
     invalidate_package_command = ['reprepro', '-b', repo_dir,
                                   '-T', debtype, '-V',
                                   'removefilter', distro,
-                                  "Package (== "+package+" )"+arch_match]
-
+                                  "Package (== " + package + " )" + arch_match]
     return try_run_command(invalidate_package_command)
+
+
+def invalidate_dependent(repo_dir, distro, arch, package):
+    """ Remove all dependents of the package with the same arch.
+    This is only valid for binary packages. """
+
+    # storage for recursion
+    processed_packages = []
+    return _invalidate_dependent(repo_dir, distro, arch, package, processed_packages)
 
 
 def _clear_ros_distro(repo_dir, rosdistro, distro, arch, commit):
