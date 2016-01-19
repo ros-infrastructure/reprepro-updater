@@ -1,0 +1,8 @@
+name: repositories_indigo_import_testing
+method: http://repositories.ros.org/ubuntu/testing/
+suites: [saucy, trusty]
+component: main
+architectures: [source amd64 armhf i386]
+filter_formula: (Package (% ros-indigo-* ))
+# needed until we deploy the gpg key
+# verify_release: blindtrust
