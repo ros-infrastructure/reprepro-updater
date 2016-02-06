@@ -60,8 +60,8 @@ for fname in yaml_files:
         # TODO add more verification
         updates_generator.add_update_element(conf.UpdateElement(**yaml_dict))
 
-print("target_distros %s" % target_distros)
-print("target_arches %s" % target_distros)
+print("target_distros %s" % sorted(target_distros))
+print("target_arches %s" % sorted(target_distros))
 
 for distro in sorted(target_distros):
     for arch in sorted(target_arches):
