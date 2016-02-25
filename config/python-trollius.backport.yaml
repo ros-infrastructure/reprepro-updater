@@ -1,0 +1,6 @@
+name: trollius
+method: http://ppa.launchpad.net/wjwwood/trollius-backports/ubuntu
+suites: [trusty]
+component: main
+architectures: [any]
+filter_formula: Package (== python-trollius) | Package (== python3-trollius)
