@@ -1,6 +1,21 @@
 name: ros_bootstrap
 method: http://repos.ros.org/repos/ros_bootstrap
-suites: [lucid, maverick, natty, oneiric, precise, quantal, raring, saucy, trusty, utopic, vivid]
+suites:
+ - lucid
+ - maverick
+ - natty
+ - oneiric
+ - precise
+ - quantal
+ - raring
+ - saucy
+ - trusty
+ - utopic
+ - vivid
+ - wily
+ - xenial
+ - jessie
+ - wheezy
 component: main
 architectures: [i386, amd64, armel, armhf, source]
 # filter_formula: Package (% python* )

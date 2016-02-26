@@ -19,15 +19,10 @@ In this directory is a second config for importing the ROS indigo ROS packages.
 
 ## Import indigo armhf from experimental farm
 
-`python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros-shadow-fixed/ubuntu -y /home/rosbuild/reprepro_updater/armhf/testfarm_indigo_testing.yaml`
-
-`python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -y /home/rosbuild/reprepro_updater/armhf/testfarm_indigo.yaml`
+Run: `./import_indigo_armhf_testfarm.bash`
 
 ## Import jade armhf from experimental farm
 
-`python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros-shadow-fixed/ubuntu -y /home/rosbuild/reprepro_updater/armhf/testfarm_jade_testing.yaml`
+Run: `./import_jade_armhf_testfarm.bash`
 
-`python /home/rosbuild/reprepro_updater/scripts/prepare_sync.py /var/www/repos/ros/ubuntu -y /home/rosbuild/reprepro_updater/armhf/testfarm_jade.yaml`
-
-To execute these commands add an option -c. 
 
