@@ -41,7 +41,7 @@ def apply_command_template(repo, command_arg, distro, regex, dry_run=False):
     subprocess.Popen(_cmd)
     # sleep to let the lock file cleanup before iterating
     print('Sleeping to allow lock reset')
-    time.sleep(2.0)
+    time.sleep(4.0)
     
 
 
