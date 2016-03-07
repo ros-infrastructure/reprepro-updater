@@ -8,8 +8,18 @@ import subprocess
 import sys
 import time
 
-DISTROS = ['precise', 'quantal', 'raring', 'saucy', 'trusty']
-REPOS = ['/var/www/repos/building', '/var/www/repos/ros-shadow-fixed/ubuntu', '/var/www/repos/ros/ubuntu',]
+DISTROS = ['precise',
+           'quantal',
+           'raring',
+           'saucy',
+           'trusty',
+           'utopic',
+           'vivid',
+           'wily',
+           'xenial',
+           'jessie',
+           ]
+REPOS = ['/var/repos/ubuntu/building', '/var/repos/ubuntu/testing', '/var/repos/ubuntu/main',]
 
 import argparse
 
