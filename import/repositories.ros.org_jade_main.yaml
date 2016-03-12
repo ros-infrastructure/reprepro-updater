@@ -1,8 +1,0 @@
-name: repositories_jade_import_main
-method: http://repositories.ros.org/ubuntu/main/
-suites: [trusty, utopic, vivid]
-component: main
-architectures: [source amd64 armhf i386]
-filter_formula: (Package (% ros-jade-* ))
-# needed until we deploy the gpg key
-# verify_release: blindtrust
