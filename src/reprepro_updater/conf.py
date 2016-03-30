@@ -126,10 +126,11 @@ Update: %(update_rule)s
 
 
 class UpdateElement(object):
-    def __init__(self, name, method, suites, component, architectures, filter_formula=None):
+    def __init__(self, name, method, suites, component, architectures, filter_formula=None, source_suite=None):
         self.name = name
         self.method = method
         self.suites = suites
+        self.source_suite = source_suite
         self.component = component
         self.architectures = architectures
         self.filter_formula = filter_formula
@@ -143,7 +144,7 @@ class UpdateElement(object):
         output = ''
         output += 'Name: %s\n' % self.name
         output += 'Method: %s\n' % self.method
-        output += 'Suite: %s\n' % distro
+        output += 'Suite: %s\n' % self.source_suite if self.source_suite else distro
         output += 'Components: %s\n' % self.component
         output += 'Architectures: %s\n' % arch
         if self.filter_formula:
