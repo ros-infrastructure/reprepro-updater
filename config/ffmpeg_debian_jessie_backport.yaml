@@ -4,5 +4,5 @@ method: http://ftp.us.debian.org/debian/
 suites: [jessie]
 source_suite: jessie-backports
 component: main
-architectures: [amd64, arm64, armel, armhf, i386, source]
+architectures: [amd64, arm64, armhf, i386, source]
 filter_formula: Package (% *ffmpeg* ) | Package (== ffmpeg)
