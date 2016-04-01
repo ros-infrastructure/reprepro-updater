@@ -144,7 +144,7 @@ class UpdateElement(object):
         output = ''
         output += 'Name: %s\n' % self.name
         output += 'Method: %s\n' % self.method
-        output += 'Suite: %s\n' % self.source_suite if self.source_suite else distro
+        output += 'Suite: %s\n' % (self.source_suite if self.source_suite else distro)
         output += 'Components: %s\n' % self.component
         output += 'Architectures: %s\n' % arch
         if self.filter_formula:
