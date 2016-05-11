@@ -1,0 +1,8 @@
+name: vtk-backports-arm
+method: http://ports.ubuntu.com/
+suites: [xenial]
+source_suite: yakkety
+component: universe>main
+#source_component: universe
+architectures: [arm64, armhf]
+filter_formula: Package (% libvtk6* ) | Package (% vtk6* )
