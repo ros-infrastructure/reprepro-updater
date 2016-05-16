@@ -9,7 +9,7 @@ import sys
 import time
 
 DISTROS = ['precise', 'quantal', 'raring', 'saucy', 'trusty', 'utopic', 'vivid']
-REPOS = ['/var/www/repos/building', '/var/www/repos/ros-shadow-fixed/ubuntu', '/var/www/repos/ros/ubuntu',]
+REPOS = ['/var/www/repos/ros_bootstrap',]
 
 import argparse
 

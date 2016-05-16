@@ -1,7 +1,6 @@
 name: vtk-backports
-method: http://archive.ubuntu.com/ubuntu/
+method:  http://ppa.launchpad.net/tully.foote/backports/ubuntu
 suites: [xenial]
-source_suite: yakkety
-component: universe>main
-architectures: [amd64, i386, source]
+component: main
+architectures: [amd64, arm64, armhf, i386, source]
 filter_formula: Package (% libvtk6* ) | Package (% vtk6* )
