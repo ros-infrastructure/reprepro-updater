@@ -3,4 +3,4 @@ method:  http://ppa.launchpad.net/tully.foote/backports/ubuntu
 suites: [xenial]
 component: main
 architectures: [amd64, arm64, armhf, i386, source]
-filter_formula: Package (% libvtk6* ) | Package (% vtk6* )
+filter_formula: Package (% libvtk6* ) | Package (% vtk6* ) | Package (% *-vtk6* )
