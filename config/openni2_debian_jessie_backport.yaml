@@ -1,0 +1,8 @@
+name: ffmpeg-debian-backports
+method: http://ftp.us.debian.org/debian/
+#http://httpredir.debian.org/debian
+suites: [jessie]
+source_suite: stretch
+component: main
+architectures: [amd64, arm64, armhf, i386, source]
+filter_formula: Package (% libopenni2* ) | Package (%openni2*)
