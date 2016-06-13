@@ -1,6 +1,6 @@
 name: catkinlint
 method: http://ppa.launchpad.net/roehling/latest/ubuntu
-suites: [precise, quantal, raring, saucy, trusty, utopic, vivid, wily, xenial]
+suites: [precise, trusty, utopic, vivid, wily, xenial]
 component: main
 architectures: [i386, amd64, source]
-filter_formula: Package (== catkin-lint ) | Package (== python-catkin-lint)
+filter_formula: Package (== catkin-lint ) | Package (% python*-catkin-lint)
