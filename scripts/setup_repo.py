@@ -26,6 +26,10 @@ if len(args) != 1:
 
 conf_params = conf.load_conf(args[0])
 
+if not conf_params:
+    print "Could not load config for %s" % args[0]
+    sys.exit(1)
+
 conf_dir = os.path.join(conf_params.repository_path, 'conf')
 
 already_configured = os.path.isdir(conf_dir)
