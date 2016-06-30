@@ -1,0 +1,6 @@
+name: couchdb-linaro
+method: http://repo.linaro.org/ubuntu/linaro-overlay
+suites: [jessie]
+component: main
+architectures: [amd64, arm64, armhf, i386, source]
+filter_formula: Package (% couchdb*)
