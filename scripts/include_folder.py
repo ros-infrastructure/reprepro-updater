@@ -23,7 +23,7 @@ parser.add_option("-p", "--package", dest="package")
 parser.add_option("-c", "--commit", dest="commit", action='store_true', default=False)
 parser.add_option("--invalidate", dest="invalidate", action='store_true', default=False)
 
-parser.add_option("--repo-path", dest="repo_path", default='/var/www/repos/building')
+parser.add_option("--repo-path", dest="repo_path", default='/var/www/repos/ros_bootstrap')
 
 
 (options, args) = parser.parse_args()
