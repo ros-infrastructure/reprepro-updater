@@ -1,0 +1,6 @@
+name: pcl-armhf-backports
+method:  http://ppa.launchpad.net/tully.foote/backports/ubuntu
+suites: [xenial]
+component: main
+architectures: [armhf]
+filter_formula: Package (% libpcl* ) | Package (== pcl-tools)
