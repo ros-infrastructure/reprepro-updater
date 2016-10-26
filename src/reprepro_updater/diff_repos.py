@@ -103,14 +103,14 @@ def compute_annoucement(rosdistro, pf_old, pf_new):
 
     out = ''
 
-    out += "Updates to %s\n" % rosdistro
-    out += "Added Packages [%s]:\n" % len(added_packages)
+    out += "## Package Updates for %s\n\n" % rosdistro
+    out += "### Added Packages [%s]:\n\n" % len(added_packages)
     for p in sorted(added_packages):
         out += " * %s: %s\n" % \
             (p, core_version(new_packages[p]['Version']))
     out += "\n"
 
-    out += "Updated Packages [%s]:\n" % len(updated_packages)
+    out += "### Updated Packages [%s]:\n\n" % len(updated_packages)
     for p in sorted(updated_packages):
         out += " * %s: %s -> %s\n" % \
             (p,
@@ -118,7 +118,7 @@ def compute_annoucement(rosdistro, pf_old, pf_new):
              core_version(new_packages[p]['Version']))
     out += "\n"
 
-    out += "Removed Packages [%s]:\n" % len(removed_packages)
+    out += "### Removed Packages [%s]:\n\n" % len(removed_packages)
     for p in sorted(removed_packages):
         out += "- %s\n" % (p)
     out += "\n"
@@ -127,7 +127,7 @@ def compute_annoucement(rosdistro, pf_old, pf_new):
         "Thanks to all ROS maintainers who make packages "\
         "available to the ROS community. The above list "\
         "of packages was made possible by the work of the "\
-        "following maintainers: \n"
+        "following maintainers: \n\n"
     for maintainer in sorted(maintainers):
         out += " * %s\n" % maintainer
 
