@@ -36,7 +36,7 @@ ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick',
                'natty', 'oneiric', 'precise', 'quantal', 'raring',
                'saucy', 'trusty', 'utopic', 'vivid', 'wily', 'xenial',
                'yakkety', 'zesty',
-               'wheezy', 'jessie']
+               'wheezy', 'jessie', 'stretch']
 ALL_ARCHES =  ['amd64', 'i386', 'arm64', 'armel', 'armhf', 'source']
 
 class ConfParameters(object):
