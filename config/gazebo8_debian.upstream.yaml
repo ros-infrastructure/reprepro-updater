@@ -1,6 +1,6 @@
 name: gazebo8_debian_import
 method: http://packages.osrfoundation.org/gazebo/debian-stable
-suites: [jessie, stretch]
+suites: [stretch]
 component: main
 architectures: [amd64, arm64, armhf, i386, source]
 filter_formula: Package (% gazebo-dbg ) | Package (% gazebo ) | Package (% sdformat)
