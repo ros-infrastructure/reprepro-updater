@@ -1,0 +1,7 @@
+name: collada-debian-backports
+method: http://ftp.us.debian.org/debian/
+suites: [jessie]
+source_suite: jessie-backports
+component: main
+architectures: [amd64, arm64, armhf, i386, source]
+filter_formula: Package (% *libcollada-dom2.4-dp-dev* ) | Package (== libcollada-dom2.4-dp-dev)
