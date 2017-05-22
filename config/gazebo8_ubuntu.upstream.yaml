@@ -1,6 +1,0 @@
-name: gazebo8_ubuntu_import
-method: http://packages.osrfoundation.org/gazebo/ubuntu
-suites: [xenial, yakkety, zesty]
-component: main
-architectures: [amd64, arm64, armhf, i386, source]
-filter_formula: Package (== gazebo8 ) | Package (== gazebo8-plugin-base ) | Package (== gazebo8-common ) | Package (== libgazebo8 ) | Package (== libgazebo8-dev ) | Package (== gazebo8-dbg ) | Package (== libsdformat5) | Package (== libsdformat5-dev) | Package (== libsdformat5-dbg) | Package (== sdformat-sdf) | Package (== libignition-math3) | Package (== libignition-math3-dev) | Package (== libignition-math3-dbg) | Package (== libignition-msgs0) | Package (== libignition-msgs-dev) | Package (== libignition-msgs0-dbg) | Package (== libignition-transport3) | Package (== libignition-transport3-dev) | Package (== libignition-transport3-dbg)
