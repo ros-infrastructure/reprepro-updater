@@ -1,9 +1,10 @@
+from __future__ import print_function
 
+import fcntl
 import os
 import subprocess
-import fcntl
-import time
 import sys
+import time
 
 
 class LockContext:
@@ -19,16 +20,16 @@ class LockContext:
         self.lfh = open(self.lockfilename, 'w')
 
         file_locked = False
-        for i in xrange(self.timeout):
+        for i in range(self.timeout):
 
             try:
 
                 fcntl.lockf(self.lfh, fcntl.LOCK_EX | fcntl.LOCK_NB)
                 file_locked = True
                 break
-            except IOError, ex:
-                print "could not get lock on %s." % self.lockfilename
-                print "Waiting one second (%d of %d)" % (i, self.timeout)
+            except IOError:
+                print("could not get lock on %s." % self.lockfilename)
+                print("Waiting one second (%d of %d)" % (i, self.timeout))
                 time.sleep(1)
         if not file_locked:
             raise IOError("Could not lock file %s with %d retries" %
@@ -44,24 +45,24 @@ class LockContext:
 def try_run_command(command):
 
         try:
-            print >>sys.stderr, "running command %s" % command
+            print("running command %s" % command, file=sys.stderr)
             subprocess.check_call(command)
             return True
 
-        except Exception, ex:
-            print "Execution of [%s] Failed:" % command, ex
+        except Exception as ex:
+            print("Execution of [%s] Failed:" % command, ex)
             return False
 
 
 def delete_unreferenced(repo_dir, commit):
     command_argument = 'deleteunreferenced' if commit else 'dumpunreferenced'
     cleanup_command = ['reprepro', '-v', '-b', repo_dir, command_argument]
-    print >>sys.stderr, "running", cleanup_command
+    print("running", cleanup_command, file=sys.stderr)
     return try_run_command(cleanup_command)
 
 
 def run_include_command(repo_dir, distro, changesfile):
-    """ Update the repo to add the files in this changes file """
+    """Update the repo to add the files in this changes file."""
     # Force misc due to dry packages having invalid "unknown" section,
     # the -S misc can be removed when dry is deprecated.
     include_command = ['reprepro', '-v', '-b', repo_dir, '-S', 'misc',
@@ -70,7 +71,7 @@ def run_include_command(repo_dir, distro, changesfile):
 
 
 def _run_update_command(repo_dir, distro, commit):
-    """ Update the repo to add the files in this changes file """
+    """Update the repo to add the files in this changes file."""
     command_argument = 'update' if commit else 'dumpupdate'
     update_command = ['reprepro', '-v', '-b', repo_dir,
                       '--noskipold', command_argument, distro]
@@ -78,9 +79,11 @@ def _run_update_command(repo_dir, distro, commit):
 
 
 def _get_dependent_packages(repo_dir, distro, arch, package):
-    """ Return a list of packages which were detected as dependant by reprepro.
-    This only returns direct dependencies. """
+    """
+    Return a list of packages which were detected as dependant by reprepro.
 
+    This only returns direct dependencies.
+    """
     reprepro_command = [
         'reprepro', '-V', '-b', repo_dir,
         '-T', 'deb',
@@ -93,7 +96,7 @@ def _get_dependent_packages(repo_dir, distro, arch, package):
     try:
         output = subprocess.check_output(reprepro_command)
     except subprocess.CalledProcessError as ex:
-        print "Execution of [%s] Failed:" % reprepro_command, ex
+        print("Execution of [%s] Failed:" % reprepro_command, ex)
         return []
     packages = []
     for l in output.splitlines():
@@ -104,7 +107,7 @@ def _get_dependent_packages(repo_dir, distro, arch, package):
 
 
 def _invalidate_dependent(repo_dir, distro, arch, package, processed_packages):
-    """Implementation of invalidation for recursion"""
+    """Implement invalidation for recursion."""
     # Get all dependents and recursively walk their dependents
     dependents = _get_dependent_packages(repo_dir, distro, arch, package)
     for dependent in dependents:
@@ -123,7 +126,7 @@ def _invalidate_dependent(repo_dir, distro, arch, package, processed_packages):
 
 
 def invalidate_package(repo_dir, distro, arch, package):
-    """Remove this package itself from the repo"""
+    """Remove this package itself from the repo."""
     debtype = 'deb' if arch != 'source' else 'dsc'
     arch_match = ', Architecture (== ' + arch + ' )' \
                  if arch != 'source' else ''
@@ -136,9 +139,11 @@ def invalidate_package(repo_dir, distro, arch, package):
 
 
 def invalidate_dependent(repo_dir, distro, arch, package):
-    """ Remove all dependents of the package with the same arch.
-    This is only valid for binary packages. """
+    """
+    Remove all dependents of the package with the same arch.
 
+    This is only valid for binary packages.
+    """
     # storage for recursion
     processed_packages = []
     return _invalidate_dependent(repo_dir, distro, arch, package, processed_packages)
@@ -170,10 +175,10 @@ def run_update(repo_dir, dist_generator, updates_generator,
     distributions_filename = os.path.join(conf_dir, 'distributions')
 
     with LockContext(lockfile) as lock_c:
-        print "I have a lock on %s" % lockfile
+        print("I have a lock on %s" % lockfile)
 
         # write out update file
-        print "Creating updates file %s" % update_filename
+        print("Creating updates file %s" % update_filename)
         update_contents = updates_generator.generate_file_contents(distro, arch)
         for l in update_contents.splitlines():
             print("  %s" % l)
@@ -181,7 +186,7 @@ def run_update(repo_dir, dist_generator, updates_generator,
             fh.write(update_contents)
 
         # write out distributions file
-        print "Creating distributions file %s" % distributions_filename
+        print("Creating distributions file %s" % distributions_filename)
         with open(distributions_filename, 'w') as fh:
             fh.write(dist_generator.generate_file_contents(arch))
 

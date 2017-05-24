@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 
+from __future__ import print_function
+
 from optparse import OptionParser
 
 import os
-import sys
 import shutil
+import sys
 
-from reprepro_updater.helpers import \
-    LockContext, delete_unreferenced,\
-    run_include_command, invalidate_dependent, invalidate_package
-from reprepro_updater.changes_parsing import \
-    find_changes_files, load_changes_files
+from reprepro_updater.changes_parsing import find_changes_files
+from reprepro_updater.changes_parsing import load_changes_files
+from reprepro_updater.helpers import delete_unreferenced
+from reprepro_updater.helpers import invalidate_dependent
+from reprepro_updater.helpers import invalidate_package
+from reprepro_updater.helpers import LockContext
+from reprepro_updater.helpers import run_include_command
 
 parser = OptionParser()
 
@@ -100,10 +104,10 @@ if options.commit:
                                        changes.filename):
                 sys.exit(1)
             if options.do_delete:
-                print "Removing %s" % changes.folder
+                print("Removing %s" % changes.folder)
                 shutil.rmtree(changes.folder)
 
 else:
-    print >>sys.stderr, "NO COMMIT OPTION\nWould have run invalidation of"\
-                        " dependent packages, invalidation of %s package and "\
-                        "uploaded new package" % (options.package)
+    print("NO COMMIT OPTION\nWould have run invalidation of"
+          " dependent packages, invalidation of %s package and "
+          "uploaded new package" % (options.package), file=sys.stderr)

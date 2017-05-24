@@ -1,6 +1,7 @@
-from debian.debian_support import PackageFile
 import re
 import sys
+
+from debian.debian_support import PackageFile
 try:
     from urllib.request import urlopen
 except ImportError:
@@ -61,7 +62,8 @@ def get_packagefile_from_url(url, name='foo'):
 
 
 def compute_annoucement(rosdistro, pf_old, pf_new):
-    """Compute the difference between to debian Packages files per rosdistro
+    """
+    Compute the difference between to debian Packages files per rosdistro.
 
     Inputs: rosdistro and debian PackageFiles
     Returns: string of difference announcement

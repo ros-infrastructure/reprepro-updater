@@ -1,14 +1,14 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
+import datetime
+from optparse import OptionParser
+import sys
+
 from reprepro_updater import conf
 from reprepro_updater import diff_repos
-from reprepro_updater.helpers import run_cleanup, run_update
-
-from optparse import OptionParser
-
-import datetime
-import sys
+from reprepro_updater.helpers import run_cleanup
+from reprepro_updater.helpers import run_update
 
 parser = OptionParser()
 parser.add_option("-r", "--rosdistro", dest="rosdistro")
@@ -105,12 +105,12 @@ for ubuntu_distro in distros:
         try:
             pf_old = diff_repos.get_packagefile_from_url(target_url, name='old')
         except RuntimeError as ex:
-            print("Exeception: %s \n NOT Computing diff" % ex, file=sys.stderr)
+            print("Exception: %s \n NOT Computing diff" % ex, file=sys.stderr)
             continue
         try:
             pf_new = diff_repos.get_packagefile_from_url(upstream_url, name='new')
         except RuntimeError as ex:
-            print("Exeception: %s \n NOT Computing diff" % ex, file=sys.stderr)
+            print("Exception: %s \n NOT Computing diff" % ex, file=sys.stderr)
             continue
         dtime = datetime.datetime.now()
         dtime = dtime.replace(microsecond=0)

@@ -1,5 +1,4 @@
 import os
-import yaml
 
 from debian.deb822 import Changes
 
@@ -10,7 +9,7 @@ class ChangesFile:
             self.filename = filename
             self.content = Changes(open(filename))
             self.folder = os.path.dirname(filename)
-        except Exception, ex:
+        except Exception as ex:
             raise Exception("Failed to load changes file %s.  [[%s]]" %
                             (filename, ex))
 

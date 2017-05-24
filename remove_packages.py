@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
-# This is a script to remove packages from all repos quickly.  It will prompt to show what would happen (using listfilter) and the remove using removefilter. 
+# This is a script to remove packages from all repos quickly.
+# It will prompt to show what would happen (using listfilter) and the remove using removefilter.
 
 from __future__ import print_function
+
 import argparse
 import subprocess
 import sys
@@ -19,13 +21,11 @@ DISTROS = ['precise',
            'xenial',
            'jessie',
            ]
-REPOS = ['/var/repos/ubuntu/building', '/var/repos/ubuntu/testing', '/var/repos/ubuntu/main',]
-
-import argparse
+REPOS = ['/var/repos/ubuntu/building', '/var/repos/ubuntu/testing', '/var/repos/ubuntu/main', ]
 
 parser = argparse.ArgumentParser(description='Find and remove packages from ROS repos.')
 parser.add_argument('regex',
-                   help='the regex to use in reprepro')
+                    help='the regex to use in reprepro')
 parser.add_argument('--repo', dest='repos', action='append', default=[],
                     help="Repos to operate on. Default: %s" % REPOS)
 parser.add_argument('--distro', dest='distros', action='append', default=[],
@@ -42,6 +42,7 @@ if not args.repos:
 if not args.distros:
     args.distros = DISTROS
 
+
 def apply_command_template(repo, command_arg, distro, regex, dry_run=False):
     command_template = '/usr/bin/reprepro -b %(repo)s -V %(command_arg)s %(distro)s' % locals()
     if dry_run:
@@ -52,8 +53,6 @@ def apply_command_template(repo, command_arg, distro, regex, dry_run=False):
     # sleep to let the lock file cleanup before iterating
     print('Sleeping to allow lock reset')
     time.sleep(2.0)
-    
-
 
 
 for repo in args.repos:
@@ -68,6 +67,10 @@ if args.add:
     # short circuit, add was already done
     sys.exit(0)
 
+try:
+    raw_input
+except NameError:
+    raw_input = input
 confirmation = raw_input('Would you like to remove these packages? If so type "yes":')
 
 if confirmation != "yes":

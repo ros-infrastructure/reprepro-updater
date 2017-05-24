@@ -1,14 +1,10 @@
 #!/usr/bin/env python
 
-from reprepro_updater import conf
-from reprepro_updater.helpers import LockContext, run_update
-
 from optparse import OptionParser
 
-import os
-import sys
-import subprocess
-import time
+from reprepro_updater import conf
+from reprepro_updater.helpers import run_update
+
 import yaml
 
 usage = "usage: %prog [options] reprepro_repo yaml_config_file[s]..."
@@ -31,7 +27,8 @@ if len(args) > 1:
 else:
     yaml_files = conf_params.get_upstream_config_files()
     if not yaml_files:
-        parser.error("No upstream_config section for %s, and nothing passed on the command line" % args[0])
+        parser.error(
+            "No upstream_config section for %s, and nothing passed on the command line" % args[0])
 
 if not conf_params.repo_exists():
     parser.error("Repository must have been initialized already")
@@ -51,10 +48,10 @@ for fname in yaml_files:
         print("loading config file: %s" % fname)
         yaml_dict = yaml.load(fh.read())
         if 'name' not in yaml_dict:
-            print "error %s does not include a name element" % fname
+            print("error %s does not include a name element" % fname)
             continue
-        print("adding arches %s and suites: %s" % (set(yaml_dict['architectures']),
-                                            set(yaml_dict['suites'])))
+        print("adding arches %s and suites: %s" %
+              (set(yaml_dict['architectures']), set(yaml_dict['suites'])))
         target_arches.update(set(yaml_dict['architectures']))
         target_distros.update(set(yaml_dict['suites']))
         # TODO add more verification
@@ -65,7 +62,7 @@ print("target_arches %s" % sorted(target_distros))
 
 for distro in sorted(target_distros):
     for arch in sorted(target_arches):
-        print ("Updating for %s %s to update into repo %s" %
-               (distro, arch, conf_params.repository_path))
+        print("Updating for %s %s to update into repo %s" %
+              (distro, arch, conf_params.repository_path))
         run_update(conf_params.repository_path, dist,
                    updates_generator, distro, arch, options.commit)
