@@ -162,8 +162,10 @@ def run_cleanup(repo_dir, rosdistro, distro, arch, commit):
     lockfile = os.path.join(repo_dir, 'lock')
     with LockContext(lockfile) as lock_c:
 
-        _clear_ros_distro(repo_dir, rosdistro, distro, arch, commit)
-        delete_unreferenced(repo_dir, commit)
+        if not _clear_ros_distro(repo_dir, rosdistro, distro, arch, commit):
+            raise RuntimeError('cleanup command failed')
+        if not delete_unreferenced(repo_dir, commit):
+            raise RuntimeError('delete_unreferenced command failed')
 
 
 def run_update(repo_dir, dist_generator, updates_generator,
@@ -190,4 +192,5 @@ def run_update(repo_dir, dist_generator, updates_generator,
         with open(distributions_filename, 'w') as fh:
             fh.write(dist_generator.generate_file_contents(arch))
 
-        _run_update_command(repo_dir, distro, commit)
+        if not _run_update_command(repo_dir, distro, commit):
+            raise RuntimeError('update command failed')
