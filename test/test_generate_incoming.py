@@ -31,8 +31,8 @@ Options: multiple_distributions
 def test_update_and_distributions():
     updates = conf.UpdatesFile(['lucid', 'oneiric', 'precise'], ['amd64', 'i386', 'armel'])
 
-
-    dist = conf.DistributionsFile(['lucid', 'oneiric', 'precise'], ['amd64', 'i386', 'armel'], 'REPOKEYID', updates )
+    dist = conf.DistributionsFile(
+        ['lucid', 'oneiric', 'precise'], ['amd64', 'i386', 'armel'], 'REPOKEYID', updates)
     dist_content = dist.generate_file_contents('amd64')
     assert """Origin: ROS
 Label: ROS lucid

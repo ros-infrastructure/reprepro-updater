@@ -209,13 +209,15 @@ class UpdatesFile(object):
 
 
 class ConfGenerator(object):
-    """ A Class for genrating the reprepro conf directory.
+    """
+    A Class for generating the reprepro conf directory.
+
     It can generate, the distributions and update rules
     dynamically for more granular updates.
     """
 
     def __init__(self, config_parameters_object):
-        """ Read the basic information """
+        """Read the basic information."""
         self.config_params = config_parameters_object
 
     def _generate_distribution(self):
@@ -228,7 +230,7 @@ class ConfGenerator(object):
         pass
 
     def import_from_folder(self, package, folder, invalidate=False):
-        """ Import a package from the folder """
+        """Import a package from the folder."""
         raise NotImplemented
 
     def run_update(self):
@@ -253,8 +255,6 @@ def load_conf(config_name=None):
     config_section = config[config_name]
     if 'repository_path' not in config_section:
         return None
-
-    repo_path = config[config_name]['repository_path']
 
     def get_config_element(config_section, key, default=None,
                            required=False, expect_list=False):

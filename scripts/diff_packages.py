@@ -6,9 +6,7 @@ from reprepro_updater import diff_repos
 
 
 def main():
-    """
-    Output: list of added/removed/versioned packages
-    """
+    """Output: list of added/removed/versioned packages."""
     usage = "usage: %prog fromfile tofile [rosdistro]"
     parser = argparse.ArgumentParser(usage)
     parser.add_argument('targetrepo', type=str, help='Destination repository base url')
