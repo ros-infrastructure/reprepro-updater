@@ -3,4 +3,12 @@ This is a set of scripts intended to create/update a debian repository.
 A lot of things are currently hard-coded inside.
 For example, the default (private) signing key signature (-__-)
 
-Refactoring in progres...
+Refactoring in progress...
+
+== Creating a new apt repository ==
+Add the new distribution in `reprepro_updater`: https://github.com/ros-infrastructure/reprepro-updater/commit/04eb17313ed769d8820ae0168a55ecec7b8de65b
+Add the new distribution name in buildfarm_deployment_config (example on the public config: https://github.com/ros-infrastructure/buildfarm_deployment_config/commit/10ce9ec1be1f54865554735082ab7ce1d7a57893)
+Log in repos.ros.org as the rosbuild user
+go to ~/reprepro_updater/scripts and pull the master branch
+run the setup_repo.py script: `python /home/rosbuild/reprepro_updater/scripts/setup_repo.py /var/www/repos/ros_bootstrap/ -c`
+Done! You can confirm that the repository has been created by opening http://repos.ros.org/repos/ros_bootstrap/dists/ in your browser
