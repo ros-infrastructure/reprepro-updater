@@ -1,6 +1,6 @@
 name: pyside2
 method: http://ppa.launchpad.net/thopiekar/pyside-git/ubuntu/
-suites: [yakkety, zesty]
+suites: [zesty, artful]
 component: main
 architectures: [i386, amd64, armhf, arm64, source]
 filter_formula: Package (% python-pyside2*) | Package (% libpyside2*) | Package (% libpyside-py3-2*) | Package (== shiboken2) | Package (% libshiboken2* ) | Package (% libshiboken-py3-2*) | Package (== pyside2 )
