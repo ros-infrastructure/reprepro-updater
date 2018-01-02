@@ -1,6 +1,0 @@
-name: backfill-ros
-method: http://packages.ros.org/ros/ubuntu/
-suites: [hardy, jaunty, karmic, lucid, maverick, natty, oneiric, precise, quantal, raring, wheezy]
-component: main
-architectures: [i386, amd64, source]
-
