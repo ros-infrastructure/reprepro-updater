@@ -60,6 +60,12 @@ def get_packagefile_from_url(url, name='foo'):
     except URLError as ex:
         raise RuntimeError("Failed to load from url %s [%s]" % (url, ex))
 
+def conditional_markdown_package_homepage_link(package, package_file):
+    if 'Homepage' in package_file[package]:
+        return "[%s](%s)" % (package, package_file[package]['Homepage'])
+    else:
+        return package
+
 
 def compute_annoucement(rosdistro, pf_old, pf_new):
     """
@@ -108,21 +114,23 @@ def compute_annoucement(rosdistro, pf_old, pf_new):
     out += "## Package Updates for %s\n\n" % rosdistro
     out += "### Added Packages [%s]:\n\n" % len(added_packages)
     for p in sorted(added_packages):
+
         out += " * %s: %s\n" % \
-            (p, core_version(new_packages[p]['Version']))
+            (conditional_markdown_package_homepage_link(p, new_packages),
+            core_version(new_packages[p]['Version']))
     out += "\n"
 
     out += "### Updated Packages [%s]:\n\n" % len(updated_packages)
     for p in sorted(updated_packages):
         out += " * %s: %s -> %s\n" % \
-            (p,
+            (conditional_markdown_package_homepage_link(p, new_packages),
              core_version(old_packages[p]['Version']),
              core_version(new_packages[p]['Version']))
     out += "\n"
 
     out += "### Removed Packages [%s]:\n\n" % len(removed_packages)
     for p in sorted(removed_packages):
-        out += "- %s\n" % (p)
+        out += "- %s\n" % (conditional_markdown_package_homepage_link(p, old_packages),)
     out += "\n"
 
     out += \
