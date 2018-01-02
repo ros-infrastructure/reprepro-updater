@@ -35,7 +35,7 @@ import os
 ALL_DISTROS = ['hardy', 'jaunty', 'karmic', 'lucid', 'maverick',
                'natty', 'oneiric', 'precise', 'quantal', 'raring',
                'saucy', 'trusty', 'utopic', 'vivid', 'wily', 'xenial',
-               'yakkety', 'zesty', 'artful',
+               'yakkety', 'zesty', 'artful', 'bionic',
                'wheezy', 'jessie', 'stretch']
 ALL_ARCHES =  ['amd64', 'i386', 'arm64', 'armel', 'armhf', 'source']
 
