@@ -114,7 +114,6 @@ def compute_annoucement(rosdistro, pf_old, pf_new):
     out += "## Package Updates for %s\n\n" % rosdistro
     out += "### Added Packages [%s]:\n\n" % len(added_packages)
     for p in sorted(added_packages):
-
         out += " * %s: %s\n" % \
             (conditional_markdown_package_homepage_link(p, new_packages),
             core_version(new_packages[p]['Version']))
