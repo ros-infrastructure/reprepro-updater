@@ -16,6 +16,27 @@ from reprepro_updater.helpers import invalidate_package
 from reprepro_updater.helpers import LockContext
 from reprepro_updater.helpers import run_include_command
 
+
+def remove_ddeb_from_changes_file(filename):
+    """ Remove ddeb entries from changes file
+    This is a workaround for https://github.com/ros-infrastructure/buildfarm_deployment/issues/186
+    """
+    trimmed_version = []
+    changes_made = False
+    with open(filename, 'r') as changes:
+        for l in changes.readlines():
+            if not l.strip().endswith('.ddeb'):
+                trimmed_version.append(l)
+            else:
+                changes_made = True
+    if changes_made:
+        print('Removing ddeb lines from changes file: %s ' % filename +
+              'workaround https://github.com/ros-infrastructure/buildfarm_deployment/issues/186')
+        with open(filename, 'w') as changes:
+            for l in trimmed_version:
+                changes.write(l)
+
+
 parser = OptionParser()
 
 parser.add_option("--delete-folder", dest="do_delete",
@@ -99,6 +120,7 @@ if options.commit:
             package_str_parts.append(changes.content['Architecture'])
             print('Importing package: %s' % ':'.join(package_str_parts))
 
+            remove_ddeb_from_changes_file(changes.filename)
             if not run_include_command(options.repo_path,
                                        changes.content['Distribution'],
                                        changes.filename):
