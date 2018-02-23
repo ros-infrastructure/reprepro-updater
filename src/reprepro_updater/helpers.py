@@ -125,6 +125,21 @@ def _invalidate_dependent(repo_dir, distro, arch, package, processed_packages):
     return True
 
 
+def invalidate_packages(repo_dir, distro, arch, packages):
+    """
+    Remove multiple packages from the repo in one reprepro invocation.
+
+    This is only valid for binary packages.
+    """
+    filterstr = "Package (== {})"
+    filterlist = [filterstr.format(pkgname) for pkgname in packages]
+    invalidate_packages_command = ['reprepro', '-b', repo_dir,
+                                   '-T', 'deb', '-A', arch, '-V',
+                                   'removefilter', distro,
+                                   ' | '.join(filterlist)]
+    return try_run_command(invalidate_packages_command)
+
+
 def invalidate_package(repo_dir, distro, arch, package):
     """Remove this package itself from the repo."""
     debtype = 'deb' if arch != 'source' else 'dsc'
