@@ -159,9 +159,17 @@ def invalidate_dependent(repo_dir, distro, arch, package):
 
     This is only valid for binary packages.
     """
-    # storage for recursion
-    processed_packages = []
-    return _invalidate_dependent(repo_dir, distro, arch, package, processed_packages)
+    # queue of dependents to iterate
+    dependents_to_process = set(_get_dependent_packages(repo_dir, distro, arch, package))
+    # the complete list of transitive dependents
+    transitive_dependents = dependents_to_process.copy()
+    while len(dependents_to_process) > 0:
+        dep = dependents_to_process.pop
+        depdeps = set(_get_dependent_packages(repo_dir, distro, arch, dep))
+        dependents_to_process |= (depdeps - transitive_dependents)
+        transitive_dependents |= depdeps
+
+    return invalidate_packages(repo_dir, distro, arch, transitive_dependents)
 
 
 def _clear_ros_distro(repo_dir, rosdistro, distro, arch, commit):
