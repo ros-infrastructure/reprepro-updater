@@ -80,7 +80,7 @@ def _run_update_command(repo_dir, distro, commit):
 
 def _get_dependent_packages(repo_dir, distro, arch, package):
     """
-    Return a list of packages which were detected as dependant by reprepro.
+    Return a list of packages which were detected as dependent by reprepro.
 
     This only returns direct dependencies.
     """
