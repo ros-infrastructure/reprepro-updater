@@ -164,7 +164,7 @@ def invalidate_dependent(repo_dir, distro, arch, package):
     # the complete list of transitive dependents
     transitive_dependents = dependents_to_process.copy()
     while len(dependents_to_process) > 0:
-        dep = dependents_to_process.pop
+        dep = dependents_to_process.pop()
         depdeps = set(_get_dependent_packages(repo_dir, distro, arch, dep))
         dependents_to_process |= (depdeps - transitive_dependents)
         transitive_dependents |= depdeps
