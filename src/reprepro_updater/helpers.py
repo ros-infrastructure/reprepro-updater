@@ -163,11 +163,24 @@ def invalidate_dependent(repo_dir, distro, arch, package):
     dependents_to_process = set(_get_dependent_packages(repo_dir, distro, arch, package))
     # the complete list of transitive dependents
     transitive_dependents = dependents_to_process.copy()
+
+    queue_max_size = len(dependents_to_process)
+    processed_packages = 0
+    iter_times = []
     while len(dependents_to_process) > 0:
+        _start = time.time()
         dep = dependents_to_process.pop()
         depdeps = set(_get_dependent_packages(repo_dir, distro, arch, dep))
         dependents_to_process |= (depdeps - transitive_dependents)
         transitive_dependents |= depdeps
+
+        if len(dependents_to_process) > queue_max_size:
+            queue_max_size = len(dependents_to_process)
+        processed_packages += 1
+        iter_times.append(time.time() - _start)
+        print("Queue size:\t\t" + len(dependents_to_process))
+        print("Dependents found:\t" + len(transitive_dependents))
+        print("Avg iter time:\t\t" + sum(iter_times) / len(iter_times))
 
     return invalidate_packages(repo_dir, distro, arch, transitive_dependents)
 
