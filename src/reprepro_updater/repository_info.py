@@ -2,9 +2,8 @@ import os
 
 
 class RepositoryInfo:
-    """
-    Parse apt repository data in order to provide information for reprepro-updater.
-    """
+    """Parse apt repository data in order to provide information for reprepro-updater."""
+
     def __init__(self, repo_dir, distro, arch):
         self.repo_dir = repo_dir
         self.distro = distro
@@ -14,37 +13,35 @@ class RepositoryInfo:
 
     def _parse_packages_file(self):
         """
-
-        Loads the Packages file for the main repository component and parses
-        the dependencies into memory.
+        Parse main apt Packages file and load dependencies into memory.
 
         Sets the variable package_dependencies which is a dict of package names
         mapping to sets of dependency names.
         """
         if self.package_dependencies is None:
             self.package_dependencies = {}
-        packages_filepath = os.path.join(self.repo_dir, 'dists', self.distro,
-                                         'main', 'binary-{}'.format(self.arch), 'Packages')
-        packages_contents = open(packages_filepath, "r").read()
-        for section in packages_contents.split("\n\n"):
+        packages_filepath = os.path.join(
+            self.repo_dir, 'dists', self.distro,
+            'main', 'binary-{}'.format(self.arch), 'Packages')
+        packages_contents = open(packages_filepath, 'r').read()
+        for section in packages_contents.split('\n\n'):
             if section is '':
                 continue
             name = None
             depends = None
-            for line in section.split("\n"):
-                if line.startswith("Package: "):
-                    name = line.split(": ")[1]
-                if line.startswith("Depends: "):
-                    depends = line.split(": ")[1]
+            for line in section.split('\n'):
+                if line.startswith('Package: '):
+                    name = line.split(': ')[1]
+                if line.startswith('Depends: '):
+                    depends = {
+                        item.strip().split(' ')[0] for item in line.split(': ')[1].split(',')}
             if name is None:
                 raise RuntimeError(
                     "Repository file '{}' had a section missing 'Package':\n+\n{}\n+".format(
                         packages_filepath, section))
             if depends is None:
-                dependency_set = set()
-            else:
-                dependency_set = set([item.strip().split(' ')[0] for item in depends.split(',')])
-            self.package_dependencies[name.strip()] = dependency_set
+                depends = set()
+            self.package_dependencies[name.strip()] = depends
         return self.package_dependencies
 
     def get_rdepends(self, package):
