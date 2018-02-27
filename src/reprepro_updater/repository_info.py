@@ -58,7 +58,7 @@ class RepositoryInfo:
 
         # Early return a memoized result if previously calculated.
         if package in self.package_rdepends:
-            return self.package_rdepends[package]
+            return self.package_rdepends[package].copy()
 
         rdepends = set()
         for p, dependencies in self.package_dependencies.items():
@@ -66,4 +66,4 @@ class RepositoryInfo:
                 rdepends.add(p)
         self.package_rdepends[package] = rdepends
 
-        return self.package_rdepends[package]
+        return self.package_rdepends[package].copy()
