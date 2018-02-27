@@ -29,7 +29,7 @@ class RepositoryInfo:
             if section is '':
                 continue
             name = None
-            depends = None
+            depends = set()
             for line in section.split('\n'):
                 if line.startswith('Package: '):
                     name = line.split(': ')[1]
@@ -40,8 +40,6 @@ class RepositoryInfo:
                 raise RuntimeError(
                     "Repository file '{}' had a section missing 'Package':\n+\n{}\n+".format(
                         packages_filepath, section))
-            if depends is None:
-                depends = set()
             self.package_dependencies[name.strip()] = depends
         return self.package_dependencies
 
