@@ -6,6 +6,8 @@ import subprocess
 import sys
 import time
 
+from reprepro_updater.repository_info import RepositoryInfo
+
 
 class LockContext:
     def __init__(self, lockfilename=None, timeout=3000):
@@ -157,10 +159,16 @@ def invalidate_dependent(repo_dir, distro, arch, package):
     """
     Remove all dependents of the package with the same arch.
 
-    This is only valid for binary packages.
+    This is only valid for binary packages and assumes all
+    packages are in the `main` component.
     """
+    # Use internal repository information parser to get reverse dependents.
+    # Using reprepro for each package was resulting in huge runtimes causing timeouts
+    # on the buildfarm when invalidating low-level packages.
+    repo_info = RepositoryInfo(repo_dir, distro, arch)
+
     # queue of dependents to iterate
-    dependents_to_process = set(_get_dependent_packages(repo_dir, distro, arch, package))
+    dependents_to_process = repo_info.get_rdepends(package)
     # the complete list of transitive dependents
     transitive_dependents = dependents_to_process.copy()
 
@@ -170,7 +178,7 @@ def invalidate_dependent(repo_dir, distro, arch, package):
     while len(dependents_to_process) > 0:
         _start = time.time()
         dep = dependents_to_process.pop()
-        depdeps = set(_get_dependent_packages(repo_dir, distro, arch, dep))
+        depdeps = repo_info.get_rdepends(dep)
         dependents_to_process |= (depdeps - transitive_dependents)
         transitive_dependents |= depdeps
 
