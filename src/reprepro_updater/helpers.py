@@ -175,7 +175,7 @@ def invalidate_dependent(repo_dir, distro, arch, package):
     queue_max_size = len(dependents_to_process)
     processed_packages = 0
     iter_times = []
-    while len(dependents_to_process) > 0:
+    while dependents_to_process:
         _start = time.time()
         dep = dependents_to_process.pop()
         depdeps = repo_info.get_rdepends(dep)
