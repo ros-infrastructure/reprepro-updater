@@ -23,7 +23,8 @@ class RepositoryInfo:
         packages_filepath = os.path.join(
             self.repo_dir, 'dists', self.distro,
             'main', 'binary-{}'.format(self.arch), 'Packages')
-        packages_contents = open(packages_filepath, 'r').read()
+        with open(packages_filepath, 'r') as packages_file:
+            packages_contents = packages_file.read()
         for section in packages_contents.split('\n\n'):
             if section is '':
                 continue
