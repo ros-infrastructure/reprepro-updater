@@ -167,10 +167,10 @@ def invalidate_dependent(repo_dir, distro, arch, package):
     # on the buildfarm when invalidating low-level packages.
     repo_info = RepositoryInfo(repo_dir, distro, arch)
 
-    # queue of dependents to iterate
-    dependents_to_process = repo_info.get_rdepends(package)
-    # the complete list of transitive dependents
-    transitive_dependents = dependents_to_process.copy()
+    # We'll build this into a list of transitive dependents.
+    transitive_dependents = repo_info.get_rdepends(package)
+    # queue of dependents to iterate, seeded with the initial rdepends.
+    dependents_to_process = list(transitive_dependents)
 
     queue_max_size = len(dependents_to_process)
     processed_packages = 0
@@ -179,7 +179,7 @@ def invalidate_dependent(repo_dir, distro, arch, package):
         _start = time.time()
         dep = dependents_to_process.pop()
         depdeps = repo_info.get_rdepends(dep)
-        dependents_to_process |= (depdeps - transitive_dependents)
+        dependents_to_process += (depdeps - transitive_dependents)
         transitive_dependents |= depdeps
 
         if len(dependents_to_process) > queue_max_size:
