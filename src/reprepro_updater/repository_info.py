@@ -42,7 +42,12 @@ class RepositoryInfo:
                 raise RuntimeError(
                     "Repository file '{}' had a section missing 'Package':\n+\n{}\n+".format(
                         packages_filepath, section))
-            self.package_dependencies[name.strip()] = depends
+            name = name.strip()
+            # Drop packages from the list of packages that are not named as ros packages.
+            # This matches the behavior of the _get_dependent_packages reprepro filter.
+            if not name.startswith('ros-'):
+                continue
+            self.package_dependencies[name] = depends
         return self.package_dependencies
 
     def get_rdepends(self, package):
