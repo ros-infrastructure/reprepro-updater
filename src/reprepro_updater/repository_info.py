@@ -35,7 +35,7 @@ class RepositoryInfo:
                     name = line.split(': ')[1]
                 if line.startswith('Depends: '):
                     depends = {pkg.strip().split(' ')[0] for pkg in line.split(': ')[1].split(',')}
-                    # Drop packages from the rdepends chain that are not named as ros packages.
+                    # Drop packages from the dependency chain that are not named as ros packages.
                     # This matches the behavior of the _get_dependent_packages reprepro filter.
                     depends = [pkg for pkg in depends if pkg.startswith('ros-')]
             if name is None:
