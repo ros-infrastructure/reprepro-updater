@@ -9,7 +9,7 @@ class RepositoryInfo:
         self.distro = distro
         self.arch = arch
         self.package_dependencies = None
-        self.package_rdepends = None
+        self.package_rdepends = {}
 
     def _parse_packages_file(self):
         """
@@ -57,8 +57,6 @@ class RepositoryInfo:
         Uses an internal map of memoized return values to cache results.
         Returns a set of package names that depend directly on the given package.
         """
-        if self.package_rdepends is None:
-            self.package_rdepends = {}
         if self.package_dependencies is None:
             self._parse_packages_file()
 
