@@ -34,8 +34,10 @@ class RepositoryInfo:
                 if line.startswith('Package: '):
                     name = line.split(': ')[1]
                 if line.startswith('Depends: '):
-                    depends = {
-                        item.strip().split(' ')[0] for item in line.split(': ')[1].split(',')}
+                    depends = {pkg.strip().split(' ')[0] for pkg in line.split(': ')[1].split(',')}
+                    # Drop packages from the rdepends chain that are not named as ros packages.
+                    # This matches the behavior of the _get_dependent_packages reprepro filter.
+                    depends = [pkg for pkg in depends if pkg.startswith('ros-')]
             if name is None:
                 raise RuntimeError(
                     "Repository file '{}' had a section missing 'Package':\n+\n{}\n+".format(
