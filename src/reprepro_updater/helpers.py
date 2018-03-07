@@ -133,7 +133,11 @@ def invalidate_packages(repo_dir, distro, arch, packages):
 
     This is only valid for binary packages.
     """
-    filterstr = "Package (== {})"
+    # Short circuit if there are no packages to remove.
+    if not packages:
+        print('No packages to remove. Not invoking reprepro.')
+        return True
+    filterstr = 'Package (== {})'
     filterlist = [filterstr.format(pkgname) for pkgname in packages]
     invalidate_packages_command = ['reprepro', '-b', repo_dir,
                                    '-T', 'deb', '-A', arch, '-V',
@@ -151,7 +155,7 @@ def invalidate_package(repo_dir, distro, arch, package):
     invalidate_package_command = ['reprepro', '-b', repo_dir,
                                   '-T', debtype, '-V',
                                   'removefilter', distro,
-                                  "Package (== " + package + " )" + arch_match]
+                                  'Package (== ' + package + ' )' + arch_match]
     return try_run_command(invalidate_package_command)
 
 
