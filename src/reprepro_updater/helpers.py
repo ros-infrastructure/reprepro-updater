@@ -129,23 +129,11 @@ def invalidate_dependent(repo_dir, distro, arch, package):
     # queue of dependents to iterate, seeded with the initial rdepends.
     dependents_to_process = list(transitive_dependents)
 
-    queue_max_size = len(dependents_to_process)
-    processed_packages = 0
-    iter_times = []
     while dependents_to_process:
-        _start = time.time()
         dep = dependents_to_process.pop()
         depdeps = repo_info.get_rdepends(dep)
         dependents_to_process += (depdeps - transitive_dependents)
         transitive_dependents |= depdeps
-
-        if len(dependents_to_process) > queue_max_size:
-            queue_max_size = len(dependents_to_process)
-        processed_packages += 1
-        iter_times.append(time.time() - _start)
-        print("Queue size:\t\t{}".format(len(dependents_to_process)))
-        print("Dependents found:\t{}".format(len(transitive_dependents)))
-        print("Avg iter time:\t\t{}".format(sum(iter_times) / len(iter_times)))
 
     return invalidate_packages(repo_dir, distro, arch, transitive_dependents)
 
