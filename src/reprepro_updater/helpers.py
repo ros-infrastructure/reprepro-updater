@@ -6,6 +6,8 @@ import subprocess
 import sys
 import time
 
+from reprepro_updater.repository_info import RepositoryInfo
+
 
 class LockContext:
     def __init__(self, lockfilename=None, timeout=3000):
@@ -78,51 +80,23 @@ def _run_update_command(repo_dir, distro, commit):
     return try_run_command(update_command)
 
 
-def _get_dependent_packages(repo_dir, distro, arch, package):
+def invalidate_packages(repo_dir, distro, arch, packages):
     """
-    Return a list of packages which were detected as dependant by reprepro.
+    Remove multiple packages from the repo in one reprepro invocation.
 
-    This only returns direct dependencies.
+    This is only valid for binary packages.
     """
-    reprepro_command = [
-        'reprepro', '-V', '-b', repo_dir,
-        '-T', 'deb',
-        'listfilter', distro,
-        "Package (% ros-* ), " +
-        "Architecture (== " + arch + " ), " +
-        "( Depends (% *" + package + "[, ]* ) " +
-        "| Depends (% *" + package + " ) )"]
-
-    try:
-        output = subprocess.check_output(reprepro_command)
-    except subprocess.CalledProcessError as ex:
-        print("Execution of [%s] Failed:" % reprepro_command, ex)
-        return []
-    packages = []
-    for l in output.splitlines():
-        elements = l.split()
-        assert len(elements) == 3, "Expected 3 elements, got %s " % elements
-        packages.append(elements[1])
-    return packages
-
-
-def _invalidate_dependent(repo_dir, distro, arch, package, processed_packages):
-    """Implement invalidation for recursion."""
-    # Get all dependents and recursively walk their dependents
-    dependents = _get_dependent_packages(repo_dir, distro, arch, package)
-    for dependent in dependents:
-        # packages may overlap in the walk at different depths
-        # don't try to redelete a package if it's already been processed
-        if dependent in processed_packages:
-            continue
-        # walk to all dependencies
-        if not _invalidate_dependent(repo_dir, distro, arch, dependent, processed_packages):
-            return False
-        # clear the package
-        if not invalidate_package(repo_dir, distro, arch, dependent):
-            return False
-        processed_packages.append(dependent)
-    return True
+    # Short circuit if there are no packages to remove.
+    if not packages:
+        print('No packages to remove. Not invoking reprepro.')
+        return True
+    filterstr = 'Package (== {})'
+    filterlist = [filterstr.format(pkgname) for pkgname in packages]
+    invalidate_packages_command = ['reprepro', '-b', repo_dir,
+                                   '-T', 'deb', '-A', arch, '-V',
+                                   'removefilter', distro,
+                                   ' | '.join(filterlist)]
+    return try_run_command(invalidate_packages_command)
 
 
 def invalidate_package(repo_dir, distro, arch, package):
@@ -134,7 +108,7 @@ def invalidate_package(repo_dir, distro, arch, package):
     invalidate_package_command = ['reprepro', '-b', repo_dir,
                                   '-T', debtype, '-V',
                                   'removefilter', distro,
-                                  "Package (== " + package + " )" + arch_match]
+                                  'Package (== ' + package + ' )' + arch_match]
     return try_run_command(invalidate_package_command)
 
 
@@ -142,11 +116,26 @@ def invalidate_dependent(repo_dir, distro, arch, package):
     """
     Remove all dependents of the package with the same arch.
 
-    This is only valid for binary packages.
+    This is only valid for binary packages and assumes all
+    packages are in the `main` component.
     """
-    # storage for recursion
-    processed_packages = []
-    return _invalidate_dependent(repo_dir, distro, arch, package, processed_packages)
+    # Use internal repository information parser to get reverse dependents.
+    # Using reprepro for each package was resulting in huge runtimes causing timeouts
+    # on the buildfarm when invalidating low-level packages.
+    repo_info = RepositoryInfo(repo_dir, distro, arch)
+
+    # We'll build this into a list of transitive dependents.
+    transitive_dependents = repo_info.get_rdepends(package)
+    # queue of dependents to iterate, seeded with the initial rdepends.
+    dependents_to_process = list(transitive_dependents)
+
+    while dependents_to_process:
+        dep = dependents_to_process.pop()
+        depdeps = repo_info.get_rdepends(dep)
+        dependents_to_process += (depdeps - transitive_dependents)
+        transitive_dependents |= depdeps
+
+    return invalidate_packages(repo_dir, distro, arch, transitive_dependents)
 
 
 def _clear_ros_distro(repo_dir, rosdistro, distro, arch, commit):
