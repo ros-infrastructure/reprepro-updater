@@ -26,9 +26,10 @@ cd ~/reprepro_updater
 ```
 - Run a dry run of the import script:
 ```
-python scripts/prepare_sync.py /var/www/repos/ros_bootstrap -y <CONFIG_FILE_WITH_IMPORT_RULE> | grep -v keep > tmplog
+python scripts/prepare_sync.py /var/www/repos/ros_bootstrap -y <CONFIG_FILE_WITH_IMPORT_RULE> > tmplog
 ```
-- check the content of tmplog to see if all the changes are the ones youe expect
+- check the content of tmplog to see if all the changes are the ones youe expect.
+`cat tmplog | grep -v keep` is useful to make it quieter
 
 - Run the actual command with -c for commit:
 ```
