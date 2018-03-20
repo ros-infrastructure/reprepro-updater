@@ -1,6 +1,6 @@
 name: catkinlint
 method: http://ppa.launchpad.net/roehling/latest/ubuntu
-suites: [precise, trusty, utopic, vivid, wily, xenial, yakkety, zesty, artful, bionic]
+suites: [trusty, xenial, artful, bionic]
 component: main
-architectures: [i386, amd64, source]
+architectures: [i386, amd64, armhf, arm64, source]
 filter_formula: Source (== catkin-lint)
