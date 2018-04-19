@@ -1,0 +1,6 @@
+name: gazebo9_import
+method: http://packages.osrfoundation.org/gazebo/ubuntu-stable
+suites: [artful]
+component: main
+architectures: [amd64, source]
+filter_formula: Package (% gazebo9-common ) | Package (% gazebo9-dbg ) | Package (% gazebo9-doc ) | Package (% gazebo9-plugin-base ) | Package (% gazebo9 ) | Package (% libgazebo9-dev ) | Package (% libgazebo9 ) | Package (% libignition-common ) | Package (% libignition-fuel-tools ) | Package (% libignition-math4 ) | Package (% libignition-msgs ) | Package (% libignition-transport4 ) | Package (% libsdformat6-dbg ) | Package (% libsdformat6-dev ) | Package (% libsdformat6 ) | Package (% sdformat-sdf ) | Package (% sdformat6-doc )
