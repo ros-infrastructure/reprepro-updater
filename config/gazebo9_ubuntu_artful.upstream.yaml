@@ -1,4 +1,4 @@
-name: gazebo9_import
+name: gazebo9_import_ubuntu_artful
 method: http://packages.osrfoundation.org/gazebo/ubuntu-stable
 suites: [artful]
 component: main
