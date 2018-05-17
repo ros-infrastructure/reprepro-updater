@@ -17,8 +17,8 @@ from reprepro_updater.helpers import LockContext
 from reprepro_updater.helpers import run_include_command
 
 
-def remove_ddeb_from_changes_file(filename):
-    """ Remove ddeb entries from changes file
+def rename_ddeb_files_in_changes_file(filename):
+    """ Rename ddeb files listed in changes file
     This is a workaround for https://github.com/ros-infrastructure/buildfarm_deployment/issues/186
     """
     trimmed_version = []
@@ -28,9 +28,14 @@ def remove_ddeb_from_changes_file(filename):
             if not l.strip().endswith('.ddeb'):
                 trimmed_version.append(l)
             else:
+                ddeb_file = l.strip().split(' ')[4]
+                deb_file = ddeb_file.replace('.ddeb', '.deb')
+                print('Renaming `%s` to `%s`'.format(ddeb_file, deb_file))
+                os.rename(ddeb_file, deb_file)
+                trimmed_version.append(l.replace('.ddeb', '.deb'))
                 changes_made = True
     if changes_made:
-        print('Removing ddeb lines from changes file: %s ' % filename +
+        print('Renamed ddeb files to deb in changes file: %s ' % filename +
               'workaround https://github.com/ros-infrastructure/buildfarm_deployment/issues/186')
         with open(filename, 'w') as changes:
             for l in trimmed_version:
@@ -120,7 +125,7 @@ if options.commit:
             package_str_parts.append(changes.content['Architecture'])
             print('Importing package: %s' % ':'.join(package_str_parts))
 
-            remove_ddeb_from_changes_file(changes.filename)
+            rename_ddeb_files_in_changes_file(changes.filename)
             if not run_include_command(options.repo_path,
                                        changes.content['Distribution'],
                                        changes.filename):
