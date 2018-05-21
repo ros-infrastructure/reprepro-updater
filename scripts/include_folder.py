@@ -28,14 +28,15 @@ def rename_ddeb_files_in_changes_file(filename):
             if not l.strip().endswith('.ddeb'):
                 trimmed_version.append(l)
             else:
+                deb_path = os.path.dirname(filename)
                 # Checksum entries have three columns. Files entries have four.
                 # The last is always the filename.
                 ddeb_file = l.strip().split(' ')[-1]
                 deb_file = ddeb_file.replace('.ddeb', '.deb')
                 # Rename the ddeb file if it hasn't been already.
-                if os.path.isfile(ddeb_file):
+                if os.path.isfile(os.path.join(deb_path, ddeb_file)):
                     print('Renaming `{}` to `{}`'.format(ddeb_file, deb_file))
-                    os.rename(ddeb_file, deb_file)
+                    os.rename(os.path.join(deb_path, ddeb_file), os.path.join(deb_path, deb_file))
                 trimmed_version.append(l.replace('.ddeb', '.deb'))
                 changes_made = True
     if changes_made:
