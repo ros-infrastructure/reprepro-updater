@@ -34,7 +34,7 @@ def rename_ddeb_files_in_changes_file(filename):
                 deb_file = ddeb_file.replace('.ddeb', '.deb')
                 # Rename the ddeb file if it hasn't been already.
                 if os.path.isfile(ddeb_file):
-                    print('Renaming `%s` to `%s`'.format(ddeb_file, deb_file))
+                    print('Renaming `{}` to `{}`'.format(ddeb_file, deb_file))
                     os.rename(ddeb_file, deb_file)
                 trimmed_version.append(l.replace('.ddeb', '.deb'))
                 changes_made = True
