@@ -28,7 +28,9 @@ def rename_ddeb_files_in_changes_file(filename):
             if not l.strip().endswith('.ddeb'):
                 trimmed_version.append(l)
             else:
-                ddeb_file = l.strip().split(' ')[4]
+                # Checksum entries have three columns. Files entries have four.
+                # The last is always the filename.
+                ddeb_file = l.strip().split(' ')[-1]
                 deb_file = ddeb_file.replace('.ddeb', '.deb')
                 print('Renaming `%s` to `%s`'.format(ddeb_file, deb_file))
                 os.rename(ddeb_file, deb_file)
