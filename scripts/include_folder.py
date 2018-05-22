@@ -32,7 +32,7 @@ def rename_ddeb_files_in_changes_file(filename):
                 # Checksum entries have three columns. Files entries have four.
                 # The last is always the filename.
                 ddeb_file = l.strip().split(' ')[-1]
-                basename = os.path.splitext(ddeb_file)[1]
+                basename = os.path.splitext(ddeb_file)[0]
                 deb_file = basename + '.deb'
                 # Rename the ddeb file if it hasn't been already.
                 if os.path.isfile(os.path.join(deb_path, ddeb_file)):
