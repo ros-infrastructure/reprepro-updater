@@ -41,7 +41,7 @@ def rename_ddeb_files_in_changes_file(filename):
                 trimmed_version.append(l.replace(ddeb_file, deb_file))
                 changes_made = True
     if changes_made:
-        print('Renamed ddeb files to deb in changes file: %s ' % filename +
+        print('Renamed ddeb files to deb in changes file: %s ' % filename + ' to ' +
               'workaround https://github.com/ros-infrastructure/buildfarm_deployment/issues/186')
         with open(filename, 'w') as changes:
             for l in trimmed_version:
