@@ -1,0 +1,8 @@
+# include the fix for server_fixture while Ubuntu merges the patch:
+# https://bugs.launchpad.net/ubuntu/+source/gazebo/+bug/1773811
+name: gazebo9_import_ubuntu_bionic
+method: http://ppa.launchpad.net/j-rivero/gazebo9bionic/ubuntu
+suites: [bionic]
+component: main
+architectures: [amd64, i386, armhf, arm64, source]
+filter_formula: Package (% gazebo9-common ) | Package (% gazebo9-doc ) | Package (% gazebo9-plugin-base ) | Package (% gazebo9 ) | Package (% libgazebo9-dev ) | Package (% libgazebo9 )
