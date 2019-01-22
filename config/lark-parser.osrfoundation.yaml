@@ -1,9 +1,8 @@
 name: lark-parser
 method: http://packages.osrfoundation.org/gazebo/ubuntu-stable
-suites: [bionic]
+suites: [xenial, bionic]
 component: main
 architectures: [amd64, arm64, source]
 filter_formula: Package (% python3-lark-parser* )
 # needed unless we incorporate the right gpg key
 verify_release: blindtrust
-
