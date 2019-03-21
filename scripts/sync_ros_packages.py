@@ -102,6 +102,9 @@ for ubuntu_distro in distros:
             ubuntu_distro,
             'main',
             package_architecture)
+        if arch == 'source':
+            print("Not computing diff for source architecture.", file=sys.stderr)
+            continue
         try:
             pf_old = diff_repos.get_packagefile_from_url(target_url, name='old')
         except RuntimeError as ex:
