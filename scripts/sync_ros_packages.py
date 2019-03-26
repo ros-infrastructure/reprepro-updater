@@ -78,6 +78,10 @@ dist = conf_params.create_distributions_file(updates_generator)
 
 for ubuntu_distro in distros:
     for arch in arches:
+        # Source architecture doesn't provide a Packages file to diff with.
+        if arch == 'source':
+            print("Not computing diff for source architecture.", file=sys.stderr)
+            continue
 
         d = {'name': 'ros-%s-%s-%s' %
              (options.rosdistro, ubuntu_distro, arch),
