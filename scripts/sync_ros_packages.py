@@ -78,11 +78,6 @@ dist = conf_params.create_distributions_file(updates_generator)
 
 for ubuntu_distro in distros:
     for arch in arches:
-        # Source architecture doesn't provide a Packages file to diff with.
-        if arch == 'source':
-            print("Not computing diff for source architecture.", file=sys.stderr)
-            continue
-
         d = {'name': 'ros-%s-%s-%s' %
              (options.rosdistro, ubuntu_distro, arch),
              'method': upstream_repo_url,
@@ -93,6 +88,13 @@ for ubuntu_distro in distros:
              }
 
         updates_generator.add_update_element(conf.UpdateElement(**d))
+
+        # The source architecture doesn't provide a Packages file to diff with.
+        # But it should still be added to the updates_generator above so the
+        # source repository is updated.
+        if arch == 'source':
+            print("Not computing diff for source architecture.", file=sys.stderr)
+            continue
 
         package_architecture = 'source' if arch == 'source' else 'binary-' + arch
         # Compute the expected diff for this update element.
