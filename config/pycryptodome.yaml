@@ -1,0 +1,10 @@
+name: pycryptodome
+method: http://deb.debian.org/debian
+suites: [stretch]
+source_suite: stretch-backports
+component: main
+architectures: [amd64, arm64, source]
+filter_formula: $Source (==pycryptodome)
+# needed unless we incorporate the right gpg key
+verify_release: blindtrust
+
