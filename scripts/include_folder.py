@@ -48,6 +48,17 @@ def rename_ddeb_files_in_changes_file(filename):
                 changes.write(l)
 
 
+def get_packages_from_changes_file(changes):
+    """ Avoid reading Binary section if in a source changes file.
+    This avoids the issue idenfited in https://github.com/ros-infrastructure/reprepro-updater/issues/73
+    According to the RFC it's mandatory but it's been moved away from for source only packages.
+    """
+    if changes.content['Architecture'] == 'source':
+        return e.content['Source'].split()
+    else:
+        return e.content['Binary'].split()
+
+
 parser = OptionParser()
 
 parser.add_option("--delete-folder", dest="do_delete",
@@ -81,14 +92,14 @@ if not changefiles:
                  (options.folders, [os.listdir(f) for f in options.folders]))
 
 valid_changes = [c for c in changefiles
-                 if options.package in c.content['Binary'].split()]
+                 if options.package in get_packages_from_changes_file(c)]
 
 extraneous_packages = set(changefiles) - set(valid_changes)
 if extraneous_packages:
     parser.error("Invalid packages detected in folders %s."
                  " Expected [%s], got [%s] from file %s" %
                  (options.folders, options.package,
-                  [e.content['Binary'] for e in extraneous_packages],
+                  [get_packages_from_changes_file(e) for e in extraneous_packages],
                   [e.filename for e in extraneous_packages]))
 
 lockfile = os.path.join(options.repo_path, 'lock')
@@ -122,10 +133,7 @@ if options.commit:
         # update after clearing all
         for changes in valid_changes:
             package_str_parts = []
-            if changes.content['Architecture'] == 'source':
-                package_str_parts.append(changes.content['Source'])
-            else:
-                package_str_parts.append(changes.content['Binary'])
+            package_str_parts.extend(get_packages_from_changes_file(changes))
             package_str_parts.append(changes.content['Version'])
             package_str_parts.append(changes.content['Distribution'])
             package_str_parts.append(changes.content['Architecture'])
