@@ -54,9 +54,9 @@ def get_packages_from_changes_file(changes):
     According to the RFC it's mandatory but it's been moved away from for source only packages.
     """
     if changes.content['Architecture'] == 'source':
-        return e.content['Source'].split()
+        return changes.content['Source'].split()
     else:
-        return e.content['Binary'].split()
+        return changes.content['Binary'].split()
 
 
 parser = OptionParser()
