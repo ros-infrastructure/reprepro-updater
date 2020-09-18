@@ -177,9 +177,10 @@ def run_update(repo_dir, dist_generator, updates_generator,
             fh.write(update_contents)
 
         # write out distributions file
-        print("Creating distributions file %s" % distributions_filename)
-        with open(distributions_filename, 'w') as fh:
-            fh.write(dist_generator.generate_file_contents(arch))
+        print(" !! Avoid altering distributions file for packages.osrfoundation.org")
+        # print("Creating distributions file %s" % distributions_filename)
+        # with open(distributions_filename, 'w') as fh:
+        #    fh.write(dist_generator.generate_file_contents(arch))
 
         if not _run_update_command(repo_dir, distro, commit):
             raise RuntimeError('update command failed')
