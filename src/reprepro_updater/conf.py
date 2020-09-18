@@ -114,13 +114,12 @@ class DistributionsFile(object):
         self.repo_key = repo_key
         self.update_objects = update_objects
 
-        self.standard_snippet = """Origin: ROS
-Label: ROS %(distro)s
+        self.standard_snippet = """Origin: OSRF
+Label: OSRF
 Codename: %(distro)s
-Suite: %(distro)s
 Architectures: %(archs)s
 Components: main
-Description: ROS %(distro)s Debian Repository
+Description: OSRF APT Repository
 Update: %(update_rule)s
 """
 
