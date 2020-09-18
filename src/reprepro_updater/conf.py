@@ -32,6 +32,7 @@
 
 from configparser import SafeConfigParser
 import os
+import sys
 
 
 class ConfParameters(object):
@@ -247,15 +248,18 @@ def load_conf(config_name=None):
         config_name = 'DEFAULT'
 
     if not os.path.exists(config_file):
-        print("Warning: config file does not exist: %s" % config_file)
-        return None
+        print("Error: config file does not exist: %s" % config_file)
+        sys.exit(-1)
+
     config.read(config_file)
 
     if config_name not in config:
-        return None
+        print("Error: config_name %s does not exist in config %s" % config_name)
+        sys.exit(-1)
     config_section = config[config_name]
     if 'repository_path' not in config_section:
-        return None
+        print("Error: repository_path does not exist in config %s" % config[config_name])
+        sys.exit(-1)
 
     def get_config_element(config_section, key, default=None,
                            required=False, expect_list=False):
