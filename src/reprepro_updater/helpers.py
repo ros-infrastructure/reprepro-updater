@@ -4,6 +4,7 @@ import fcntl
 import os
 import subprocess
 import sys
+from shutil import copyfile
 import time
 
 from reprepro_updater.repository_info import RepositoryInfo
@@ -165,6 +166,15 @@ def run_update(repo_dir, dist_generator, updates_generator,
     update_filename = os.path.join(conf_dir, 'updates')
     distributions_filename = os.path.join(conf_dir, 'distributions')
 
+    # backup distributions file
+    old_distribution_filename = distributions_filename + '.old'
+    copyfile(distributions_filename, old_distribution_filename)
+    # do not override distribution file if not commit sent
+    if not commit:
+        fake_distribution_filename = distributions_filename + '.new'
+        copyfile(distributions_filename, fake_distribution_filename)
+        distributions_filename = fake_distribution_filename
+
     with LockContext(lockfile) as lock_c:
         print("I have a lock on %s" % lockfile)
 
@@ -176,11 +186,23 @@ def run_update(repo_dir, dist_generator, updates_generator,
         with open(update_filename, 'w') as fh:
             fh.write(update_contents)
 
-        # write out distributions file
-        print(" !! Avoid altering distributions file for packages.osrfoundation.org")
-        # print("Creating distributions file %s" % distributions_filename)
-        # with open(distributions_filename, 'w') as fh:
-        #    fh.write(dist_generator.generate_file_contents(arch))
+        # write out distributions file, fake or real
+        print("Creating distributions file %s" % distributions_filename)
+        with open(distributions_filename, 'w') as fh:
+            fh.write(dist_generator.generate_file_contents(arch))
+
+        # run diff with custom subprocess call. Only real failure if exit status >= 2
+        command = ['diff', '-u', old_distribution_filename, distributions_filename]
+        try:
+            print("running command %s" % command, file=sys.stderr)
+            subprocess.check_call(command)
+        except subprocess.CalledProcessError as ex:
+            if ex.returncode == 1:
+                print("STOP: detected differences between distributions files please fix them before continue")
+                sys.exit(-1)
+            if ex.returncode >= 2:
+                print("Execution of [%s] Failed:" % command, ex)
+                sys.exit(-1)
 
         if not _run_update_command(repo_dir, distro, commit):
             raise RuntimeError('update command failed')
