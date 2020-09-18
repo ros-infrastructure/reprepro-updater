@@ -1,5 +1,7 @@
 name: openrobotics_dart_packages_from_ppa
-method: http://ppa.launchpad.net/j-rivero/dart/ubuntu
+method: http://ppa.launchpad.net/j-rivero/dartsim-openrobotics-testing/ubuntu/
 suites: [bionic]
 component: main
 architectures: [amd64, armhf, arm64, source]
+filter_formula: Package (% *dart6* )
+verify_release: blindtrust
