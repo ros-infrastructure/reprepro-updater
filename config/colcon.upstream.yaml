@@ -1,5 +1,5 @@
 name: colcon
-method: https://packagecloud.io/dirk-thomas/colcon
+method: https://packagecloud.io/dirk-thomas/colcon/ubuntu
 suites: [xenial, bionic, focal, stretch, buster]
 component: main
 architectures: [i386, amd64, armhf, arm64, source]
