@@ -1,6 +1,6 @@
-name: catkinlint
-method: http://ppa.launchpad.net/roehling/latest/ubuntu
-suites: [trusty, xenial, artful, bionic]
+name: catkin_lint
+method: http://ppa.launchpad.net/roehling/ros/ubuntu
+suites: [xenial, bionic, focal]
 component: main
 architectures: [i386, amd64, armhf, arm64, source]
-filter_formula: Source (== catkin-lint)
+filter_formula: Source (== catkin-lint), $Version (% 1.6.10-*)
