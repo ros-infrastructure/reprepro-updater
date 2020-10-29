@@ -55,7 +55,7 @@ def get_packagefile_from_url(url):
     try:
         with NamedTemporaryFile() as temp:
             urlretrieve(url, temp.name)
-            package_file = PackageFile('Packages')
+            package_file = PackageFile(temp.name)
     except URLError as ex:
         raise RuntimeError("Failed to load from url %s [%s]" % (url, ex))
 
