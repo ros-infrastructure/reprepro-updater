@@ -2,6 +2,7 @@ import re
 import sys
 
 from debian.debian_support import PackageFile
+from tempfile import NamedTemporaryFile
 try:
     from urllib.request import urlopen
 except ImportError:
@@ -13,9 +14,9 @@ except ImportError:
     from urllib2 import URLError
 
 try:
-    from cStringIO import StringIO
+    from urllib.request import urlretrieve
 except ImportError:
-    from io import StringIO
+    from urllib import urlretrieve
 
 
 def convert_tuples_list_to_dict(tuples_list):
@@ -50,15 +51,16 @@ def construct_packages_url(base_url, dist, component, arch):
     return '/'.join([base_url.rstrip('/'), 'dists', dist, component, arch, 'Packages'])
 
 
-def get_packagefile_from_url(url, name='foo'):
+def get_packagefile_from_url(url):
     try:
-        fromlines = urlopen(url)
-        contents = fromlines.read()
-        if sys.version_info[0] == 3:
-            contents = contents.decode("utf-8")
-        return PackageFile(name, StringIO(contents))
+        with NamedTemporaryFile() as temp:
+            urlretrieve(url, temp.name)
+            package_file = PackageFile('Packages')
     except URLError as ex:
         raise RuntimeError("Failed to load from url %s [%s]" % (url, ex))
+
+    return package_file
+
 
 def conditional_markdown_package_homepage_link(package, package_file):
     if 'Homepage' in package_file[package]:
