@@ -124,7 +124,7 @@ for ubuntu_distro in distros:
               (target_url, upstream_url, dtime.isoformat('-')))
         announcement = diff_repos.compute_annoucement(options.rosdistro, pf_old, pf_new)
         print('-' * 80)
-        print(announcement)
+        print(announcement.encode('utf-8'))
         print('-' * 80)
 
 # clean up first
