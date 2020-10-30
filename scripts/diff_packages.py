@@ -33,12 +33,12 @@ def main():
     )
 
     try:
-        pf_old = diff_repos.get_packagefile_from_url(target_url, name='old')
+        pf_old = diff_repos.get_packagefile_from_url(target_url)
     except RuntimeError as ex:
         parser.error("%s" % ex)
 
     try:
-        pf_new = diff_repos.get_packagefile_from_url(upstream_url, name='new')
+        pf_new = diff_repos.get_packagefile_from_url(upstream_url)
     except RuntimeError as ex:
         parser.error("%s" % ex)
 
