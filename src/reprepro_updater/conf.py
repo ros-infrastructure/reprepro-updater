@@ -253,7 +253,7 @@ def load_conf(config_name=None):
     config.read(config_file)
 
     if config_name not in config:
-        print("Error: config_name %s does not exist in config %s" % config_name, config)
+        print("Error: config_name %s does not exist in config %s" % (config_name, config))
         sys.exit(-1)
     config_section = config[config_name]
     if 'repository_path' not in config_section:
