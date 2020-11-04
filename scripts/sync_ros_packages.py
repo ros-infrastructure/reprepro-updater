@@ -109,12 +109,12 @@ for ubuntu_distro in distros:
             'main',
             package_architecture)
         try:
-            pf_old = diff_repos.get_packagefile_from_url(target_url, name='old')
+            pf_old = diff_repos.get_packagefile_from_url(target_url)
         except RuntimeError as ex:
             print("Exception: %s \n NOT Computing diff" % ex, file=sys.stderr)
             continue
         try:
-            pf_new = diff_repos.get_packagefile_from_url(upstream_url, name='new')
+            pf_new = diff_repos.get_packagefile_from_url(upstream_url)
         except RuntimeError as ex:
             print("Exception: %s \n NOT Computing diff" % ex, file=sys.stderr)
             continue
@@ -124,7 +124,7 @@ for ubuntu_distro in distros:
               (target_url, upstream_url, dtime.isoformat('-')))
         announcement = diff_repos.compute_annoucement(options.rosdistro, pf_old, pf_new)
         print('-' * 80)
-        print(announcement)
+        print(announcement.encode('utf-8'))
         print('-' * 80)
 
 # clean up first

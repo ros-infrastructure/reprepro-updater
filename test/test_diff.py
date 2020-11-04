@@ -8,7 +8,7 @@ def test_announcement():
         target_url = 'file://' + os.path.abspath(os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             'test_data/Packages.target'))
-        pf_old = diff_repos.get_packagefile_from_url(target_url, name='old')
+        pf_old = diff_repos.get_packagefile_from_url(target_url)
     except RuntimeError:
         assert False
 
@@ -16,7 +16,7 @@ def test_announcement():
         upstream_url = 'file://' + os.path.abspath(os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             'test_data/Packages.upstream'))
-        pf_new = diff_repos.get_packagefile_from_url(upstream_url, name='new')
+        pf_new = diff_repos.get_packagefile_from_url(upstream_url)
     except RuntimeError:
         assert False
 
