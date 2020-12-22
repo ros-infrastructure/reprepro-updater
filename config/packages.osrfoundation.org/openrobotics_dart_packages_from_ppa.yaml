@@ -3,5 +3,7 @@ method: http://ppa.launchpad.net/j-rivero/dartsim-openrobotics-testing/ubuntu/
 suites: [bionic]
 component: main
 architectures: [amd64, armhf, arm64, source]
-filter_formula: Package (% *dart6* )
+# TODO: include version in the configuration to get a declarive way of knowing the contents of packages.osrfoundation.org
+# see https://github.com/ros-infrastructure/reprepro-updater/pull/83/files
+filter_formula: Package (% *dart6*, $Version (% TODO))
 verify_release: blindtrust
