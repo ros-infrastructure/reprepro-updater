@@ -95,8 +95,8 @@ filter_formula: "\
 (Package (% libignition-transport8-dev, $Version (% 8.1.0*))|\
 (Package (% libignition-transport8-log, $Version (% 8.1.0*))|\
 (Package (% libignition-transport8-log-dev, $Version (% 8.1.0*))|\
-(Package (% libogre-2.1)|\
-(Package (% libogre-2.1-dev)|\
+(Package (% libogre-2.1, $Version (% 2.0.9999~20180616~06a386f-3osrf~*))|\
+(Package (% libogre-2.1, $Version (% 2.0.9999~20180616~06a386f-3osrf~*))|\
 (Package (% libsdformat9, $Version (% 9.3.0*))|\
 (Package (% libsdformat9-dbg, $Version (% 9.3.0*))|\
 (Package (% libsdformat9-dev, $Version (% 9.3.0*))|\
