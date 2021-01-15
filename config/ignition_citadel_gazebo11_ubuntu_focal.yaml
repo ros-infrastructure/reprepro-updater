@@ -102,5 +102,5 @@ filter_formula: "\
 (Package (% libsdformat9-dev), $Version (% 9.3.0*))|\
 (Package (% sdformat9-dbg), $Version (% 9.3.0*))|\
 (Package (% sdformat9-doc), $Version (% 9.3.0*))|\
-(Package (% sdformat9-sdf), $Version (% 9.3.0*))|\
+(Package (% sdformat9-sdf), $Version (% 9.3.0*))\
 "
