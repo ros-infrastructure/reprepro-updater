@@ -1,0 +1,6 @@
+name: gazebo9bionic
+method: https://launchpad.net/~j-rivero/+archive/ubuntu/gazebo9bionic
+suites: [bionic]
+component: main
+architectures: [source]
+filter_formula: Package (% gazebo9), $Version (% 9.0.0+dfsg5-3ubuntu1+ppa2)
