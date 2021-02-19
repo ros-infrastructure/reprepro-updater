@@ -1,5 +1,5 @@
 name: gazebo9bionic
-method: https://launchpad.net/~j-rivero/+archive/ubuntu/gazebo9bionic
+method: http://ppa.launchpad.net/j-rivero/gazebo9bionic/ubuntu
 suites: [bionic]
 component: main
 architectures: [source]
