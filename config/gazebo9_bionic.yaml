@@ -4,7 +4,8 @@ suites: [bionic]
 component: main
 architectures: [amd64, arm64, armhf, i386, source]
 filter_formula: "\ 
-((Package (= gazebo9) |\
+((Package (= gazebo) |\
+(Package (= gazebo9) |\
 Package (= gazebo9-common) |\
 Package (= gazebo9-doc) |\
 Package (= gazebo9-plugin-base) |\
