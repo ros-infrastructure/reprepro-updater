@@ -1,0 +1,6 @@
+name: pyside2_bionic_source
+method: http://ppa.launchpad.net/thopiekar/pyside-git/ubuntu/
+suites: [bionic]
+component: main
+architectures: [source]
+filter_formula: (Package (= pyside2), $Version (% 2.0.0+dev-0~201712012232~rev1779~pkg53~ubuntu18.04.1))
