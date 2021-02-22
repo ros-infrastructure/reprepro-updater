@@ -3,4 +3,4 @@ method: http://packages.osrfoundation.org/gazebo/ubuntu-prerelease
 suites: [bionic]
 component: main
 architectures: [amd64, arm64, armhf, source]
-filter_formula: Package (% libopensplice69*), $Version (% 6.9.190705+osrf1-2~bionic~bionic)
+filter_formula: Package (= libopensplice69), $Version (% 6.9.190705+osrf1-2~bionic~bionic)
