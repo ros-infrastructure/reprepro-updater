@@ -1,0 +1,6 @@
+name: libopensplice67_bionic_xenial
+method: http://packages.osrfoundation.org/gazebo/ubuntu-prerelease
+suites: [bionic, xenial]
+component: main
+architectures: [amd64, arm64, armhf, source]
+filter_formula: Package (= libopensplice67), $Version (% 6.7.180404+osrf1-2~*)
