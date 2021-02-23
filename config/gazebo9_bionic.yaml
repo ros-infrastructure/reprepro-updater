@@ -1,0 +1,15 @@
+name: gazebo9bionic
+method: http://ppa.launchpad.net/j-rivero/gazebo9bionic/ubuntu
+suites: [bionic]
+component: main
+architectures: [amd64, arm64, armhf, i386, source]
+filter_formula: "\ 
+((Package (= gazebo) |\
+(Package (= gazebo9) |\
+Package (= gazebo9-common) |\
+Package (= gazebo9-doc) |\
+Package (= gazebo9-plugin-base) |\
+Package (= libgazebo9) |\
+Package (= libgazebo9-dev), \
+$Version (% 9.0.0+dfsg5-3ubuntu1+ppa2)) \
+"
