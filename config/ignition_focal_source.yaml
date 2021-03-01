@@ -13,4 +13,5 @@ filter_formula: "\
 (Package (% =ignition-physics2), $Version (% 2.3.0-1~focal))|\
 (Package (% =ignition-plugin), $Version (% 1.1.0-1~focal))|\
 (Package (% =ignition-transport8), $Version (% 8.2.0-1~focal))|\
+(Package (% =ogre-2.1), $Version (% 2.0.9999~20180616~06a386f-3osrf~focal))|\
 "
