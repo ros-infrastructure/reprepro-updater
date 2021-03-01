@@ -1,0 +1,12 @@
+name: ignition_focal_from_testing
+method: http://packages.osrfoundation.org/gazebo/ubuntu-testing
+suites: [focal]
+component: main
+architectures: [source]
+filter_formula: "\
+(Package (% =ignition-launch2), $Version (% 2.1.0-1~focal))|\
+(Package (% =ignition-gazebo3), $Version (% 3.7.0-2~focal))|\
+(Package (% =ignition-rendering3), $Version (% 3.2.0-3~focal))|\
+(Package (% =ignition-sensors3), $Version (% 3.0.0-1~focal))|\
+(Package (% =sdformat9), $Version (% 9.4.0-1~focal))\
+"

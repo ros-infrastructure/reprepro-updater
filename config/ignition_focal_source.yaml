@@ -1,0 +1,16 @@
+name: ignition_focal_source
+method: http://packages.osrfoundation.org/gazebo/ubuntu-stable
+suites: [focal]
+component: main
+architectures: [source]
+filter_formula: "\
+(Package (% =ignition-cmake2), $Version (% 2.6.2-1~focal))|\
+(Package (% =ignition-common3), $Version (% 3.10.0-1~focal))|\
+(Package (% =ignition-fuel-tools4), $Version (% 4.3.0-1~focal))|\
+(Package (% =ignition-gui3), $Version (% 3.4.0-1~focal))|\
+(Package (% =ignition-math6), $Version (% 6.7.0-1~focal))|\
+(Package (% =ignition-msgs5), $Version (% 5.6.0-1~focal))|\
+(Package (% =ignition-physics2), $Version (% 2.3.0-1~focal))|\
+(Package (% =ignition-plugin), $Version (% 1.1.0-1~focal))|\
+(Package (% =ignition-transport8), $Version (% 8.2.0-1~focal))|\
+"
