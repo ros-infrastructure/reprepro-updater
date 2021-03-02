@@ -3,7 +3,7 @@ method: http://packages.osrfoundation.org/gazebo/ubuntu-prerelease
 suites: [xenial]
 component: main
 # python packages only, all arches supported
-architectures: [amd64, source]
+architectures: [amd64, arm64, armhf source]
 filter_formula: "\
 ((Package (% =lark-parser) |\
   Package (% =python3-lark-parser) |\
