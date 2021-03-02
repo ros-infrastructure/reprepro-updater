@@ -1,0 +1,12 @@
+name: ceres_xenial
+method: http://ppa.launchpad.net/j-rivero/reproduce-ceres-xenial/ubuntu
+suites: [xenial]
+component: main
+architectures: [i386, amd64, armhf, arm64, source]
+filter_formula: "\
+((Package (= ceres-solver) |\
+Package (= libceres-dev) |\
+Package (= libceres1) |\
+Package (= ceres-solver-doc)), \
+$Version (% 1.12.0+dfsg0-5))\
+"
