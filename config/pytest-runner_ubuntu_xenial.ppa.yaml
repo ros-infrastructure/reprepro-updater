@@ -1,0 +1,12 @@
+# Note: source package needs of https://launchpad.net/~j-rivero/+archive/ubuntu/reproduce-setuptools-scm-xenial to build packages
+name: pytest-runner_ubuntu_xenial
+method: http://ppa.launchpad.net/j-rivero/reproduce-pytest-runner-xenial/ubuntu
+suites: [xenial]
+component: main
+architectures: [amd64, i386, armhf, arm64, source]
+filter_formula: "\
+((Package (= pytest-runner) |\
+Package (= python-pytest-runner) |\
+Package (= python3-pytest-runner)), \
+$Version (% 2.11.1-3))\
+"
