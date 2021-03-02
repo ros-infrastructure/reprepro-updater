@@ -7,6 +7,6 @@ filter_formula: "\
 ((Package (= ceres-solver) |\
 Package (= libceres-dev) |\
 Package (= libceres1) |\
-Package (= ceres-solver-doc)), |\
+Package (= ceres-solver-doc)), \
 $Version (% libceres1_1.12.0+dfsg0-5))\
 "
