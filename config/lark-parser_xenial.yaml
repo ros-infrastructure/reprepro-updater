@@ -1,6 +1,6 @@
 name: lark-parser_xenial
-method: http://packages.osrfoundation.org/gazebo/ubuntu-prerelease
-suites: [xenial]
+method: http://packages.osrfoundation.org/gazebo/ubuntu-testing
+suites: [bionic, buster, stretch, xenial]
 component: main
 # python packages only, all arches supported
 architectures: [amd64, arm64, armhf source]
@@ -8,5 +8,5 @@ filter_formula: "\
 ((Package (% =lark-parser) |\
   Package (% =python3-lark-parser) |\
   Package (% =python3-lark-parser-doc)),
-  $Version (% 0.7.2-2osrf~xenial))\
+  $Version (% 0.7.2-3osrf~* ))\
 "
