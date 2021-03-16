@@ -1,5 +1,6 @@
-import unittest
 import aptly_importer
+import unittest
+import subprocess
 
 
 #class TestConfigBase(unittest.TestCase):
@@ -42,18 +43,33 @@ class TestAptly(unittest.TestCase):
 class TestUpdaterManager(unittest.TestCase):
     def setUp(self):
         self.aptly = aptly_importer.Aptly()
-        self.expected_mirror_test_name = '_reprepro_updater_test_suite_-focal'
-        self.expected_repo_test_name = 'ros_bootstrap-focal'
+        self.expected_distros = ['focal', 'groovy']
+        self.expected_mirrors_test_name =\
+                [f"_reprepro_updater_test_suite_-{distro}" for distro in self.expected_distros]
+        self.expected_repos_test_name =\
+                [f"ros_bootstrap-{distro}" for distro in self.expected_distros]
+        # clean up testing artifacts if they previously exist
+        self.__clean_up_aptly_test_artifacts()
 
     def tearDown(self):
-        self.__remove_repo(self.expected_repo_test_name)
-        self.__remove_mirror(self.expected_mirror_test_name)
+        self.__clean_up_aptly_test_artifacts()
+
+    def __clean_up_aptly_test_artifacts(self):
+        [self.__remove_repo(name) for name in self.expected_repos_test_name]
+        [self.__remove_mirror(name) for name in self.expected_mirrors_test_name]
+        [self.__remove_snapshots_from_mirror(name) for name in self.expected_mirrors_test_name]
+        self.aptly.run(['db', 'cleanup'])
 
     def __remove_mirror(self, mirror_name):
-        self.aptly.run(['mirror', 'drop', mirror_name], show_errors=False, fail_on_errors=False)
+        self.aptly.run(['mirror', 'drop', '-force', mirror_name],
+                       show_errors=False, fail_on_errors=False)
 
     def __remove_repo(self, repo_name):
         self.aptly.run(['repo', 'drop', repo_name], show_errors=False, fail_on_errors=False)
+
+    def __remove_snapshots_from_mirror(self, mirror_name):
+        for snap in self.aptly.get_snapshots_from_mirror(mirror_name):
+            self.aptly.run(['snapshot', 'drop', snap])
 
     def __add_repo(self, repo_name):
         self.aptly.run(['repo', 'create', repo_name])
@@ -61,14 +77,14 @@ class TestUpdaterManager(unittest.TestCase):
     def test_example_creation_from_scratch(self):
         manager = aptly_importer.UpdaterManager('test/example.yaml')
         manager.run()
-        self.assertTrue(self.aptly.check_mirror_exists(self.expected_mirror_test_name))
-        self.assertTrue(self.aptly.check_repo_exists(self.expected_repo_test_name))
+        [self.assertTrue(self.aptly.check_mirror_exists(name)) for name in self.expected_mirrors_test_name]
+        [self.assertTrue(self.aptly.check_repo_exists(name)) for name in self.expected_repos_test_name]
 
     def test_example_creation_existing_repo(self):
-        self.__add_repo(self.expected_repo_test_name)
+        [self.__add_repo(name) for name in self.expected_repos_test_name]
         manager = aptly_importer.UpdaterManager('test/example.yaml')
         manager.run()
-        self.assertTrue(self.aptly.check_mirror_exists(self.expected_mirror_test_name))
+        [self.assertTrue(self.aptly.check_mirror_exists(name)) for name in self.expected_mirrors_test_name]
 
 
 class TestReprepro2AptlyFilter(unittest.TestCase):
