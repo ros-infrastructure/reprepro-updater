@@ -2,5 +2,5 @@ name: _reprepro_updater_test_suite_
 method: http://archive.ubuntu.com/ubuntu/
 suites: ['focal']
 component: main
-architectures: [arm64, amd64, source]
+architectures: [i386, amd64, source]
 filter_formula: Package (% sdformat )

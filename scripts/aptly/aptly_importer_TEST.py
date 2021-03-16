@@ -43,16 +43,32 @@ class TestUpdaterManager(unittest.TestCase):
     def setUp(self):
         self.aptly = aptly_importer.Aptly()
         self.expected_mirror_test_name = '_reprepro_updater_test_suite_-focal'
+        self.expected_repo_test_name = 'ros_bootstrap-focal'
 
-    def _remove_mirror(self, mirror_name):
+    def tearDown(self):
+        self.__remove_repo(self.expected_repo_test_name)
+        self.__remove_mirror(self.expected_mirror_test_name)
+
+    def __remove_mirror(self, mirror_name):
         self.aptly.run(['mirror', 'drop', mirror_name], show_errors=False, fail_on_errors=False)
 
-    def test_example_creation(self):
-        self._remove_mirror(self.expected_mirror_test_name)
+    def __remove_repo(self, repo_name):
+        self.aptly.run(['repo', 'drop', repo_name], show_errors=False, fail_on_errors=False)
+
+    def __add_repo(self, repo_name):
+        self.aptly.run(['repo', 'create', repo_name])
+
+    def test_example_creation_from_scratch(self):
         manager = aptly_importer.UpdaterManager('test/example.yaml')
         manager.run()
         self.assertTrue(self.aptly.check_mirror_exists(self.expected_mirror_test_name))
-        self._remove_mirror(self.expected_mirror_test_name)
+        self.assertTrue(self.aptly.check_repo_exists(self.expected_repo_test_name))
+
+    def test_example_creation_existing_repo(self):
+        self.__add_repo(self.expected_repo_test_name)
+        manager = aptly_importer.UpdaterManager('test/example.yaml')
+        manager.run()
+        self.assertTrue(self.aptly.check_mirror_exists(self.expected_mirror_test_name))
 
 
 class TestReprepro2AptlyFilter(unittest.TestCase):

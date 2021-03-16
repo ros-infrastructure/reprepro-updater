@@ -29,7 +29,7 @@ class Aptly():
             return True
         else:
             if show_errors:
-                self.error(run_cmd, f"{r.stderr.decode('utf-8')}", fail_on_errors)
+                self.__error(run_cmd, f"{r.stderr.decode('utf-8')}", fail_on_errors)
             return False
 
     def check_valid_filter(self, filter_str):
@@ -49,7 +49,11 @@ class Aptly():
         return self.run(['mirror', 'show', mirror_name],
                         fail_on_errors=False, show_errors=False)
 
-    def error(self, cmd, msg, exit=False):
+    def check_repo_exists(self, repo_name):
+        return self.run(['repo', 'show', repo_name],
+                        fail_on_errors=False, show_errors=False)
+
+    def __error(self, cmd, msg, exit=False):
         print(f"Aptly error running: {cmd} \n", file=stderr)
         print(f"{msg} \n", file=stderr)
 
@@ -96,38 +100,52 @@ class UpdaterManager():
         self.config = UpdaterConfiguration(input_file)
         self.aptly = Aptly()
 
-    def get_mirror_name(self, distribution):
-        return f"{self.config.name}-{distribution}"
-
-    def create_aptly_mirrors_from_config(self):
-        for dist in self.config.suites:
-            self.create_aptly_mirror(dist)
-
-    def create_aptly_mirror(self, distribution):
+    def __create_aptly_mirror(self, distribution):
         assert(self.config)
+        mirror_name = self.__get_mirror_name(distribution)
         self.aptly.run(['mirror', 'create', '-with-sources',
                         f"-architectures={','.join(self.config.architectures)}",
                         f"-filter={self.config.filter_formula}",
-                        self.get_mirror_name(distribution),
+                        mirror_name,
                         self.config.method,
                         distribution,
                         self.config.component])
+        self.aptly.run(['mirror', 'update', mirror_name])
 
-    def check_aptly_mirrors_exist(self):
-        for dist in self.config.suites:
-            mirror_name = self.get_mirror_name(dist)
-            if self.aptly.check_mirror_exists(mirror_name):
-                self.error(f"mirror {mirror_name} exists. Refuse to create mirrors")
-
-    def run(self):
-        # check that mirror names are available
-        self.check_aptly_mirrors_exist()
-        for dist in self.config.suites:
-            self.create_aptly_mirror(dist)
-
-    def error(self, msg):
+    def __error(self, msg):
         print(f"Update Manager error: {msg} \n", file=stderr)
         exit(-1)
+
+    def __get_mirror_name(self, distribution):
+        return f"{self.config.name}-{distribution}"
+
+    def __get_repo_name(self, distribution):
+        return f"ros_bootstrap-{distribution}"
+
+    def __import__aptly_mirror_to_repo(self, distribution):
+        repo_name = self.__get_repo_name(distribution)
+        # create repository if it does not exist. New distribution probably
+        if not self.aptly.check_repo_exists(repo_name):
+            self.aptly.run(['repo', 'create', repo_name])
+        self.aptly.run(['repo', 'import',
+                        self.__get_mirror_name(distribution),
+                        repo_name,
+                        self.config.filter_formula])
+
+    def assure_aptly_mirrors_do_not_exist(self):
+        for dist in self.config.suites:
+            mirror_name = self.__get_mirror_name(dist)
+            if self.aptly.check_mirror_exists(mirror_name):
+                self.__error(f"mirror {mirror_name} exists. Refuse to create mirrors")
+
+    def run(self):
+        # 1. Create aptly mirrors from yaml configuration file
+        # check aptly mirrors before creating to avoid problems beforehand
+        self.assure_aptly_mirrors_do_not_exist()
+        for dist in self.config.suites:
+            self.__create_aptly_mirror(dist)
+            # 2. Import from mirrors to local repositories
+            self.__import__aptly_mirror_to_repo(dist)
 
 
 def main():
@@ -144,11 +162,8 @@ def main():
     if not path.exists(args.config_file[0]):
         parser.error("Missing input file from %s" % args.config_file[0])
 
-    # 1. Create aptly mirrors from yaml configuration file
     manager = UpdaterManager(args.config_file[0])
-    # check aptly mirrors before creating to avoid problems beforehand
-    manager.check_aptly_mirrors_exist()
-    manager.create_aptly_mirrors_from_config()
+    manager.run()
 
 
 if __name__ == '__main__':
