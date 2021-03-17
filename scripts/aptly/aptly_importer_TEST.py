@@ -11,9 +11,9 @@ import subprocess
 #http://packages.osrfoundation.org/gazebo/ubuntu
 
 class TestYamlConfiguration(unittest.TestCase):
-    def test_non_existing_file(self):
+    def test_non_existsing_file(self):
         with self.assertRaises(SystemExit):
-            aptly_importer.UpdaterConfiguration('test/i_do_not_exist.yaml')
+            aptly_importer.UpdaterConfiguration('test/i_do_not_exists.yaml')
 
     def test_missing_field(self):
         with self.assertRaises(SystemExit):
@@ -37,18 +37,18 @@ class TestAptly(unittest.TestCase):
         self.assertFalse(self.aptly.check_valid_filter('mysql-client (>= 3.6'))
 
     def tets_invalid_mirror(self):
-        self.assertFalse(self.aptly.check_mirror_exists('i_do_not_exist'))
+        self.assertFalse(self.aptly.check_mirror_exists('i_do_not_exists'))
 
 
 class TestUpdaterManager(unittest.TestCase):
     def setUp(self):
         self.aptly = aptly_importer.Aptly()
         self.expected_distros = ['focal', 'groovy']
-        self.expected_mirrors_test_name =\
-                [f"_reprepro_updater_test_suite_-{distro}" for distro in self.expected_distros]
-        self.expected_repos_test_name =\
-                [f"ros_bootstrap-{distro}" for distro in self.expected_distros]
-        # clean up testing artifacts if they previously exist
+        self.expected_mirrors_test_name = [f"_reprepro_updater_test_suite_-{distro}"
+                                           for distro in self.expected_distros]
+        self.expected_repos_test_name =[f"ros_bootstrap-{distro}"
+                                        for distro in self.expected_distros]
+        # clean up testing artifacts if they previously exists
         self.__clean_up_aptly_test_artifacts()
 
     def tearDown(self):
@@ -77,14 +77,23 @@ class TestUpdaterManager(unittest.TestCase):
     def test_example_creation_from_scratch(self):
         manager = aptly_importer.UpdaterManager('test/example.yaml')
         manager.run()
-        [self.assertTrue(self.aptly.check_mirror_exists(name)) for name in self.expected_mirrors_test_name]
-        [self.assertTrue(self.aptly.check_repo_exists(name)) for name in self.expected_repos_test_name]
+        for name in self.expected_mirrors_test_name:
+            self.assertTrue(self.aptly.exists(aptly_importer.Aptly.ArtifactType.MIRROR, name))
+        for name in self.expected_repos_test_name:
+            self.assertTrue(self.aptly.exists(aptly_importer.Aptly.ArtifactType.REPOSITORY, name))
+        """
+        for name in self.expected_mirrors_test_name:
+            self.assertGreater(
+                self.aptly.get_number_of_packages(aptly_importer.Aptly.ArtifactType.MIRROR, name),
+                0)
+        """
 
-    def test_example_creation_existing_repo(self):
+    def test_example_creation_existsing_repo(self):
         [self.__add_repo(name) for name in self.expected_repos_test_name]
         manager = aptly_importer.UpdaterManager('test/example.yaml')
         manager.run()
-        [self.assertTrue(self.aptly.check_mirror_exists(name)) for name in self.expected_mirrors_test_name]
+        [self.assertTrue(self.aptly.exists(aptly_importer.Aptly.ArtifactType.MIRROR, name))
+            for name in self.expected_mirrors_test_name]
 
 
 class TestReprepro2AptlyFilter(unittest.TestCase):

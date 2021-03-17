@@ -1,4 +1,5 @@
 import argparse
+from enum import Enum
 from pathlib import Path
 from os import path
 from subprocess import check_output, PIPE, run, CalledProcessError
@@ -20,6 +21,11 @@ class Reprepro2AptlyFilter():
 
 
 class Aptly():
+    class ArtifactType(Enum):
+            MIRROR = 'mirror'
+            REPOSITORY = 'repo'
+            SNAPSHOT = 'snapshot'
+
     def __error(self, cmd, msg, exit=False):
         print(f"Aptly error running: {cmd}", file=stderr)
         print(f"  --> {msg} \n", file=stderr)
@@ -37,17 +43,19 @@ class Aptly():
         self.run(delete_mirror_cmd)
         return True
 
-    def check_mirror_exists(self, mirror_name):
-        return self.run(['mirror', 'show', mirror_name],
+    def exists(self, aptly_type: ArtifactType, name):
+        return self.run([aptly_type.value, 'show', name],
                         fail_on_errors=False, show_errors=False)
 
-    def check_repo_exists(self, repo_name):
-        return self.run(['repo', 'show', repo_name],
-                        fail_on_errors=False, show_errors=False)
+    def get_number_of_packages(self, aptly_type: ArtifactType, name):
+        output = check_output(f"aptly {aptly_type.value} show {name}", shell=True)
 
-    def check_snapshot_exists(self, snapshot_name):
-        return self.run(['snapshot', 'show', snapshot_name],
-                        fail_on_errors=False, show_errors=False)
+        for row in output.splitlines():
+            import pprint
+            pprint.pprint(row)
+            if 'Number of packages' in row.decode():
+                return int(row.decode().split(':')[1])
+        assert(False), "get_number_of_packages did not found a valid 'Number of packages' line"
 
     def get_snapshots_from_mirror(self, mirror_name):
         result = []
@@ -153,7 +161,7 @@ class UpdaterManager():
     def __import__aptly_mirror_to_repo(self, distribution):
         repo_name = self.__get_repo_name(distribution)
         # create repository if it does not exist. New distribution probably
-        if not self.aptly.check_repo_exists(repo_name):
+        if not self.aptly.exists(Aptly.ArtifactType.REPOSITORY, repo_name):
             self.aptly.run(['repo', 'create', repo_name])
         self.aptly.run(['repo', 'import',
                         self.__get_mirror_name(distribution),
@@ -163,7 +171,7 @@ class UpdaterManager():
     def __assure_aptly_mirrors_do_not_exist(self):
         for dist in self.config.suites:
             mirror_name = self.__get_mirror_name(dist)
-            if self.aptly.check_mirror_exists(mirror_name):
+            if self.aptly.exists(Aptly.ArtifactType.MIRROR, mirror_name):
                 self.__error(f"mirror {mirror_name} exists. Refuse to create mirrors")
 
     def run(self):
