@@ -50,6 +50,18 @@ class Aptly():
         return self.run([aptly_type.value, 'show', name],
                         fail_on_errors=False, show_errors=False)
 
+    def source_package_exists(self, aptly_type: ArtifactType, name):
+        if not self.exists(aptly_type, name):
+            self.__error('source_package_exists method', f"{aptly_type.value} does not exist")
+            return False
+
+        output = check_output(f"aptly {aptly_type.value} show -with-packages {name}", shell=True)
+        # Did not find a better way of identifying source packages that parsing this output
+        # Aptly add the sufix of _source to all its package names corresponding to source files
+        # The regexp get all Packages section and look for $packagename_$version-$revision_source
+        m = re.findall(r"Packages:.*( .*_.*-.*_source)\n.*$", output.decode(), re.DOTALL)
+        return len(m) > 0
+
     def get_number_of_packages(self, aptly_type: ArtifactType, name):
         output = check_output(f"aptly {aptly_type.value} show {name}", shell=True)
 
@@ -177,12 +189,23 @@ class UpdaterManager():
             if self.aptly.exists(Aptly.ArtifactType.MIRROR, mirror_name):
                 self.__error(f"mirror {mirror_name} exists. Refuse to create mirrors")
 
+    def __remove_all_generated_mirrors(self):
+        for dist in self.config.suites:
+            mirror_name = self.__get_mirror_name(dist)
+            if self.aptly.exists(Aptly.ArtifactType.MIRROR, mirror_name):
+                self.aptly.run(['mirror', 'drop', mirror_name])
+
     def run(self):
         # 1. Create aptly mirrors from yaml configuration file
         # check aptly mirrors before creating to avoid problems beforehand
         self.__assure_aptly_mirrors_do_not_exist()
         for dist in self.config.suites:
             self.__create_aptly_mirror(dist)
+            # 2. Be sure mirror has source package
+            if not self.aptly.source_package_exists(Aptly.ArtifactType.MIRROR,
+                                                    self.__get_mirror_name(dist)):
+                self.__remove_all_generated_mirrors()
+                self.__error(f"{self.__get_mirror_name(dist)} does not have a source package")
             # 2. Import from mirrors to local repositories
             self.__import__aptly_mirror_to_repo(dist)
             # 3. Create snapshots from repositories
@@ -192,7 +215,6 @@ class UpdaterManager():
 def main():
     """
     Usage: python3 aptly_importer.py <config_file>
-    Output: list of added/removed/versioned packages
     """
     usage = "usage: %prog config_file"
     parser = argparse.ArgumentParser(usage)

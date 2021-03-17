@@ -51,14 +51,22 @@ class TestUpdaterManager(unittest.TestCase):
     def __add_repo(self, repo_name):
         self.aptly.run(['repo', 'create', repo_name])
 
+    def __assert_no_mirrors(self):
+        for name in self.expected_mirrors_test_name:
+            self.assertFalse(self.aptly.exists(aptly_importer.Aptly.ArtifactType.MIRROR,
+                                               name))
+
     def __assert_expected_repos_mirrors(self):
         for name in self.expected_mirrors_test_name:
-            self.assertTrue(self.aptly.exists(aptly_importer.Aptly.ArtifactType.MIRROR, name))
+            self.assertTrue(self.aptly.exists(aptly_importer.Aptly.ArtifactType.MIRROR,
+                                              name))
             self.assertGreater(
-                self.aptly.get_number_of_packages(aptly_importer.Aptly.ArtifactType.MIRROR, name),
+                self.aptly.get_number_of_packages(aptly_importer.Aptly.ArtifactType.MIRROR,
+                                                  name),
                 0)
         for name in self.expected_repos_test_name:
-            self.assertTrue(self.aptly.exists(aptly_importer.Aptly.ArtifactType.REPOSITORY, name))
+            self.assertTrue(self.aptly.exists(aptly_importer.Aptly.ArtifactType.REPOSITORY,
+                                              name))
 
     def __clean_up_aptly_test_artifacts(self):
         [self.__remove_repo(name) for name in self.expected_repos_test_name]
@@ -102,8 +110,9 @@ class TestUpdaterManager(unittest.TestCase):
     def test_example_no_sources(self):
         self.__setup__(['xenial'])
         manager = aptly_importer.UpdaterManager('test/example_no_source_package.yaml')
-        manager.run()
-        self.__assert_expected_repos_mirrors()
+        with self.assertRaises(SystemExit):
+            manager.run()
+        self.__assert_no_mirrors()
 
 
 class TestReprepro2AptlyFilter(unittest.TestCase):
