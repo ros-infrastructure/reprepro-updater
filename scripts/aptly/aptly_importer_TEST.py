@@ -8,6 +8,7 @@ import subprocess
 #        self.config = repository.load_config_file('config/_test_repository.yaml')
 # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
 # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 871920D1991BC93C
+#  osrf 67170598AF249743
 #http://packages.osrfoundation.org/gazebo/ubuntu
 
 class TestYamlConfiguration(unittest.TestCase):
@@ -99,6 +100,10 @@ class TestUpdaterManager(unittest.TestCase):
         self.__assert_expected_repos_mirrors()
 
     def test_example_no_sources(self):
+        self.__setup__(['xenial'])
+        manager = aptly_importer.UpdaterManager('test/example_no_source_package.yaml')
+        manager.run()
+        self.__assert_expected_repos_mirrors()
 
 
 class TestReprepro2AptlyFilter(unittest.TestCase):

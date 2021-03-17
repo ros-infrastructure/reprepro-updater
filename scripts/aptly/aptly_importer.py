@@ -54,8 +54,6 @@ class Aptly():
         output = check_output(f"aptly {aptly_type.value} show {name}", shell=True)
 
         for row in output.splitlines():
-            import pprint
-            pprint.pprint(row)
             if 'Number of packages' in row.decode():
                 return int(row.decode().split(':')[1])
         assert(False), "get_number_of_packages did not found a valid 'Number of packages' line"
