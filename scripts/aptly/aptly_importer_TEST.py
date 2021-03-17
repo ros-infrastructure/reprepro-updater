@@ -43,16 +43,21 @@ class TestAptly(unittest.TestCase):
 class TestUpdaterManager(unittest.TestCase):
     def setUp(self):
         self.aptly = aptly_importer.Aptly()
-        self.expected_distros = ['focal', 'groovy']
-        self.expected_mirrors_test_name = [f"_reprepro_updater_test_suite_-{distro}"
-                                           for distro in self.expected_distros]
-        self.expected_repos_test_name =[f"ros_bootstrap-{distro}"
-                                        for distro in self.expected_distros]
-        # clean up testing artifacts if they previously exists
-        self.__clean_up_aptly_test_artifacts()
 
     def tearDown(self):
         self.__clean_up_aptly_test_artifacts()
+
+    def __add_repo(self, repo_name):
+        self.aptly.run(['repo', 'create', repo_name])
+
+    def __assert_expected_repos_mirrors(self):
+        for name in self.expected_mirrors_test_name:
+            self.assertTrue(self.aptly.exists(aptly_importer.Aptly.ArtifactType.MIRROR, name))
+            self.assertGreater(
+                self.aptly.get_number_of_packages(aptly_importer.Aptly.ArtifactType.MIRROR, name),
+                0)
+        for name in self.expected_repos_test_name:
+            self.assertTrue(self.aptly.exists(aptly_importer.Aptly.ArtifactType.REPOSITORY, name))
 
     def __clean_up_aptly_test_artifacts(self):
         [self.__remove_repo(name) for name in self.expected_repos_test_name]
@@ -71,29 +76,29 @@ class TestUpdaterManager(unittest.TestCase):
         for snap in self.aptly.get_snapshots_from_mirror(mirror_name):
             self.aptly.run(['snapshot', 'drop', snap])
 
-    def __add_repo(self, repo_name):
-        self.aptly.run(['repo', 'create', repo_name])
+    def __setup__(self, distros_expected):
+        self.expected_distros = distros_expected
+        self.expected_mirrors_test_name = [f"_reprepro_updater_test_suite_-{distro}"
+                                           for distro in self.expected_distros]
+        self.expected_repos_test_name =[f"ros_bootstrap-{distro}"
+                                        for distro in self.expected_distros]
+        # clean up testing artifacts if they previously exists
+        self.__clean_up_aptly_test_artifacts()
 
-    def test_example_creation_from_scratch(self):
+    def test_basic_example_creation_from_scratch(self):
+        self.__setup__(['focal', 'groovy'])
         manager = aptly_importer.UpdaterManager('test/example.yaml')
         manager.run()
-        for name in self.expected_mirrors_test_name:
-            self.assertTrue(self.aptly.exists(aptly_importer.Aptly.ArtifactType.MIRROR, name))
-        for name in self.expected_repos_test_name:
-            self.assertTrue(self.aptly.exists(aptly_importer.Aptly.ArtifactType.REPOSITORY, name))
-        """
-        for name in self.expected_mirrors_test_name:
-            self.assertGreater(
-                self.aptly.get_number_of_packages(aptly_importer.Aptly.ArtifactType.MIRROR, name),
-                0)
-        """
+        self.__assert_expected_repos_mirrors()
 
-    def test_example_creation_existsing_repo(self):
+    def test_basic_example_creation_existsing_repo(self):
+        self.__setup__(['focal', 'groovy'])
         [self.__add_repo(name) for name in self.expected_repos_test_name]
         manager = aptly_importer.UpdaterManager('test/example.yaml')
         manager.run()
-        [self.assertTrue(self.aptly.exists(aptly_importer.Aptly.ArtifactType.MIRROR, name))
-            for name in self.expected_mirrors_test_name]
+        self.__assert_expected_repos_mirrors()
+
+    def test_example_no_sources(self):
 
 
 class TestReprepro2AptlyFilter(unittest.TestCase):

@@ -26,6 +26,9 @@ class Aptly():
             REPOSITORY = 'repo'
             SNAPSHOT = 'snapshot'
 
+    def __init__(self, debug=False):
+        self.debug = debug
+
     def __error(self, cmd, msg, exit=False):
         print(f"Aptly error running: {cmd}", file=stderr)
         print(f"  --> {msg} \n", file=stderr)
@@ -68,7 +71,8 @@ class Aptly():
 
     def run(self, cmd=[], fail_on_errors=True, show_errors=True):
         run_cmd = ['aptly'] + cmd
-        # print(f"RUN {' '.join(run_cmd)}")
+        if self.debug:
+            print(f"RUN {' '.join(run_cmd)}")
         try:
             r = run(run_cmd, stdout=PIPE, stderr=PIPE)
         except CalledProcessError as e:
@@ -119,9 +123,10 @@ class UpdaterConfiguration():
 
 
 class UpdaterManager():
-    def __init__(self, input_file):
+    def __init__(self, input_file, debug=False):
+        self.aptly = Aptly(debug)
         self.config = UpdaterConfiguration(input_file)
-        self.aptly = Aptly()
+        self.debug = debug
         self.snapshot_timestamp = None
 
     def __create_aptly_mirror(self, distribution):
