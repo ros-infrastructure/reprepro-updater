@@ -1,7 +1,7 @@
 import aptly_importer
-import unittest
+import os
 import subprocess
-
+import unittest
 
 #class TestConfigBase(unittest.TestCase):
 #    def setUp(self):
@@ -45,6 +45,8 @@ class TestUpdaterManager(unittest.TestCase):
     def setUp(self):
         self.aptly_config_file = '/tmp/aptly.conf'
         self.aptly = aptly_importer.Aptly(config_file=self.aptly_config_file)
+        self.debug_msgs = \
+            True if os.environ['_DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_'] else False
         with open(self.aptly_config_file, 'w') as conf_file:
             conf_file.write("""\
                             {
@@ -123,6 +125,7 @@ class TestUpdaterManager(unittest.TestCase):
     def test_basic_example_creation_from_scratch(self):
         self.__setup__(['focal', 'groovy'])
         manager = aptly_importer.UpdaterManager('test/example.yaml',
+                                                debug=self.debug_msgs,
                                                 aptly_config_file=self.aptly_config_file)
         self.assertTrue(manager.run())
         self.__assert_expected_repos_mirrors()

@@ -31,10 +31,10 @@ class Aptly():
         self.debug = debug
         self.config_file = config_file
 
-    def __error(self, cmd, msg, exit=False):
+    def __error(self, cmd, msg, exit_on_errors=False):
         print(f"Aptly error running: {cmd}", file=stderr)
         print(f"  --> {msg} \n", file=stderr)
-        if exit:
+        if exit_on_errors:
             exit(-1)
 
     def check_valid_filter(self, filter_str):
@@ -130,7 +130,7 @@ class UpdaterConfiguration():
 
     def __error(self, msg):
         print(f"Configuration file error: {msg} \n", file=stderr)
-        exit(-1)
+        sys.exit(-1)
 
     def __load_config_file(self, config_file_path):
         fn = Path(__file__).parent / config_file_path

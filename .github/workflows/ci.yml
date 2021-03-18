@@ -7,6 +7,11 @@ jobs:
   bionic-ci:
     runs-on: ubuntu-18.04
     name: Ubuntu Bionic CI
+    strategy:
+      matrix:
+        show_debug_cmds:
+          - true
+          - false
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -49,3 +54,5 @@ jobs:
       - name: Run tests
         run: |
             python3 scripts/aptly/aptly_importer_TEST.py
+        env:
+          _DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_:: ${{ matrix.show_debug_cmds }}
