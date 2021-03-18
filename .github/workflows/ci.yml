@@ -17,7 +17,7 @@ jobs:
       - name: Install software
         run: |
             sudo apt-get update
-            sudo apt-get install -y gpg python3 aptly
+            sudo apt-get install -y gpg python3 aptly debian-archive-keyring
       - name: Generate key
         run: |
             cat <<-EOF > genkey
