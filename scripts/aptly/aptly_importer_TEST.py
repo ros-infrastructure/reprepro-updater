@@ -45,8 +45,8 @@ class TestUpdaterManager(unittest.TestCase):
     def setUp(self):
         self.aptly_config_file = '/tmp/aptly.conf'
         self.aptly = aptly_importer.Aptly(config_file=self.aptly_config_file)
-        self.debug_msgs = \
-            True if os.environ['_DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_'] else False
+        self.debug_msgs =\
+            os.environ['_DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_'] if '_DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_' in os.environ else False
         with open(self.aptly_config_file, 'w') as conf_file:
             conf_file.write("""\
                             {
