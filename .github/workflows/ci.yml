@@ -28,7 +28,7 @@ jobs:
                 Name-Real: Testing name
                 Name-Email: test@test.org
                 Expire-Date: 0
-                Passphrase:
+                %no-protection
             EOF
             gpg --gen-key --batch genkey
       - name: Setup enviroment
