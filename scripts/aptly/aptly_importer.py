@@ -130,7 +130,7 @@ class UpdaterConfiguration():
 
     def __error(self, msg):
         print(f"Configuration file error: {msg} \n", file=stderr)
-        sys.exit(-1)
+        exit(-1)
 
     def __load_config_file(self, config_file_path):
         fn = Path(__file__).parent / config_file_path
