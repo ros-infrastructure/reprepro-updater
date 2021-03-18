@@ -3,7 +3,7 @@ from enum import Enum
 from pathlib import Path
 from os import path
 from subprocess import check_output, PIPE, run, CalledProcessError
-from sys import stderr
+from sys import stderr, exit
 import re
 import time
 import yaml
@@ -34,6 +34,8 @@ class Aptly():
     def __error(self, cmd, msg, exit=False):
         print(f"Aptly error running: {cmd}", file=stderr)
         print(f"  --> {msg} \n", file=stderr)
+        if exit:
+            exit(-1)
 
     def check_valid_filter(self, filter_str):
         fake_mirror_name = '_test_aptly_filter'
