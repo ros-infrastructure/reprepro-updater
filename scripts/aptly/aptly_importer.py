@@ -25,9 +25,11 @@ class Aptly():
             MIRROR = 'mirror'
             REPOSITORY = 'repo'
             SNAPSHOT = 'snapshot'
+            PUBLISH = 'publish'
 
-    def __init__(self, debug=False):
+    def __init__(self, debug=False, config_file=None):
         self.debug = debug
+        self.config_file = config_file
 
     def __error(self, cmd, msg, exit=False):
         print(f"Aptly error running: {cmd}", file=stderr)
@@ -47,7 +49,12 @@ class Aptly():
         return True
 
     def exists(self, aptly_type: ArtifactType, name):
+        assert(aptly_type != Aptly.ArtifactType.PUBLISH), 'PUBLISH uses exists_publication'
         return self.run([aptly_type.value, 'show', name],
+                        fail_on_errors=False, show_errors=False)
+
+    def exists_publication(self, distribution, end_point):
+        return self.run(['publish', 'show', distribution, end_point],
                         fail_on_errors=False, show_errors=False)
 
     def source_package_exists(self, aptly_type: ArtifactType, name):
@@ -80,7 +87,10 @@ class Aptly():
         return result
 
     def run(self, cmd=[], fail_on_errors=True, show_errors=True):
-        run_cmd = ['aptly'] + cmd
+        run_cmd = ['aptly']
+        if self.config_file:
+            run_cmd += [f"-config={self.config_file}"]
+        run_cmd += cmd
         if self.debug:
             print(f"RUN {' '.join(run_cmd)}")
         try:
@@ -133,11 +143,18 @@ class UpdaterConfiguration():
 
 
 class UpdaterManager():
-    def __init__(self, input_file, debug=False):
-        self.aptly = Aptly(debug)
+    def __init__(self, input_file, debug=False, aptly_config_file=None):
+        self.aptly = Aptly(debug,
+                           config_file=aptly_config_file)
         self.config = UpdaterConfiguration(input_file)
         self.debug = debug
         self.snapshot_timestamp = None
+
+    def __assure_aptly_mirrors_do_not_exist(self):
+        for dist in self.config.suites:
+            mirror_name = self.__get_mirror_name(dist)
+            if self.aptly.exists(Aptly.ArtifactType.MIRROR, mirror_name):
+                self.__error(f"mirror {mirror_name} exists. Refuse to create mirrors")
 
     def __create_aptly_mirror(self, distribution):
         assert(self.config)
@@ -158,6 +175,9 @@ class UpdaterManager():
     def __error(self, msg):
         print(f"Update Manager error: {msg} \n", file=stderr)
         exit(-1)
+
+    def __get_endpoint_name(self, distribution):
+        return f"filesystem:live:ros_bootstrap"
 
     def __get_mirror_name(self, distribution):
         return f"{self.config.name}-{distribution}"
@@ -183,11 +203,17 @@ class UpdaterManager():
                         repo_name,
                         self.config.filter_formula])
 
-    def __assure_aptly_mirrors_do_not_exist(self):
-        for dist in self.config.suites:
-            mirror_name = self.__get_mirror_name(dist)
-            if self.aptly.exists(Aptly.ArtifactType.MIRROR, mirror_name):
-                self.__error(f"mirror {mirror_name} exists. Refuse to create mirrors")
+    def __publish_new_snapshot(self, dist):
+        if (self.aptly.exists_publication(dist, self.__get_endpoint_name(dist))):
+            self.aptly.run(['publish', 'switch',
+                            dist,
+                            self.__get_endpoint_name(dist),
+                            self.__get_snapshot_name(dist)])
+        else:
+            self.aptly.run(['publish', 'snapshot',
+                            f"-distribution={dist}",
+                            self.__get_snapshot_name(dist),
+                            self.__get_endpoint_name(dist)])
 
     def __remove_all_generated_mirrors(self):
         for dist in self.config.suites:
@@ -210,6 +236,8 @@ class UpdaterManager():
             self.__import__aptly_mirror_to_repo(dist)
             # 3. Create snapshots from repositories
             self.__create_aptly_snapshot(dist)
+            # 4. Publish new snapshots
+            self.__publish_new_snapshot(dist)
 
 
 def main():

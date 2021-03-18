@@ -5,7 +5,7 @@ import subprocess
 
 #class TestConfigBase(unittest.TestCase):
 #    def setUp(self):
-#        self.config = repository.load_config_file('config/_test_repository.yaml')
+#        self.config = repository.load_aptly_config_file('config/_test_repository.yaml')
 # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
 # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 871920D1991BC93C
 #  osrf 67170598AF249743
@@ -43,13 +43,25 @@ class TestAptly(unittest.TestCase):
 
 class TestUpdaterManager(unittest.TestCase):
     def setUp(self):
-        self.aptly = aptly_importer.Aptly()
+        self.aptly_config_file = '/tmp/aptly.conf'
+        self.aptly = aptly_importer.Aptly(config_file=self.aptly_config_file)
+        with open(self.aptly_config_file, 'w') as conf_file:
+            conf_file.write("""\
+                            {
+                              "downloadSourcePackages": true,
+                              "gpgDisableSign": false,
+                              "FileSystemPublishEndpoints": {
+                                "live": {
+                                  "rootDir": "/tmp/reprepro_updater/"
+                                }
+                              }
+                            }""")
 
     def tearDown(self):
         self.__clean_up_aptly_test_artifacts()
 
     def __add_repo(self, repo_name):
-        self.aptly.run(['repo', 'create', repo_name])
+        self.assertTrue(self.aptly.run(['repo', 'create', repo_name]))
 
     def __assert_no_mirrors(self):
         for name in self.expected_mirrors_test_name:
@@ -69,6 +81,7 @@ class TestUpdaterManager(unittest.TestCase):
                                               name))
 
     def __clean_up_aptly_test_artifacts(self):
+        [self.__remove_publish(dist) for dist in self.expected_distros]
         [self.__remove_repo(name) for name in self.expected_repos_test_name]
         [self.__remove_mirror(name) for name in self.expected_mirrors_test_name]
         [self.__remove_snapshots_from_mirror(name) for name in self.expected_mirrors_test_name]
@@ -78,8 +91,17 @@ class TestUpdaterManager(unittest.TestCase):
         self.aptly.run(['mirror', 'drop', '-force', mirror_name],
                        show_errors=False, fail_on_errors=False)
 
+    def __remove_publish(self, distro):
+        self.aptly.run(['publish', 'drop',
+                       f"-config={self.aptly_config_file}",
+                       distro,
+                       self.expected_endpoint_name],
+                       show_errors=False, fail_on_errors=False)
+
     def __remove_repo(self, repo_name):
-        self.aptly.run(['repo', 'drop', repo_name], show_errors=False, fail_on_errors=False)
+        # be sure to unpublish the repo otherwise can not be removed
+        self.aptly.run(['repo', 'drop', '-force', repo_name],
+                       show_errors=False, fail_on_errors=False)
 
     def __remove_snapshots_from_mirror(self, mirror_name):
         for snap in self.aptly.get_snapshots_from_mirror(mirror_name):
@@ -87,29 +109,36 @@ class TestUpdaterManager(unittest.TestCase):
 
     def __setup__(self, distros_expected):
         self.expected_distros = distros_expected
+        self.expected_endpoint_name = 'filesystem:live:ros_bootstrap'
         self.expected_mirrors_test_name = [f"_reprepro_updater_test_suite_-{distro}"
                                            for distro in self.expected_distros]
-        self.expected_repos_test_name =[f"ros_bootstrap-{distro}"
-                                        for distro in self.expected_distros]
+        self.expected_repos_test_name = [f"ros_bootstrap-{distro}"
+                                         for distro in self.expected_distros]
+        self.expected_repos_by_distro_test_name =\
+            {f"{distro}": f"ros_bootstrap-{distro}" for distro in self.expected_distros}
+
         # clean up testing artifacts if they previously exists
         self.__clean_up_aptly_test_artifacts()
 
     def test_basic_example_creation_from_scratch(self):
         self.__setup__(['focal', 'groovy'])
-        manager = aptly_importer.UpdaterManager('test/example.yaml')
+        manager = aptly_importer.UpdaterManager('test/example.yaml',
+                                                aptly_config_file=self.aptly_config_file)
         manager.run()
         self.__assert_expected_repos_mirrors()
 
     def test_basic_example_creation_existsing_repo(self):
         self.__setup__(['focal', 'groovy'])
         [self.__add_repo(name) for name in self.expected_repos_test_name]
-        manager = aptly_importer.UpdaterManager('test/example.yaml')
+        manager = aptly_importer.UpdaterManager('test/example.yaml',
+                                                aptly_config_file=self.aptly_config_file)
         manager.run()
         self.__assert_expected_repos_mirrors()
 
     def test_example_no_sources(self):
         self.__setup__(['xenial'])
-        manager = aptly_importer.UpdaterManager('test/example_no_source_package.yaml')
+        manager = aptly_importer.UpdaterManager('test/example_no_source_package.yaml',
+                                                aptly_config_file=self.aptly_config_file)
         with self.assertRaises(SystemExit):
             manager.run()
         self.__assert_no_mirrors()
