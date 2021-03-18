@@ -238,6 +238,7 @@ class UpdaterManager():
             self.__create_aptly_snapshot(dist)
             # 4. Publish new snapshots
             self.__publish_new_snapshot(dist)
+        return True
 
 
 def main():

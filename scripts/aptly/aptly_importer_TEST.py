@@ -124,7 +124,7 @@ class TestUpdaterManager(unittest.TestCase):
         self.__setup__(['focal', 'groovy'])
         manager = aptly_importer.UpdaterManager('test/example.yaml',
                                                 aptly_config_file=self.aptly_config_file)
-        manager.run()
+        self.assertTrue(manager.run())
         self.__assert_expected_repos_mirrors()
 
     def test_basic_example_creation_existsing_repo(self):
@@ -132,7 +132,7 @@ class TestUpdaterManager(unittest.TestCase):
         [self.__add_repo(name) for name in self.expected_repos_test_name]
         manager = aptly_importer.UpdaterManager('test/example.yaml',
                                                 aptly_config_file=self.aptly_config_file)
-        manager.run()
+        self.assertTrue(manager.run())
         self.__assert_expected_repos_mirrors()
 
     def test_example_no_sources(self):
