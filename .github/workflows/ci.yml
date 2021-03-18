@@ -6,7 +6,7 @@ on: [push, pull_request]
 jobs:
   bionic-ci:
     runs-on: ubuntu-18.04
-    name: Bionic Aptly CI - \
+    name: Bionic Aptly CI -
           debug ${{ matrix.show_debug_cmds }}
     strategy:
       matrix:
