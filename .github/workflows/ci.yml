@@ -18,12 +18,26 @@ jobs:
         run: |
             sudo apt-get update
             sudo apt-get install -y gpg python3 aptly
+      - name: Generate key
+        run: |
+            cat <<-EOF > genkey
+                Key-Type: 1
+                Key-Length: 4096
+                Subkey-Type: 1
+                Subkey-Length: 4096
+                Name-Real: Testing name
+                Name-Email: test@test.org
+                Expire-Date: 0
+                Passphrase:
+            EOF
+            gpg --gen-key --batch genkey
       - name: Setup enviroment
         run: |
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 871920D1991BC93C 3B4FE6ACC0B21F32
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 04EE7237B7D453EC 648ACFD622F3D138
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 16E90B3FDF65EDE3AA7F323C04EE7237B7D453EC
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 0146DC6D4A0B2914BDED34DB648ACFD622F3D138
+            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 67170598AF249743
       - name: Run tests
         run: |
             python3 scripts/aptly/aptly_importer_TEST.py
