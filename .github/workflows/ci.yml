@@ -22,6 +22,8 @@ jobs:
         run: |
             sudo gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 871920D1991BC93C 3B4FE6ACC0B21F32
             sudo gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 04EE7237B7D453EC 648ACFD622F3D138
+            sudo gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 16E90B3FDF65EDE3AA7F323C04EE7237B7D453EC
+            sudo gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 0146DC6D4A0B2914BDED34DB648ACFD622F3D138
       - name: Run tests
         run: |
             python3 scripts/aptly/aptly_importer_TEST.py
