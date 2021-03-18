@@ -33,8 +33,7 @@ jobs:
             gpg --gen-key --batch genkey
       - name: Setup enviroment
         run: |
-            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 871920D1991BC93C 3B4FE6ACC0B21F32 8C0375DF2893458D
-            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 04EE7237B7D453EC 648ACFD622F3D138
+            gpg --no-default-keyring --keyring /usr/share/keyrings/debian-archive-keyring.gpg --export | gpg --no-default-keyring --keyring trustedkeys.gpg --import
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 16E90B3FDF65EDE3AA7F323C04EE7237B7D453EC
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 0146DC6D4A0B2914BDED34DB648ACFD622F3D138
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 67170598AF249743
