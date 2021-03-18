@@ -17,7 +17,22 @@ jobs:
       - name: Install software
         run: |
             sudo apt-get update
-            sudo apt-get install -y gpg python3 aptly debian-archive-keyring
+            sudo apt-get install -y gpg python3 aptly ubuntu-keyring
+      - name: Fix weird problem with trust keys
+        run: |
+            gpg --check-trustdb 2>&1| grep 'not found' | awk '{print $8}' >bad-keys.txt
+            gpg --export-ownertrust > ownertrust-gpg.txt
+            mv ~/.gnupg/trustdb.gpg ~/.gnupg/trustdb.gpg-broken
+            for KEY in `cat bad-keys.txt` ; do sed -i "/$KEY/d" ownertrust-gpg.txt ; done
+            gpg --import-ownertrust ownertrust-gpg.txt
+            rm bad-keys.txt ownertrust-gpg.txt
+      - name: Setup enviroment
+        run: |
+            gpg --no-default-keyring --keyring /usr/share/keyrings/ubuntu-archive-keyring.gpg --export | gpg --no-default-keyring --keyring trustedkeys.gpg --import
+            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 16E90B3FDF65EDE3AA7F323C04EE7237B7D453EC
+            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 0146DC6D4A0B2914BDED34DB648ACFD622F3D138
+            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 67170598AF249743
+
       - name: Generate key
         run: |
             cat <<-EOF > genkey
@@ -31,12 +46,6 @@ jobs:
                 %no-protection
             EOF
             gpg --gen-key --batch genkey
-      - name: Setup enviroment
-        run: |
-            gpg --no-default-keyring --keyring /usr/share/keyrings/ubuntu-archive-keyring.gpg --export | gpg --no-default-keyring --keyring trustedkeys.gpg --import
-            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 16E90B3FDF65EDE3AA7F323C04EE7237B7D453EC
-            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 0146DC6D4A0B2914BDED34DB648ACFD622F3D138
-            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 67170598AF249743
       - name: Run tests
         run: |
             python3 scripts/aptly/aptly_importer_TEST.py
