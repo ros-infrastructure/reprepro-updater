@@ -1,15 +1,8 @@
 import aptly_importer
 import os
-import subprocess
+import tempfile
 import unittest
 
-#class TestConfigBase(unittest.TestCase):
-#    def setUp(self):
-#        self.config = repository.load_aptly_config_file('config/_test_repository.yaml')
-# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
-# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 871920D1991BC93C
-#  osrf 67170598AF249743
-#http://packages.osrfoundation.org/gazebo/ubuntu
 
 class TestYamlConfiguration(unittest.TestCase):
     def test_non_existsing_file(self):
@@ -43,24 +36,28 @@ class TestAptly(unittest.TestCase):
 
 class TestUpdaterManager(unittest.TestCase):
     def setUp(self):
-        self.aptly_config_file = '/tmp/aptly.conf'
         self.aptly = aptly_importer.Aptly(config_file=self.aptly_config_file)
         self.debug_msgs =\
             os.environ['_DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_'] if '_DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_' in os.environ else False
-        with open(self.aptly_config_file, 'w') as conf_file:
-            conf_file.write("""\
-                            {
-                              "downloadSourcePackages": true,
-                              "gpgDisableSign": false,
-                              "FileSystemPublishEndpoints": {
-                                "live": {
-                                  "rootDir": "/tmp/reprepro_updater/"
-                                }
-                              }
-                            }""")
+        with tempfile.NamedTemporaryFile(dir='/tmp', delete=False) as tmpfile:
+            tmpfile.write("""\
+            {
+              "downloadSourcePackages": true,
+              "gpgDisableSign": false,
+              "FileSystemPublishEndpoints": {
+                "live": {
+                  "rootDir": "/tmp/reprepro_updater/"
+                }
+              }
+            }""")
+            self.aptly_config_file = tmpfile.name
 
     def tearDown(self):
         self.__clean_up_aptly_test_artifacts()
+        if os.path.exists(self.aptly_config_file):
+            os.remove(self.aptly_config_file)
+        else:
+            assert(False), f"{self.aptly_config_file} file does not exist while trying to remove it"
 
     def __add_repo(self, repo_name):
         self.assertTrue(self.aptly.run(['repo', 'create', repo_name]))
