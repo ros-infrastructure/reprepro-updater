@@ -36,9 +36,6 @@ class TestAptly(unittest.TestCase):
 
 class TestUpdaterManager(unittest.TestCase):
     def setUp(self):
-        self.aptly = aptly_importer.Aptly(config_file=self.aptly_config_file)
-        self.debug_msgs =\
-            os.environ['_DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_'] if '_DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_' in os.environ else False
         with tempfile.NamedTemporaryFile(dir='/tmp', delete=False) as tmpfile:
             tmpfile.write("""\
             {
@@ -51,6 +48,10 @@ class TestUpdaterManager(unittest.TestCase):
               }
             }""")
             self.aptly_config_file = tmpfile.name
+
+        self.aptly = aptly_importer.Aptly(config_file=self.aptly_config_file)
+        self.debug_msgs =\
+            os.environ['_DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_'] if '_DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_' in os.environ else False
 
     def tearDown(self):
         self.__clean_up_aptly_test_artifacts()
