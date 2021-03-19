@@ -46,7 +46,7 @@ class TestUpdaterManager(unittest.TestCase):
                   "rootDir": "/tmp/reprepro_updater/"
                 }
               }
-            }""")
+            }""".encode())
             self.aptly_config_file = tmpfile.name
 
         self.aptly = aptly_importer.Aptly(config_file=self.aptly_config_file)
