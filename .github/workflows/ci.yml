@@ -4,18 +4,9 @@ name: Aptly Importer
 on: [push, pull_request]
 
 jobs:
-  bionic-ci:
+  common_setup:
     runs-on: ubuntu-18.04
-    name: Bionic Aptly CI -
-          debug ${{ matrix.show_debug_cmds }}
-    strategy:
-      matrix:
-        show_debug_cmds:
-          - true
-          - false
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Install aptly repo
         run: |
             sudo apt-key adv --keyserver pool.sks-keyservers.net --recv-keys ED75B5A4483DA07C
@@ -52,8 +43,38 @@ jobs:
                 %no-protection
             EOF
             gpg --gen-key --batch genkey
+
+  bionic-ci:
+    needs: common_setup
+    runs-on: ubuntu-18.04
+    name: Bionic Aptly CI -
+          debug ${{ matrix.show_debug_cmds }}
+    strategy:
+      matrix:
+        show_debug_cmds:
+          - true
+          - false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Run tests
         run: |
             python3 scripts/aptly/aptly_importer_TEST.py
         env:
           _DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_: ${{ matrix.show_debug_cmds }}
+
+  bionic-config-files-testing:
+    needs: common_setup
+    runs-on: ubuntu-18.04
+    name: Aptly testing new config files
+    steps:
+      - id: files
+        uses: jitterbit/get-changed-files@v1
+      - run: |
+          for changed_file in ${{ steps.files.outputs.all }}; do
+            echo "Do something with this ${changed_file}."
+            if [[ ${changed_file} != ${changed_file/config\/*.yaml} ]]; fi
+              echo "CONFIG FILE DETECTED"
+              python3 scripts/aptly/aptly_importer.py ${changed_file}
+            fi
+          done
