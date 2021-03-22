@@ -4,9 +4,6 @@ name: Aptly Importer
 on: [push, pull_request]
 
 jobs:
-  common_setup:
-    runs-on: ubuntu-18.04
-
   bionic-ci:
     runs-on: ubuntu-18.04
     name: Bionic Aptly CI -
