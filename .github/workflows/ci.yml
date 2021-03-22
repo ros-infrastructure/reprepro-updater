@@ -6,7 +6,25 @@ on: [push, pull_request]
 jobs:
   common_setup:
     runs-on: ubuntu-18.04
+
+  bionic-ci:
+    runs-on: ubuntu-18.04
+    name: Bionic Aptly CI -
+          debug ${{ matrix.show_debug_cmds }}
+    strategy:
+      matrix:
+        show_debug_cmds:
+          - true
+          - false
+        job_type:
+          - 'CI'
+          - 'CONFIG_TESTER'
+        exclude:
+          - job_type: 'CONFIG_TESTER'
+            show_debug_cmds: false
     steps:
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Install aptly repo
         run: |
             sudo apt-key adv --keyserver pool.sks-keyservers.net --recv-keys ED75B5A4483DA07C
@@ -44,33 +62,20 @@ jobs:
             EOF
             gpg --gen-key --batch genkey
 
-  bionic-ci:
-    needs: common_setup
-    runs-on: ubuntu-18.04
-    name: Bionic Aptly CI -
-          debug ${{ matrix.show_debug_cmds }}
-    strategy:
-      matrix:
-        show_debug_cmds:
-          - true
-          - false
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Run tests
+      # CI TESTING
+      - name: Run CI tests
+        if: ${{ matrix.job_type == 'CI' }}
         run: |
             python3 scripts/aptly/aptly_importer_TEST.py
         env:
           _DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_: ${{ matrix.show_debug_cmds }}
-
-  bionic-config-files-testing:
-    needs: common_setup
-    runs-on: ubuntu-18.04
-    name: Aptly testing new config files
-    steps:
+      # CONFIG FILE TESTER
       - id: files
+        if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
         uses: jitterbit/get-changed-files@v1
-      - run: |
+      - name: Run testing on changed config files
+        if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
+        run: |
           for changed_file in ${{ steps.files.outputs.all }}; do
             echo "Do something with this ${changed_file}."
             if [[ ${changed_file} != ${changed_file/config\/*.yaml} ]]; fi
