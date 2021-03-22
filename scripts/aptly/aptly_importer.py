@@ -153,13 +153,16 @@ class UpdaterManager():
         self.snapshot_timestamp = None
 
     def __assure_aptly_mirrors_do_not_exist(self):
+        self.__log('Checking that aptly mirrors from config filename do not exist')
         for dist in self.config.suites:
             mirror_name = self.__get_mirror_name(dist)
             if self.aptly.exists(Aptly.ArtifactType.MIRROR, mirror_name):
                 self.__error(f"mirror {mirror_name} exists. Refuse to create mirrors")
+        self.__log_ok('no conflict in mirrors name')
 
     def __create_aptly_mirror(self, distribution):
         assert(self.config)
+        self.__log(f"Creating aplty mirror for {distribution}")
         mirror_name = self.__get_mirror_name(distribution)
         self.aptly.run(['mirror', 'create', '-with-sources',
                         f"-architectures={','.join(self.config.architectures)}",
@@ -169,10 +172,13 @@ class UpdaterManager():
                         distribution,
                         self.config.component])
         self.aptly.run(['mirror', 'update', mirror_name])
+        self.__log_ok(f"mirror {mirror_name} created")
 
     def __create_aptly_snapshot(self, distribution):
+        self.__log('Creating an aptly snapshot from local aptly repository')
         self.aptly.run(['snapshot', 'create', self.__get_snapshot_name(distribution),
                         'from', 'mirror', self.__get_mirror_name(distribution)])
+        self.__log_ok(f"snapshot {self.__get_snapshot_name(distribution)} created from mirror {self.__get_mirror_name(distribution)}")
 
     def __error(self, msg):
         print(f"Update Manager error: {msg} \n", file=stderr)
@@ -196,26 +202,39 @@ class UpdaterManager():
         self.snapshot_timestamp = f"{time.time()}"
 
     def __import__aptly_mirror_to_repo(self, distribution):
+        self.__log('Import aptly mirror into local aptly repo')
         repo_name = self.__get_repo_name(distribution)
         # create repository if it does not exist. New distribution probably
         if not self.aptly.exists(Aptly.ArtifactType.REPOSITORY, repo_name):
             self.aptly.run(['repo', 'create', repo_name])
+            self.__log_ok(f"aptly repository {repo_name} was created")
         self.aptly.run(['repo', 'import',
                         self.__get_mirror_name(distribution),
                         repo_name,
                         self.config.filter_formula])
+        self.__log_ok(f"aptly mirror {self.__get_mirror_name(distribution)} imported to the repo {repo_name}")
+
+    def __log(self, msg):
+        print(f" {msg} ")
+
+    def __log_ok(self, msg):
+        self.__log(f"   [ok] {msg}")
 
     def __publish_new_snapshot(self, dist):
+        self.__log('Publish the new snapshot')
         if (self.aptly.exists_publication(dist, self.__get_endpoint_name(dist))):
             self.aptly.run(['publish', 'switch',
                             dist,
                             self.__get_endpoint_name(dist),
                             self.__get_snapshot_name(dist)])
+            self.__log_ok(f"publish switch in {self.__get_endpoint_name(dist)} to use {self.__get_snapshot_name(dist)}")
+
         else:
             self.aptly.run(['publish', 'snapshot',
                             f"-distribution={dist}",
                             self.__get_snapshot_name(dist),
                             self.__get_endpoint_name(dist)])
+            self.__log_ok(f"new publication in {self.__get_endpoint_name(dist)} for {self.__get_snapshot_name(dist)}")
 
     def __remove_all_generated_mirrors(self):
         for dist in self.config.suites:
@@ -224,22 +243,27 @@ class UpdaterManager():
                 self.aptly.run(['mirror', 'drop', mirror_name])
 
     def run(self):
+        self.__log(f"\n == [ PROCESSING {self.config.name} ] ==\n")
         # 1. Create aptly mirrors from yaml configuration file
         # check aptly mirrors before creating to avoid problems beforehand
         self.__assure_aptly_mirrors_do_not_exist()
         for dist in self.config.suites:
             self.__create_aptly_mirror(dist)
             # 2. Be sure mirror has source package
+            self.__log(f'Check that there is a source package')
             if not self.aptly.source_package_exists(Aptly.ArtifactType.MIRROR,
                                                     self.__get_mirror_name(dist)):
                 self.__remove_all_generated_mirrors()
-                self.__error(f"{self.__get_mirror_name(dist)} does not have a source package")
+                self.__error(f'{self.__get_mirror_name(dist)} does not have a source package. Removing generated mirrors')
+            self.__log_ok('There is a source pakage in the mirror')
             # 2. Import from mirrors to local repositories
             self.__import__aptly_mirror_to_repo(dist)
             # 3. Create snapshots from repositories
             self.__create_aptly_snapshot(dist)
             # 4. Publish new snapshots
             self.__publish_new_snapshot(dist)
+
+        self.__log(f"\n == [ END OF PROCESSING {self.config.name} ] ==\n")
         return True
 
 
