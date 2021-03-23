@@ -47,7 +47,7 @@ Package (= python-pyside2.qtwidgets) |\
 Package (= python-pyside2.qtwidgets-dbg) |\
 Package (= python-pyside2.qtx11extras) |\
 Package (= python-pyside2.qtx11extras-dbg) |\
-Package (= python-pyside2.qtxml) \
+Package (= python-pyside2.qtxml) |\
 Package (= python-pyside2.qtxml-dbg)), \
 $Version (% 2.0.0+dev1-1~202102130210~rev1858~pkg5~git131fdfd1~ubuntu16.04.1) |\
 ((Package (= shiboken2) |\
