@@ -102,14 +102,18 @@ class Aptly():
         return packages_by_source
 
     def get_source_packages(self, aptly_type, name):
-        try:
-            return check_output(['aptly', aptly_type.value, 'search',
-                                 '-format={{.Package}}',
-                                 name,
-                                 '$PackageType (= source)']).decode('utf-8').splitlines()
-        except CalledProcessError as e:
-            # check_output returns 1 if no source packages are avilable
-            return []
+            result = self.run([aptly_type.value, 'search',
+                               '-format={{.Package}}',
+                               name,
+                               '$PackageType (= source)'],
+                              return_all_info=True)
+            if result.returncode == 0:
+                return result.stdout.decode('utf-8').splitlines()
+            # handle no source packages scenario
+            if 'no results' in result.stderr.decode('utf-8'):
+                return []
+            else:
+                self.__error('get_source_packages method', result.stderr)
 
     def get_snapshots_from_mirror(self, mirror_name):
         result = []
@@ -120,7 +124,7 @@ class Aptly():
                 result.append(m[0])
         return result
 
-    def run(self, cmd=[], fail_on_errors=True, show_errors=True):
+    def run(self, cmd=[], fail_on_errors=True, show_errors=True, return_all_info=False):
         run_cmd = ['aptly']
         if self.config_file:
             run_cmd += [f"-config={self.config_file}"]
@@ -130,7 +134,13 @@ class Aptly():
         try:
             r = run(run_cmd, stdout=PIPE, stderr=PIPE)
         except CalledProcessError as e:
+            if return_all_info:
+                return r
             return False
+        # if return_all_info is enabled return result object
+        if return_all_info:
+            return r
+
         if r.returncode == 0:
             return True
         else:
