@@ -113,7 +113,7 @@ class Aptly():
             if 'no results' in result.stderr.decode('utf-8'):
                 return []
             else:
-                self.__error('get_source_packages method', result.stderr)
+                self.__error('get_source_packages method', result.stderr.decode('utf-8'))
 
     def get_snapshots_from_mirror(self, mirror_name):
         result = []
