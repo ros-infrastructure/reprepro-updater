@@ -15,8 +15,8 @@ class Reprepro2AptlyFilter():
         r_str = filter_str.lstrip()
         # Package is not a valid Aptly filter. Could be Name or empty.
         r_str = r_str.replace('Package', 'Name')
-        # Do not use equal symbols, just remove
-        r_str = r_str.replace('% =', '')
+        # Aptly filters use (= value) for exact matches rather than (% =value)
+        r_str = r_str.replace('% =', '= ')
         return r_str
 
 
