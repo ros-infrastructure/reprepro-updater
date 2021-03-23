@@ -75,8 +75,9 @@ class Aptly():
             if len(source.split(' ')) > 1:
                 source = source.split(' ')[0]
             packages_by_source[source].add(package)
-        source_packages = check_output(['aptly', aptly_type.value, 'search', '-format={{.Package}}', name, '$PackageType (= source)']).splitlines()
+        source_packages = check_output(['aptly', aptly_type.value, 'search', '-format={{.Package}}', name, '$PackageType (= source)']).decode('utf-8').splitlines()
         result = True
+
         for source in packages_by_source:
             if source not in source_packages:
                 print(f"Source package '{source}' is missing for packages: {', '.join(packages_by_source[source])}")
