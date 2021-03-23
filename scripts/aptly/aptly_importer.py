@@ -56,15 +56,37 @@ class Aptly():
         return self.run([aptly_type.value, 'show', name],
                         fail_on_errors=False, show_errors=False)
 
+    def exists_all_source_packages(self, aptly_type: ArtifactType, name):
+        if not self.exists(aptly_type, name):
+            self.__error('exists_all_source_packages method',
+                         f"{aptly_type.value} does not exist")
+            return False
+
+        packages_by_source = self.get_packages_by_source_package(aptly_type, name)
+        source_packages = self.get_source_packages(aptly_type, name)
+
+        for source in packages_by_source:
+            if source not in source_packages:
+                return False
+                print(f"Source package '{source}' is missing for packages: \
+                              {', '.join(packages_by_source[source])}")
+        return True
+
     def exists_publication(self, distribution, end_point):
         return self.run(['publish', 'show', distribution, end_point],
                         fail_on_errors=False, show_errors=False)
 
-    def source_package_exists(self, aptly_type: ArtifactType, name):
-        if not self.exists(aptly_type, name):
-            self.__error('source_package_exists method', f"{aptly_type.value} does not exist")
-            return False
+    def get_number_of_packages(self, aptly_type: ArtifactType, name):
+        output = check_output(f"aptly {aptly_type.value} show {name}", shell=True)
 
+        for row in output.splitlines():
+            if 'Number of packages' in row.decode():
+                return int(row.decode().split(':')[1])
+        assert(False), "get_number_of_packages did not found a valid 'Number of packages' line"
+
+    # returns a dictionary with source package as index and deb packages corresponding to
+    # that source package as values
+    def get_packages_by_source_package(self, aptly_type: ArtifactType, name):
         packages_by_source = defaultdict(set)
         for line in check_output(['aptly', aptly_type.value, 'search', '-format={{.Package}}::{{.Source}}', name, '$PackageType (= deb)']).splitlines():
             # ignore empty entries with 'no value'
@@ -75,22 +97,13 @@ class Aptly():
             if len(source.split(' ')) > 1:
                 source = source.split(' ')[0]
             packages_by_source[source].add(package)
-        source_packages = check_output(['aptly', aptly_type.value, 'search', '-format={{.Package}}', name, '$PackageType (= source)']).decode('utf-8').splitlines()
-        result = True
+        return packages_by_source
 
-        for source in packages_by_source:
-            if source not in source_packages:
-                print(f"Source package '{source}' is missing for packages: {', '.join(packages_by_source[source])}")
-                result = False
-        return result
-
-    def get_number_of_packages(self, aptly_type: ArtifactType, name):
-        output = check_output(f"aptly {aptly_type.value} show {name}", shell=True)
-
-        for row in output.splitlines():
-            if 'Number of packages' in row.decode():
-                return int(row.decode().split(':')[1])
-        assert(False), "get_number_of_packages did not found a valid 'Number of packages' line"
+    def get_source_packages(self, aptly_type, name):
+        return check_output(['aptly', aptly_type.value, 'search',
+                             '-format={{.Package}}',
+                             name,
+                             '$PackageType (= source)']).decode('utf-8').splitlines()
 
     def get_snapshots_from_mirror(self, mirror_name):
         result = []
@@ -262,10 +275,10 @@ class UpdaterManager():
         self.__assure_aptly_mirrors_do_not_exist()
         for dist in self.config.suites:
             self.__create_aptly_mirror(dist)
-            # 2. Be sure mirror has source package
+            # 2. Be sure mirror has all source packages
             self.__log(f'Check that there is a source package')
-            if not self.aptly.source_package_exists(Aptly.ArtifactType.MIRROR,
-                                                    self.__get_mirror_name(dist)):
+            if not self.aptly.exists_all_source_packages(Aptly.ArtifactType.MIRROR,
+                                                         self.__get_mirror_name(dist)):
                 self.__remove_all_generated_mirrors()
                 self.__error(f'{self.__get_mirror_name(dist)} does not have a source package. Removing generated mirrors')
             self.__log_ok('There is a source pakage in the mirror')
