@@ -74,9 +74,9 @@ jobs:
         if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
         run: |
           for changed_file in ${{ steps.files.outputs.all }}; do
-            echo "Do something with this ${changed_file}."
+            echo "- Ignoring non config file ${changed_file}."
             if [[ ${changed_file} != ${changed_file/config\/*.yaml} ]]; then
-              echo "CONFIG FILE DETECTED"
+              echo "+ Detected config file: ${changed_file}."
               python3 scripts/aptly/aptly_importer.py ${changed_file/config}
             fi
           done

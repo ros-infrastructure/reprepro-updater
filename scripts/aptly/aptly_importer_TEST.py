@@ -3,6 +3,7 @@ import os
 import tempfile
 import unittest
 
+
 class TestYamlConfiguration(unittest.TestCase):
     def test_non_existsing_file(self):
         with self.assertRaises(SystemExit):
