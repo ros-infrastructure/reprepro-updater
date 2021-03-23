@@ -3,7 +3,6 @@ import os
 import tempfile
 import unittest
 
-
 class TestYamlConfiguration(unittest.TestCase):
     def test_non_existsing_file(self):
         with self.assertRaises(SystemExit):
@@ -128,7 +127,7 @@ class TestUpdaterManager(unittest.TestCase):
         self.assertTrue(manager.run())
         self.__assert_expected_repos_mirrors()
 
-    def test_basic_example_creation_existsing_repo(self):
+    def test_basic_example_creation_existing_repo(self):
         self.__setup__(['focal', 'groovy'])
         [self.__add_repo(name) for name in self.expected_repos_test_name]
         manager = aptly_importer.UpdaterManager('test/example.yaml',
