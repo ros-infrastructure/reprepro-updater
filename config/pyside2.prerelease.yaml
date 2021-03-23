@@ -1,4 +1,3 @@
----
 name: pyside2
 method: http://ppa.launchpad.net/tully.foote/pyside2-reproduction/ubuntu/
 suites: [xenial]
