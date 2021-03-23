@@ -65,12 +65,13 @@ class Aptly():
         packages_by_source = self.get_packages_by_source_package(aptly_type, name)
         source_packages = self.get_source_packages(aptly_type, name)
 
+        result = True
         for source in packages_by_source:
             if source not in source_packages:
-                return False
-                print(f"Source package '{source}' is missing for packages: \
-                              {', '.join(packages_by_source[source])}")
-        return True
+                print(f"Source package '{source}' is missing for packages: "
+                      f"{', '.join(packages_by_source[source])}")
+                result = False
+        return result
 
     def exists_publication(self, distribution, end_point):
         return self.run(['publish', 'show', distribution, end_point],
@@ -93,17 +94,22 @@ class Aptly():
             if 'no value' in line.decode('utf-8'):
                 continue
             package, source = line.decode('utf-8').split('::')
-            # Source field may include a parenthesized version which we'll ignore for now. e.g. `pcl (1.11.1+dfsg-1)`
+            # Source field may include a parenthesized version which we'll ignore for now.
+            # e.g. `pcl (1.11.1+dfsg-1)`
             if len(source.split(' ')) > 1:
                 source = source.split(' ')[0]
             packages_by_source[source].add(package)
         return packages_by_source
 
     def get_source_packages(self, aptly_type, name):
-        return check_output(['aptly', aptly_type.value, 'search',
-                             '-format={{.Package}}',
-                             name,
-                             '$PackageType (= source)']).decode('utf-8').splitlines()
+        try:
+            return check_output(['aptly', aptly_type.value, 'search',
+                                 '-format={{.Package}}',
+                                 name,
+                                 '$PackageType (= source)']).decode('utf-8').splitlines()
+        except CalledProcessError as e:
+            # check_output returns 1 if no source packages are avilable
+            return []
 
     def get_snapshots_from_mirror(self, mirror_name):
         result = []
@@ -276,7 +282,7 @@ class UpdaterManager():
         for dist in self.config.suites:
             self.__create_aptly_mirror(dist)
             # 2. Be sure mirror has all source packages
-            self.__log(f'Check that there is a source package')
+            self.__log(f'Check all source packages exist')
             if not self.aptly.exists_all_source_packages(Aptly.ArtifactType.MIRROR,
                                                          self.__get_mirror_name(dist)):
                 self.__remove_all_generated_mirrors()
