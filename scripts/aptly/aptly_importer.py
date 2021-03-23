@@ -1,4 +1,5 @@
 import argparse
+from collections import defaultdict
 from enum import Enum
 from pathlib import Path
 from os import path
@@ -64,12 +65,20 @@ class Aptly():
             self.__error('source_package_exists method', f"{aptly_type.value} does not exist")
             return False
 
-        output = check_output(f"aptly {aptly_type.value} show -with-packages {name}", shell=True)
-        # Did not find a better way of identifying source packages that parsing this output
-        # Aptly add the sufix of _source to all its package names corresponding to source files
-        # The regexp get all Packages section and look for $packagename_$version-$revision_source
-        m = re.findall(r"Packages:.*( .*_.*-.*_source)\n.*$", output.decode(), re.DOTALL)
-        return len(m) > 0
+        packages_by_source = defaultdict(set)
+        for line in check_output(['aptly', aptly_type.value, 'search', '-format={{.Package}}::{{.Source}}', name, '$PackageType (= deb)']).splitlines():
+            package, source = line.decode('utf-8').split('::')
+            # Source field may include a parenthesized version which we'll ignore for now. e.g. `pcl (1.11.1+dfsg-1)`
+            if len(source.split(' ')) > 1:
+                source = source.split(' ')[0]
+            packages_by_source[source].add(package)
+        source_packages = check_output(['aptly', aptly_type.value, 'search', '-format={{.Package}}', name, '$PackageType (= source)']).splitlines()
+        result = True
+        for source in packages_by_source:
+            if source not in source_packages:
+                print(f"Source package '{source}' is missing for packages: {', '.join(packages_by_source[source])}")
+                result = False
+        return result
 
     def get_number_of_packages(self, aptly_type: ArtifactType, name):
         output = check_output(f"aptly {aptly_type.value} show {name}", shell=True)
