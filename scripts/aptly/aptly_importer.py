@@ -67,6 +67,9 @@ class Aptly():
 
         packages_by_source = defaultdict(set)
         for line in check_output(['aptly', aptly_type.value, 'search', '-format={{.Package}}::{{.Source}}', name, '$PackageType (= deb)']).splitlines():
+            # ignore empty entries with 'no value'
+            if 'no value' in line.decode('utf-8'):
+                continue
             package, source = line.decode('utf-8').split('::')
             # Source field may include a parenthesized version which we'll ignore for now. e.g. `pcl (1.11.1+dfsg-1)`
             if len(source.split(' ')) > 1:
