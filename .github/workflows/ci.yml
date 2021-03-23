@@ -77,6 +77,6 @@ jobs:
             echo "Do something with this ${changed_file}."
             if [[ ${changed_file} != ${changed_file/config\/*.yaml} ]]; then
               echo "CONFIG FILE DETECTED"
-              python3 scripts/aptly/aptly_importer.py ${changed_file}
+              python3 scripts/aptly/aptly_importer.py ${changed_file/config}
             fi
           done
