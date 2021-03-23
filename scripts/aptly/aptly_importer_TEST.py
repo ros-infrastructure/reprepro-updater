@@ -1,7 +1,10 @@
 import aptly_importer
 import os
+from pathlib import Path
 import tempfile
 import unittest
+
+TEST_CONFIG_DIR = Path(__file__).parent.absolute() / 'test'
 
 
 class TestYamlConfiguration(unittest.TestCase):
@@ -14,7 +17,7 @@ class TestYamlConfiguration(unittest.TestCase):
             aptly_importer.UpdaterConfiguration('test/missing_architectures_field.yaml')
 
     def test_ok(self):
-        self.assertTrue(aptly_importer.UpdaterConfiguration('test/example.yaml'))
+        self.assertTrue(aptly_importer.UpdaterConfiguration(TEST_CONFIG_DIR / 'example.yaml'))
 
 
 class TestAptly(unittest.TestCase):
@@ -122,7 +125,7 @@ class TestUpdaterManager(unittest.TestCase):
 
     def test_basic_example_creation_from_scratch(self):
         self.__setup__(['focal', 'groovy'])
-        manager = aptly_importer.UpdaterManager('test/example.yaml',
+        manager = aptly_importer.UpdaterManager(TEST_CONFIG_DIR / 'example.yaml',
                                                 debug=self.debug_msgs,
                                                 aptly_config_file=self.aptly_config_file)
         self.assertTrue(manager.run())
@@ -131,15 +134,16 @@ class TestUpdaterManager(unittest.TestCase):
     def test_basic_example_creation_existing_repo(self):
         self.__setup__(['focal', 'groovy'])
         [self.__add_repo(name) for name in self.expected_repos_test_name]
-        manager = aptly_importer.UpdaterManager('test/example.yaml',
+        manager = aptly_importer.UpdaterManager(TEST_CONFIG_DIR / 'example.yaml',
                                                 aptly_config_file=self.aptly_config_file)
         self.assertTrue(manager.run())
         self.__assert_expected_repos_mirrors()
 
     def test_example_no_sources(self):
         self.__setup__(['xenial'])
-        manager = aptly_importer.UpdaterManager('test/example_no_source_package.yaml',
-                                                aptly_config_file=self.aptly_config_file)
+        manager = aptly_importer.UpdaterManager(
+            TEST_CONFIG_DIR / 'example_no_source_package.yaml',
+            aptly_config_file=self.aptly_config_file)
         with self.assertRaises(SystemExit):
             manager.run()
         self.__assert_no_mirrors()
