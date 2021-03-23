@@ -89,7 +89,15 @@ class Aptly():
     # that source package as values
     def get_packages_by_source_package(self, aptly_type: ArtifactType, name):
         packages_by_source = defaultdict(set)
-        for line in check_output(['aptly', aptly_type.value, 'search', '-format={{.Package}}::{{.Source}}', name, '$PackageType (= deb)']).splitlines():
+        cmd = [aptly_type.value, 'search',
+               '-format={{.Package}}::{{.Source}}',
+               name,
+               '$PackageType (= deb)']
+        result = self.run(cmd, return_all_info=True)
+        if result.returncode != 0:
+            self.__error(cmd, result.stderr.decode('utf-8'), exit_on_errors=True)
+
+        for line in result.stdout.splitlines():
             # ignore empty entries with 'no value'
             if 'no value' in line.decode('utf-8'):
                 continue
