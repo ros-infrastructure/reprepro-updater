@@ -13,7 +13,7 @@ import yaml
 class Reprepro2AptlyFilter():
     def convert(self, filter_str):
         # remove begin/end whitespaces
-        r_str = filter_str.lstrip()
+        r_str = filter_str.strip()
         # Package is not a valid Aptly filter. Could be Name or empty.
         r_str = r_str.replace('Package', 'Name')
         # Aptly filters use (= value) for exact matches rather than (% =value)
