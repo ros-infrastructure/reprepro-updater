@@ -162,7 +162,7 @@ class UpdaterManager():
 
     def __create_aptly_mirror(self, distribution):
         assert(self.config)
-        self.__log(f"Creating aplty mirror for {distribution}")
+        self.__log(f"Creating aptly mirror for {distribution}")
         mirror_name = self.__get_mirror_name(distribution)
         self.aptly.run(['mirror', 'create', '-with-sources',
                         f"-architectures={','.join(self.config.architectures)}",
