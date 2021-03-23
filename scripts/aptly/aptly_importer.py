@@ -175,7 +175,7 @@ class UpdaterConfiguration():
         exit(-1)
 
     def __load_config_file(self, config_file_path):
-        fn = Path(__file__).parent / config_file_path
+        fn = Path(config_file_path).absolute()
         try:
             with open(str(fn), 'r') as stream:
                 config = yaml.safe_load(stream)
