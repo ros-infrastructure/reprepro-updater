@@ -72,6 +72,7 @@ Package (% libignition-sensors3-thermal-camera) |\
 Package (% libignition-sensors3-thermal-camera-dev)), \
 $Version (% 3.2.0-1~focal)|\
 (Package (% =ignition-transport8), $Version (% 8.2.0-1~focal))|\
+(Package (% =ogre-2.1), $Version (% 2.0.9999~20180616~06a386f-3osrf~focal))\
 (Package (% =sdformat9) |\
 Package (% libsdformat9) |\
 Package (% libsdformat9-dbg) |\
