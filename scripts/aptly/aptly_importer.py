@@ -187,11 +187,12 @@ class UpdaterConfiguration():
 
 
 class UpdaterManager():
-    def __init__(self, input_file, debug=False, aptly_config_file=None):
+    def __init__(self, input_file, debug=False, aptly_config_file=None, ignore_mirror_signature=False):
         self.aptly = Aptly(debug,
                            config_file=aptly_config_file)
         self.config = UpdaterConfiguration(input_file)
         self.debug = debug
+        self.ignore_mirror_signature = ignore_mirror_signature
         self.snapshot_timestamp = None
 
     def __assure_aptly_mirrors_do_not_exist(self):
@@ -209,6 +210,7 @@ class UpdaterManager():
         self.aptly.run(['mirror', 'create', '-with-sources',
                         f"-architectures={','.join(self.config.architectures)}",
                         f"-filter={self.config.filter_formula}",
+                        '-ignore-signatures' if self.ignore_mirror_signature else '',
                         mirror_name,
                         self.config.method,
                         distribution,
@@ -316,13 +318,17 @@ def main():
     usage = "usage: %prog config_file"
     parser = argparse.ArgumentParser(usage)
     parser.add_argument('config_file', type=str, nargs='+', default=None)
+    parser.add_argument("--ignore-signatures",
+                        help="ignore mirror signatures when importing",
+                        action="store_true")
 
     args = parser.parse_args()
 
     if not path.exists(args.config_file[0]):
         parser.error("Missing input file from %s" % args.config_file[0])
 
-    manager = UpdaterManager(args.config_file[0])
+    manager = UpdaterManager(aptly_config_file=args.config_file[0],
+                             ignore_mirror_signature=args.ignore_signatures)
     manager.run()
 
 
