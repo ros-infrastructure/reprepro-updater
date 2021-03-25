@@ -223,7 +223,9 @@ class UpdaterManager():
                         self.config.method,
                         distribution,
                         self.config.component])
-        self.aptly.run(['mirror', 'update', mirror_name])
+        self.aptly.run(['mirror', 'update',
+                        '-ignore-signatures' if self.ignore_mirror_signature else '',
+                        mirror_name])
         self.__log_ok(f"mirror {mirror_name} created")
 
     def __create_aptly_snapshot(self, distribution):
