@@ -1,6 +1,7 @@
 import aptly_importer
 import os
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 
@@ -175,4 +176,15 @@ class TestReprepro2AptlyFilter(unittest.TestCase):
 
 
 if __name__ == '__main__':
+    aptly = aptly_importer.Aptly()
+    # try to detect if the machine is a producition/testing system
+    # by checking repositories to refuse to destroy them
+    if ((aptly.exists(aptly_importer.Aptly.ArtifactType.REPOSITORY,
+                      'ros_bootstrap-focal')) and
+        aptly.exists(aptly_importer.Aptly.ArtifactType.REPOSITORY,
+                     'ros_bootstrap-bionic')):
+            print("Machine has repositories for focal and bionic with name"
+                  "ros_bootstrap-$distro. Refuse to continue since they will"
+                  "be destroyed")
+            sys.exit(2)
     unittest.main()

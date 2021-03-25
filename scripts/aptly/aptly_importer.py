@@ -13,7 +13,7 @@ import yaml
 class Reprepro2AptlyFilter():
     def convert(self, filter_str):
         # remove begin/end whitespaces
-        r_str = filter_str.lstrip()
+        r_str = filter_str.strip()
         # Package is not a valid Aptly filter. Could be Name or empty.
         r_str = r_str.replace('Package', 'Name')
         # Aptly filters use (= value) for exact matches rather than (% =value)
@@ -36,7 +36,7 @@ class Aptly():
         print(f"Aptly error running: {cmd}", file=stderr)
         print(f"  --> {msg} \n", file=stderr)
         if exit_on_errors:
-            exit(-1)
+            exit(1)
 
     def check_valid_filter(self, filter_str):
         fake_mirror_name = '_test_aptly_filter'
@@ -89,7 +89,15 @@ class Aptly():
     # that source package as values
     def get_packages_by_source_package(self, aptly_type: ArtifactType, name):
         packages_by_source = defaultdict(set)
-        for line in check_output(['aptly', aptly_type.value, 'search', '-format={{.Package}}::{{.Source}}', name, '$PackageType (= deb)']).splitlines():
+        cmd = [aptly_type.value, 'search',
+               '-format={{.Package}}::{{.Source}}',
+               name,
+               '$PackageType (= deb)']
+        result = self.run(cmd, return_all_info=True)
+        if result.returncode != 0:
+            self.__error(cmd, result.stderr.decode('utf-8'), exit_on_errors=True)
+
+        for line in result.stdout.splitlines():
             # ignore empty entries with 'no value'
             if 'no value' in line.decode('utf-8'):
                 continue
@@ -172,7 +180,7 @@ class UpdaterConfiguration():
 
     def __error(self, msg):
         print(f"Configuration file error: {msg} \n", file=stderr)
-        exit(-1)
+        exit(2)
 
     def __load_config_file(self, config_file_path):
         fn = Path(config_file_path).absolute()
@@ -226,7 +234,7 @@ class UpdaterManager():
 
     def __error(self, msg):
         print(f"Update Manager error: {msg} \n", file=stderr)
-        exit(-1)
+        exit(1)
 
     def __get_endpoint_name(self, distribution):
         return f"filesystem:live:ros_bootstrap"
