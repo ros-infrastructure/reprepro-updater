@@ -335,7 +335,7 @@ def main():
     if not path.exists(args.config_file[0]):
         parser.error("Missing input file from %s" % args.config_file[0])
 
-    manager = UpdaterManager(aptly_config_file=args.config_file[0],
+    manager = UpdaterManager(input_file=args.config_file[0],
                              ignore_mirror_signature=args.ignore_signatures)
     manager.run()
 
