@@ -325,10 +325,10 @@ def main():
     """
     usage = "usage: %prog config_file"
     parser = argparse.ArgumentParser(usage)
-    parser.add_argument('config_file', type=str, nargs='+', default=None)
     parser.add_argument("--ignore-signatures",
                         help="ignore mirror signatures when importing",
                         action="store_true")
+    parser.add_argument('config_file', type=str, nargs='+', default=None)
 
     args = parser.parse_args()
 

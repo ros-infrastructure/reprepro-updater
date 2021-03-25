@@ -77,6 +77,6 @@ jobs:
             echo "- Ignoring non config file ${changed_file}."
             if [[ ${changed_file} != ${changed_file/config\/*.yaml} ]]; then
               echo "+ Detected config file: ${changed_file}."
-              python3 scripts/aptly/aptly_importer.py ---ignore-signatures ${changed_file}
+              python3 scripts/aptly/aptly_importer.py --ignore-signatures ${changed_file}
             fi
           done
