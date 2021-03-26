@@ -138,7 +138,7 @@ class Aptly():
             run_cmd += [f"-config={self.config_file}"]
         run_cmd += cmd
         if self.debug:
-            print(f"RUN {' '.join(filter(None,run_cmd))}")
+            print(f"RUN {' '.join(run_cmd)}")
         try:
             r = run(run_cmd, stdout=PIPE, stderr=PIPE)
         except CalledProcessError as e:
@@ -215,17 +215,22 @@ class UpdaterManager():
         assert(self.config)
         self.__log(f"Creating aptly mirror for {distribution}")
         mirror_name = self.__get_mirror_name(distribution)
-        self.aptly.run(['mirror', 'create', '-with-sources',
-                        f"-architectures={','.join(self.config.architectures)}",
-                        f"-filter={self.config.filter_formula}",
-                        '-ignore-signatures' if self.ignore_mirror_signature else '',
-                        mirror_name,
-                        self.config.method,
-                        distribution,
-                        self.config.component])
-        self.aptly.run(['mirror', 'update',
-                        '-ignore-signatures' if self.ignore_mirror_signature else '',
-                        mirror_name])
+        create_cmd = ['mirror', 'create', '-with-sources',
+                      f"-architectures={','.join(self.config.architectures)}",
+                      f"-filter={self.config.filter_formula}"]
+        if self.ignore_mirror_signature:
+            create_cmd += ['-ignore-signatures']
+        create_cmd += [mirror_name,
+                       self.config.method,
+                       distribution,
+                       self.config.component]
+        self.aptly.run(create_cmd)
+        update_cmd = ['mirror', 'update']
+        if self.ignore_mirror_signature:
+            update_cmd += ['-ignore-signatures']
+        update_cmd += [mirror_name]
+        self.aptly.run(update_cmd)
+
         self.__log_ok(f"mirror {mirror_name} created")
 
     def __create_aptly_snapshot(self, distribution):
