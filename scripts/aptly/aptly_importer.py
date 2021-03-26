@@ -138,7 +138,7 @@ class Aptly():
             run_cmd += [f"-config={self.config_file}"]
         run_cmd += cmd
         if self.debug:
-            print(f"RUN {' '.join(run_cmd)}")
+            print(f"RUN {' '.join(filter(None,run_cmd))}")
         try:
             r = run(run_cmd, stdout=PIPE, stderr=PIPE)
         except CalledProcessError as e:
