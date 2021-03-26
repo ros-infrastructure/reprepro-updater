@@ -195,7 +195,9 @@ class UpdaterConfiguration():
 
 
 class UpdaterManager():
-    def __init__(self, input_file, debug=False, aptly_config_file=None, ignore_mirror_signature=False):
+    def __init__(self, input_file, debug=False,
+                 aptly_config_file=None, ignore_mirror_signature=False,
+                 only_mirror_creation=False):
         self.aptly = Aptly(debug,
                            config_file=aptly_config_file)
         self.config = UpdaterConfiguration(input_file)
@@ -314,7 +316,9 @@ class UpdaterManager():
                                                          self.__get_mirror_name(dist)):
                 self.__remove_all_generated_mirrors()
                 self.__error(f'{self.__get_mirror_name(dist)} does not have a source package. Removing generated mirrors')
-            self.__log_ok('There is a source pakage in the mirror')
+            self.__log_ok('All source pakages exist in the mirror')
+            if self.only_mirror_creation:
+                return True
             # 2. Import from mirrors to local repositories
             self.__import__aptly_mirror_to_repo(dist)
             # 3. Create snapshots from repositories
@@ -330,10 +334,14 @@ def main():
     """
     Usage: python3 aptly_importer.py <config_file>
     """
-    usage = "usage: %prog config_file"
+    usage = "usage: python3 aptly_importer.py [options] <config_file>"
     parser = argparse.ArgumentParser(usage)
     parser.add_argument("--ignore-signatures",
-                        help="ignore mirror signatures when importing",
+                        help="Ignore mirror signatures when importing",
+                        action="store_true")
+    parser.add_argument("--only-mirror-creation",
+                        help="Perform only the mirror creation and update. Useful for"
+                             "checking, it does not modify anything in the system",
                         action="store_true")
     parser.add_argument('config_file', type=str, nargs='+', default=None)
 
@@ -343,7 +351,8 @@ def main():
         parser.error("Missing input file from %s" % args.config_file[0])
 
     manager = UpdaterManager(input_file=args.config_file[0],
-                             ignore_mirror_signature=args.ignore_signatures)
+                             ignore_mirror_signature=args.ignore_signatures,
+                             only_mirror_creation=args.only_mirror_creation)
     manager.run()
 
 
