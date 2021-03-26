@@ -203,6 +203,7 @@ class UpdaterManager():
         self.config = UpdaterConfiguration(input_file)
         self.debug = debug
         self.ignore_mirror_signature = ignore_mirror_signature
+        self.only_mirror_creation = only_mirror_creation
         self.snapshot_timestamp = None
 
     def __assure_aptly_mirrors_do_not_exist(self):

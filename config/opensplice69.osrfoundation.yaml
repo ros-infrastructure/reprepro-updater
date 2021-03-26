@@ -1,3 +1,4 @@
+---
 name: opensplice69
 method: http://packages.osrfoundation.org/gazebo/ubuntu-stable
 suites: [xenial, bionic]
