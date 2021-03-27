@@ -4,6 +4,13 @@ suites: [focal]
 component: main
 architectures: [amd64, i386, armhf, arm64, source]
 filter_formula: "\
+((Package (% =gazebo11) |\
+Package (% =gazebo11-common) |\
+Package (% =gazebo11-dbg) |\
+Package (% =gazebo11-doc) |\
+Package (% =libgazebo11) |\
+Package (% =libgazebo11-dev)), \
+$Version (% 11.3.0-1~focal)) |\
 (Package (% =ignition-cmake2), $Version (% 2.6.2-1~focal)) |\
 (Package (% =ignition-common3), $Version (% 3.11.1-1~focal)) |\
 ((Package (% libignition-common3) |\
@@ -72,7 +79,10 @@ Package (% libignition-sensors3-thermal-camera) |\
 Package (% libignition-sensors3-thermal-camera-dev)), \
 $Version (% 3.2.0-1~focal)) |\
 (Package (% =ignition-transport8), $Version (% 8.2.0-1~focal)) |\
-(Package (% =ogre-2.1), $Version (% 2.0.9999~20180616~06a386f-3osrf~focal)) |\
+((Package (% =ogre-2.1) |\
+Package (% =libogre-2.1) |\
+Package (% =libogre-2.1-dev)),
+$Version (% 2.0.9999~20180616~06a386f-3osrf~focal)) |\
 ((Package (% =sdformat9) |\
 Package (% libsdformat9) |\
 Package (% libsdformat9-dbg) |\
