@@ -320,10 +320,10 @@ def main():
 
     args = parser.parse_args()
 
-    if not path.exists(args.config_file[0]):
-        parser.error("Missing input file from %s" % args.config_file[0])
+    if not path.exists(args.config_file):
+        parser.error("Missing input file from %s" % args.config_file)
 
-    manager = UpdaterManager(args.config_file[0])
+    manager = UpdaterManager(args.config_file)
     manager.run()
 
 
