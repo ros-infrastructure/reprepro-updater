@@ -173,8 +173,8 @@ class TestReprepro2AptlyFilter(unittest.TestCase):
 if __name__ == '__main__':
     aptly = aptly_importer.Aptly()
     # test suite is potentially dangerous for production machines
-    if os.getenv('_ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_') and \
-       os.environ['_ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_']:
+    if not os.getenv('_ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_') or \
+       not os.environ['_ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_']:
             print("_ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_ variable is"
                   "not set to true. Refuse to run test suite")
             sys.exit(2)
