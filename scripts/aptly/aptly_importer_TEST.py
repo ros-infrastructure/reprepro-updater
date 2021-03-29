@@ -172,14 +172,10 @@ class TestReprepro2AptlyFilter(unittest.TestCase):
 
 if __name__ == '__main__':
     aptly = aptly_importer.Aptly()
-    # try to detect if the machine is a producition/testing system
-    # by checking repositories to refuse to destroy them
-    if ((aptly.exists(aptly_importer.Aptly.ArtifactType.REPOSITORY,
-                      'ros_bootstrap-focal')) and
-        aptly.exists(aptly_importer.Aptly.ArtifactType.REPOSITORY,
-                     'ros_bootstrap-bionic')):
-            print("Machine has repositories for focal and bionic with name"
-                  "ros_bootstrap-$distro. Refuse to continue since they will"
-                  "be destroyed")
+    # test suite is potentially dangerous for production machines
+    if os.getenv('_ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_') and \
+       os.environ['_ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_']:
+            print("_ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_ variable is"
+                  "not set to true. Refuse to run test suite")
             sys.exit(2)
     unittest.main()
