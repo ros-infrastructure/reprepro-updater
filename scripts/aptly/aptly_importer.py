@@ -323,7 +323,7 @@ def main():
     """
     usage = "usage: %prog config_file"
     parser = argparse.ArgumentParser(usage)
-    parser.add_argument('config_file', type=str, nargs='+', default=None)
+    parser.add_argument('config_file', type=str, default=None)
 
     args = parser.parse_args()
 
