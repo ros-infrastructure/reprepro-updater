@@ -1,4 +1,4 @@
-name: ignition_focal_source
+name: ignition_citadel_gazebo11_ubuntu_focal
 method: http://packages.osrfoundation.org/gazebo/ubuntu-stable
 suites: [focal]
 component: main
