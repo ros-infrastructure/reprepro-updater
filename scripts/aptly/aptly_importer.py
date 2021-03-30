@@ -195,11 +195,12 @@ class UpdaterConfiguration():
 
 
 class UpdaterManager():
-    def __init__(self, input_file, debug=False, aptly_config_file=None):
+    def __init__(self, input_file, debug=False, aptly_config_file=None, snapshot_and_publish=False):
         self.aptly = Aptly(debug,
                            config_file=aptly_config_file)
         self.config = UpdaterConfiguration(input_file)
         self.debug = debug
+        self.snapshot_and_publish = snapshot_and_publish
         self.snapshot_timestamp = None
 
     def __create_aptly_mirror(self, distribution):
@@ -301,10 +302,11 @@ class UpdaterManager():
             self.__log_ok('There is a source pakage in the mirror')
             # 2. Import from mirrors to local repositories
             self.__import__aptly_mirror_to_repo(dist)
-            # 3. Create snapshots from repositories
-            self.__create_aptly_snapshot(dist)
-            # 4. Publish new snapshots
-            self.__publish_new_snapshot(dist)
+            if self.snapshot_and_publish:
+                # 3. Create snapshots from repositories
+                self.__create_aptly_snapshot(dist)
+                # 4. Publish new snapshots
+                self.__publish_new_snapshot(dist)
 
         self.__log(f"\n == [ END OF PROCESSING {self.config.name} ] ==\n")
         return True
@@ -317,13 +319,14 @@ def main():
     usage = "usage: %prog config_file"
     parser = argparse.ArgumentParser(usage)
     parser.add_argument('config_file', type=str, default=None)
+    parser.add_argument('--snapshot-and-publish', action='store_true', help='Create and publish a snapshot of the updated distributions')
 
     args = parser.parse_args()
 
     if not path.exists(args.config_file):
         parser.error("Missing input file from %s" % args.config_file)
 
-    manager = UpdaterManager(args.config_file)
+    manager = UpdaterManager(args.config_file, snapshot_and_publish=args.snapshot_and_publish)
     manager.run()
 
 
