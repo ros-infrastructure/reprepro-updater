@@ -196,14 +196,19 @@ class UpdaterConfiguration():
 
 class UpdaterManager():
     def __init__(self, input_file, debug=False,
-                 aptly_config_file=None, ignore_mirror_signature=False,
-                 only_mirror_creation=False):
+                 aptly_config_file=None, 
+                 ignore_mirror_signature=False,
+                 only_mirror_creation=False,
+                 simulate_repo_import=False,
+                 snapshot_and_publish=False):
         self.aptly = Aptly(debug,
                            config_file=aptly_config_file)
         self.config = UpdaterConfiguration(input_file)
         self.debug = debug
         self.ignore_mirror_signature = ignore_mirror_signature
         self.only_mirror_creation = only_mirror_creation
+        self.simulate_repo_import = simulate_repo_import
+        self.snapshot_and_publish = snapshot_and_publish
         self.snapshot_timestamp = None
 
     def __create_aptly_mirror(self, distribution):
@@ -265,10 +270,14 @@ class UpdaterManager():
         if not self.aptly.exists(Aptly.ArtifactType.REPOSITORY, repo_name):
             self.aptly.run(['repo', 'create', repo_name])
             self.__log_ok(f"aptly repository {repo_name} was created")
-        self.aptly.run(['repo', 'import',
-                        self.__get_mirror_name(distribution),
-                        repo_name,
-                        self.config.filter_formula])
+        import_cmd = ['repo', 'import',
+                      self.__get_mirror_name(distribution),
+                      repo_name,
+                      self.config.filter_formula]
+        if self.simulate_repo_import:
+            import_cmd.insert(2, '-dry-run')
+
+        self.aptly.run(import_cmd)
         self.__log_ok(f"aptly mirror {self.__get_mirror_name(distribution)} imported to the repo {repo_name}")
 
     def __log(self, msg):
@@ -315,21 +324,25 @@ class UpdaterManager():
                 return True
             # 2. Import from mirrors to local repositories
             self.__import__aptly_mirror_to_repo(dist)
-            # 3. Create snapshots from repositories
-            self.__create_aptly_snapshot(dist)
-            # 4. Publish new snapshots
-            self.__publish_new_snapshot(dist)
-
+            if self.simulate_repo_import:
+                self.__log_ok(f"Simulation of the import actions from mirrors to repos finished")
+                exit(0)
+            if self.snapshot_and_publish:
+                # 3. Create snapshots from repositories
+                self.__create_aptly_snapshot(dist)
+                # 4. Publish new snapshots
+                self.__publish_new_snapshot(dist)
         self.__log(f"\n == [ END OF PROCESSING {self.config.name} ] ==\n")
         return True
 
 
 def main():
     """
-    Usage: python3 aptly_importer.py <config_file>
+    Usage: python3 aptly_importer.py [parameters] <config_file>
     """
-    usage = "usage: python3 aptly_importer.py [options] <config_file>"
+    usage = "usage: python3 aptly_importer.py [parameters] <config_file>"
     parser = argparse.ArgumentParser(usage)
+    parser.add_argument('config_file', type=str, default=None)
     parser.add_argument("--ignore-signatures",
                         help="Ignore mirror signatures when importing",
                         action="store_true")
@@ -337,7 +350,11 @@ def main():
                         help="Perform only the mirror creation and update. Useful for"
                              "checking, it does not modify anything in the system",
                         action="store_true")
-    parser.add_argument('config_file', type=str, default=None)
+
+    parser.add_argument('--simulate-repo-import',
+                        action='store_true',
+                        help='Perform a dry-run until the point of simulation mirrors import to repositories')
+    parser.add_argument('--snapshot-and-publish', action='store_true', help='Create and publish a snapshot of the updated distributions')
 
     args = parser.parse_args()
 
@@ -346,7 +363,9 @@ def main():
 
     manager = UpdaterManager(input_file=args.config_file,
                              ignore_mirror_signature=args.ignore_signatures,
-                             only_mirror_creation=args.only_mirror_creation)
+                             only_mirror_creation=args.only_mirror_creation,
+                             simulate_repo_import=args.simulate_repo_import,
+                             snapshot_and_publish=args.snapshot_and_publish)
     manager.run()
 
 
