@@ -110,7 +110,7 @@ class TestUpdaterManager(unittest.TestCase):
         for snap in self.aptly.get_snapshots_from_mirror(mirror_name):
             self.aptly.run(['snapshot', 'drop', snap])
 
-    def __setup__(self, distros_expected):
+    def __setup__(self, distros_expected, config_file):
         self.expected_distros = distros_expected
         self.expected_endpoint_name = 'filesystem:live:ros_bootstrap'
         self.expected_mirrors_test_name = [f"_reprepro_updater_test_suite_-{distro}"
@@ -119,41 +119,34 @@ class TestUpdaterManager(unittest.TestCase):
                                          for distro in self.expected_distros]
         self.expected_repos_by_distro_test_name =\
             {f"{distro}": f"ros_bootstrap-{distro}" for distro in self.expected_distros}
-
+        self.manager = aptly_importer.UpdaterManager(config_file,
+                                                     debug=self.debug_msgs,
+                                                     aptly_config_file=self.aptly_config_file,
+                                                     snapshot_and_publish=True)
         # clean up testing artifacts if they previously exists
         self.__clean_up_aptly_test_artifacts()
 
     def test_basic_example_creation_from_scratch(self):
-        self.__setup__(['focal', 'groovy'])
-        manager = aptly_importer.UpdaterManager('test/example.yaml',
-                                                debug=self.debug_msgs,
-                                                aptly_config_file=self.aptly_config_file)
-        self.assertTrue(manager.run())
+        self.__setup__(['focal', 'groovy'], 'test/example.yaml')
+        self.assertTrue(self.manager.run())
         self.__assert_expected_repos_mirrors()
 
     def test_basic_example_creation_existing_mirror(self):
-        self.__setup__(['focal', 'groovy'])
+        self.__setup__(['focal', 'groovy'], 'test/example.yaml')
         [self.__add_mirror(name) for name in self.expected_mirrors_test_name]
-        manager = aptly_importer.UpdaterManager('test/example.yaml',
-                                                debug=self.debug_msgs,
-                                                aptly_config_file=self.aptly_config_file)
-        self.assertTrue(manager.run())
+        self.assertTrue(self.manager.run())
         self.__assert_expected_repos_mirrors()
 
     def test_basic_example_creation_existing_repo(self):
-        self.__setup__(['focal', 'groovy'])
+        self.__setup__(['focal', 'groovy'], 'test/example.yaml')
         [self.__add_repo(name) for name in self.expected_repos_test_name]
-        manager = aptly_importer.UpdaterManager('test/example.yaml',
-                                                aptly_config_file=self.aptly_config_file)
-        self.assertTrue(manager.run())
+        self.assertTrue(self.manager.run())
         self.__assert_expected_repos_mirrors()
 
     def test_example_no_sources(self):
-        self.__setup__(['xenial'])
-        manager = aptly_importer.UpdaterManager('test/example_no_source_package.yaml',
-                                                aptly_config_file=self.aptly_config_file)
+        self.__setup__(['xenial'], 'test/example_no_source_package.yaml')
         with self.assertRaises(SystemExit):
-            manager.run()
+            self.manager.run()
         self.__assert_no_mirrors()
 
 
