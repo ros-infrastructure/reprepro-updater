@@ -75,9 +75,10 @@ jobs:
         if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
         run: |
           for changed_file in ${{ steps.files.outputs.all }}; do
-            echo "- Ignoring non config file ${changed_file}."
             if [[ ${changed_file} != ${changed_file/config\/*.yaml} ]]; then
               echo "+ Detected config file: ${changed_file}."
               python3 scripts/aptly/aptly_importer.py --ignore-signatures --only-mirror-creation ${changed_file}
+            else
+              echo "- Ignoring non config file ${changed_file}."
             fi
           done
