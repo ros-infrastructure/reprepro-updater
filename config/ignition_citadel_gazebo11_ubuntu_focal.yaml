@@ -33,7 +33,7 @@ Package (% =libignition-gazebo3-plugins)), \
 $Version (% 3.8.0-1~focal)) |\
 ((Package (% =ignition-gui3) |\
 Package (% libignition-gui3) |\
-Package (% libignition-gui3-dev)), |\
+Package (% libignition-gui3-dev)), \
 $Version (% 3.5.0-1~focal)) |\
 ((Package (% =ignition-launch2) |\
 Package (% =libignition-launch2) |\
@@ -43,7 +43,7 @@ $Version (% 2.2.1-1~focal)) |\
 ((Package (% =ignition-msgs5) |\
 Package (% =libignition-msgs5) |\
 Package (% =libignition-msgs5-dev) |\
-Package (% =libignition-msgs5-dbg)), |\
+Package (% =libignition-msgs5-dbg)), \
 $Version (% 5.7.0-1~focal)) |\
 (Package (% =ignition-physics2), $Version (% 2.3.0-1~focal)) |\
 (Package (% =ignition-plugin), $Version (% 1.1.0-1~focal)) |\
