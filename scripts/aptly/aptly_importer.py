@@ -337,12 +337,12 @@ def main():
                         help="Perform only the mirror creation and update. Useful for"
                              "checking, it does not modify anything in the system",
                         action="store_true")
-    parser.add_argument('config_file', type=str, nargs='+', default=None)
+    parser.add_argument('config_file', type=str, default=None)
 
     args = parser.parse_args()
 
-    if not path.exists(args.config_file[0]):
-        parser.error("Missing input file from %s" % args.config_file[0])
+    if not path.exists(args.config_file):
+        parser.error("Missing input file from %s" % args.config_file)
 
     manager = UpdaterManager(input_file=args.config_file,
                              ignore_mirror_signature=args.ignore_signatures,
