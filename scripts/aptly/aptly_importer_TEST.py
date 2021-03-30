@@ -137,17 +137,17 @@ class TestUpdaterManager(unittest.TestCase):
 
     def test_basic_example_creation_existing_mirror(self):
         self.__setup__(['focal', 'groovy'], 'example.yaml')
-        [self.__add_mirror(name) for name in self.expected_mirrors_test_name]        
+        [self.__add_mirror(name) for name in self.expected_mirrors_test_name]
         self.assertTrue(self.manager.run())
         self.__assert_expected_repos_mirrors()
 
     def test_basic_example_creation_existing_repo(self):
         self.__setup__(['focal', 'groovy'], 'example.yaml')
         [self.__add_repo(name) for name in self.expected_repos_test_name]
-        self.assertTrue(manager.run())
+        self.assertTrue(self.manager.run())
         self.__assert_expected_repos_mirrors()
 
-    def test_example_no_sources(self):       
+    def test_example_no_sources(self):
         self.__setup__(['xenial'], 'example_no_source_package.yaml')
         with self.assertRaises(SystemExit):
             self.manager.run()
