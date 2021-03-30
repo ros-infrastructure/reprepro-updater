@@ -1,0 +1,8 @@
+---
+name: _reprepro_updater_test_suite_
+method: http://packages.osrfoundation.org/gazebo/ubuntu-stable
+suites: ['xenial']
+component: main
+architectures: [amd64, source]
+# sdformat4 has no source package for xenial and it is not updated anymore
+filter_formula: Package (% *sdformat4* )

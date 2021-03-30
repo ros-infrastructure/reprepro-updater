@@ -1,0 +1,60 @@
+---
+name: Aptly Importer
+
+on: [push, pull_request]
+
+jobs:
+  bionic-ci:
+    runs-on: ubuntu-18.04
+    name: Bionic Aptly CI -
+          debug ${{ matrix.show_debug_cmds }}
+    strategy:
+      matrix:
+        show_debug_cmds:
+          - true
+          - false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install aptly repo
+        run: |
+            sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ED75B5A4483DA07C
+            sudo bash -c "echo 'deb http://repo.aptly.info/ squeeze main' > /etc/apt/sources.list.d/aptly.list"
+      - name: Install software
+        run: |
+            sudo apt-get update
+            sudo apt-get install -y gpg python3 aptly ubuntu-keyring
+      - name: Fix weird problem with trust keys
+        run: |
+            gpg --check-trustdb 2>&1| grep 'not found' | awk '{print $8}' >bad-keys.txt
+            gpg --export-ownertrust > ownertrust-gpg.txt
+            mv ~/.gnupg/trustdb.gpg ~/.gnupg/trustdb.gpg-broken
+            for KEY in `cat bad-keys.txt` ; do sed -i "/$KEY/d" ownertrust-gpg.txt ; done
+            gpg --import-ownertrust ownertrust-gpg.txt
+            rm bad-keys.txt ownertrust-gpg.txt
+      - name: Setup enviroment
+        run: |
+            gpg --no-default-keyring --keyring /usr/share/keyrings/ubuntu-archive-keyring.gpg --export | gpg --no-default-keyring --keyring trustedkeys.gpg --import
+            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 16E90B3FDF65EDE3AA7F323C04EE7237B7D453EC
+            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 0146DC6D4A0B2914BDED34DB648ACFD622F3D138
+            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 67170598AF249743
+
+      - name: Generate key
+        run: |
+            cat <<-EOF > genkey
+                Key-Type: 1
+                Key-Length: 4096
+                Subkey-Type: 1
+                Subkey-Length: 4096
+                Name-Real: Testing name
+                Name-Email: test@test.org
+                Expire-Date: 0
+                %no-protection
+            EOF
+            gpg --gen-key --batch genkey
+      - name: Run tests
+        run: |
+            python3 scripts/aptly/aptly_importer_TEST.py
+        env:
+          _DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_: ${{ matrix.show_debug_cmds }}
+          _ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_: true
