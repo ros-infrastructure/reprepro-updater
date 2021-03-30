@@ -138,7 +138,7 @@ class TestUpdaterManager(unittest.TestCase):
     def test_basic_example_creation_existing_mirror(self):
         self.__setup__(['focal', 'groovy'])
         [self.__add_mirror(name) for name in self.expected_mirrors_test_name]
-        manager = aptly_importer.UpdaterManager('test/example.yaml',
+        manager = aptly_importer.UpdaterManager(TEST_CONFIG_DIR / 'example.yaml',
                                                 debug=self.debug_msgs,
                                                 aptly_config_file=self.aptly_config_file)
         self.assertTrue(manager.run())
