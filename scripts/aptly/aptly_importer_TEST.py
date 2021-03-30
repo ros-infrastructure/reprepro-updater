@@ -64,6 +64,9 @@ class TestUpdaterManager(unittest.TestCase):
         else:
             assert(False), f"{self.aptly_config_file} file does not exist while trying to remove it"
 
+    def __add_mirror(self, mirror_name):
+        self.assertTrue(self.aptly.run(['mirror', 'create', mirror_name, 'http://packages.osrfoundation.org/gazebo/ubuntu-stable', 'focal']))
+
     def __add_repo(self, repo_name):
         self.assertTrue(self.aptly.run(['repo', 'create', repo_name]))
 
@@ -132,6 +135,15 @@ class TestUpdaterManager(unittest.TestCase):
         self.assertTrue(manager.run())
         self.__assert_expected_repos_mirrors()
 
+    def test_basic_example_creation_existing_mirror(self):
+        self.__setup__(['focal', 'groovy'])
+        [self.__add_mirror(name) for name in self.expected_mirrors_test_name]
+        manager = aptly_importer.UpdaterManager('test/example.yaml',
+                                                debug=self.debug_msgs,
+                                                aptly_config_file=self.aptly_config_file)
+        self.assertTrue(manager.run())
+        self.__assert_expected_repos_mirrors()
+
     def test_basic_example_creation_existing_repo(self):
         self.__setup__(['focal', 'groovy'])
         [self.__add_repo(name) for name in self.expected_repos_test_name]
@@ -177,14 +189,10 @@ class TestReprepro2AptlyFilter(unittest.TestCase):
 
 if __name__ == '__main__':
     aptly = aptly_importer.Aptly()
-    # try to detect if the machine is a producition/testing system
-    # by checking repositories to refuse to destroy them
-    if ((aptly.exists(aptly_importer.Aptly.ArtifactType.REPOSITORY,
-                      'ros_bootstrap-focal')) and
-        aptly.exists(aptly_importer.Aptly.ArtifactType.REPOSITORY,
-                     'ros_bootstrap-bionic')):
-            print("Machine has repositories for focal and bionic with name"
-                  "ros_bootstrap-$distro. Refuse to continue since they will"
-                  "be destroyed")
+    # test suite is potentially dangerous for production machines
+    if not os.getenv('_ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_') or \
+       not os.environ['_ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_']:
+            print("_ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_ variable is"
+                  "not set to true. Refuse to run test suite")
             sys.exit(2)
     unittest.main()

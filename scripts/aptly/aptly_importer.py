@@ -206,18 +206,13 @@ class UpdaterManager():
         self.only_mirror_creation = only_mirror_creation
         self.snapshot_timestamp = None
 
-    def __assure_aptly_mirrors_do_not_exist(self):
-        self.__log('Checking that aptly mirrors from config filename do not exist')
-        for dist in self.config.suites:
-            mirror_name = self.__get_mirror_name(dist)
-            if self.aptly.exists(Aptly.ArtifactType.MIRROR, mirror_name):
-                self.__error(f"mirror {mirror_name} exists. Refuse to create mirrors")
-        self.__log_ok('no conflict in mirrors name')
-
     def __create_aptly_mirror(self, distribution):
         assert(self.config)
         self.__log(f"Creating aptly mirror for {distribution}")
         mirror_name = self.__get_mirror_name(distribution)
+        if self.aptly.exists(Aptly.ArtifactType.MIRROR, mirror_name):
+            self.__log_ok('Removing existing mirror')
+            self.aptly.run(['mirror', 'drop', mirror_name])
         create_cmd = ['mirror', 'create', '-with-sources',
                       f"-architectures={','.join(self.config.architectures)}",
                       f"-filter={self.config.filter_formula}"]
@@ -306,10 +301,8 @@ class UpdaterManager():
 
     def run(self):
         self.__log(f"\n == [ PROCESSING {self.config.name} ] ==\n")
-        # 1. Create aptly mirrors from yaml configuration file
-        # check aptly mirrors before creating to avoid problems beforehand
-        self.__assure_aptly_mirrors_do_not_exist()
         for dist in self.config.suites:
+            # 1. Create aptly mirrors from yaml configuration file
             self.__create_aptly_mirror(dist)
             # 2. Be sure mirror has all source packages
             self.__log(f'Check all source packages exist')
@@ -351,7 +344,7 @@ def main():
     if not path.exists(args.config_file[0]):
         parser.error("Missing input file from %s" % args.config_file[0])
 
-    manager = UpdaterManager(input_file=args.config_file[0],
+    manager = UpdaterManager(input_file=args.config_file,
                              ignore_mirror_signature=args.ignore_signatures,
                              only_mirror_creation=args.only_mirror_creation)
     manager.run()

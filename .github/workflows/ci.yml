@@ -66,6 +66,7 @@ jobs:
             python3 scripts/aptly/aptly_importer_TEST.py
         env:
           _DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_: ${{ matrix.show_debug_cmds }}
+          _ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_: true
       # CONFIG FILE TESTER
       - id: files
         if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
