@@ -239,8 +239,8 @@ class UpdaterManager():
     def __create_aptly_snapshot(self, distribution):
         self.__log('Creating an aptly snapshot from local aptly repository')
         self.aptly.run(['snapshot', 'create', self.__get_snapshot_name(distribution),
-                        'from', 'mirror', self.__get_mirror_name(distribution)])
-        self.__log_ok(f"snapshot {self.__get_snapshot_name(distribution)} created from mirror {self.__get_mirror_name(distribution)}")
+                        'from', 'repo', self.__get_repo_name(distribution)])
+        self.__log_ok(f"snapshot {self.__get_snapshot_name(distribution)} created from repo {self.__get_repo_name(distribution)}")
 
     def __error(self, msg):
         print(f"Update Manager error: {msg} \n", file=stderr)
