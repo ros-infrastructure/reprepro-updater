@@ -68,7 +68,11 @@ class TestUpdaterManager(unittest.TestCase):
         self.assertTrue(self.aptly.run(['mirror', 'create', mirror_name, 'http://packages.osrfoundation.org/gazebo/ubuntu-stable', 'focal']))
 
     def __add_repo(self, repo_name):
-        self.assertTrue(self.aptly.run(['repo', 'create', repo_name]))
+        self.assertTrue(self.aptly.run([
+            'repo',
+            'create',
+            f"-architectures={','.join(self.manager.config.architectures)}",
+            repo_name]))
 
     def __assert_no_mirrors(self):
         for name in self.expected_mirrors_test_name:
@@ -92,6 +96,8 @@ class TestUpdaterManager(unittest.TestCase):
         [self.__remove_repo(name) for name in self.expected_repos_test_name]
         [self.__remove_mirror(name) for name in self.expected_mirrors_test_name]
         [self.__remove_snapshots_from_mirror(name) for name in self.expected_mirrors_test_name]
+        # extra artifacts in some tests
+        self.__remove_repo('ros_bootstrap-xenial')
         self.aptly.run(['db', 'cleanup'])
 
     def __remove_mirror(self, mirror_name):
@@ -114,7 +120,7 @@ class TestUpdaterManager(unittest.TestCase):
         for snap in self.aptly.get_snapshots_from_mirror(mirror_name):
             self.aptly.run(['snapshot', 'drop', snap])
 
-    def __setup__(self, distros_expected, config_file):
+    def __setup__(self, distros_expected, config_file, snapshot_and_publish=True):
         self.expected_distros = distros_expected
         self.expected_endpoint_name = 'filesystem:live:ros_bootstrap'
         self.expected_mirrors_test_name = [f"_reprepro_updater_test_suite_-{distro}"
@@ -126,9 +132,14 @@ class TestUpdaterManager(unittest.TestCase):
         self.manager = aptly_importer.UpdaterManager(TEST_CONFIG_DIR / config_file,
                                                      debug=self.debug_msgs,
                                                      aptly_config_file=self.aptly_config_file,
-                                                     snapshot_and_publish=True)
+                                                     snapshot_and_publish=snapshot_and_publish)
         # clean up testing artifacts if they previously exists
         self.__clean_up_aptly_test_artifacts()
+
+    def test_no_publish_basic_example_creation_from_scratch(self):
+        self.__setup__(['focal', 'groovy'], 'test/example.yaml', snapshot_and_publish=False)
+        self.assertTrue(self.manager.run())
+        self.__assert_expected_repos_mirrors()
 
     def test_basic_example_creation_from_scratch(self):
         self.__setup__(['focal', 'groovy'], 'example.yaml')
@@ -152,6 +163,25 @@ class TestUpdaterManager(unittest.TestCase):
         with self.assertRaises(SystemExit):
             self.manager.run()
         self.__assert_no_mirrors()
+
+    def test_publish_existing_repos_in_config(self):
+        self.__setup__(['focal', 'groovy'], 'test/example.yaml')
+        # add existing repositories
+        self.__add_repo('ros_bootstrap-focal')
+        self.assertTrue(self.manager.run())
+        self.__assert_expected_repos_mirrors()
+
+    def test_publish_existing_repos_not_in_config(self):
+        self.__setup__(['focal', 'groovy'], 'test/example.yaml')
+        # add existing repositories
+        self.__add_repo('ros_bootstrap-xenial')
+        [self.__add_repo(name) for name in self.expected_repos_test_name]
+        # publishing neeeds custom architectures parameter to work nicely on created xenial
+        # repo. We expect failure to indicate the xenial is in the mix which is the expected
+        # behaviour. To solve the problem extra support needs to be added to aptly_imported
+        # to declare architectures
+        with self.assertRaises(SystemExit):
+            self.assertTrue(self.manager.run())
 
 
 class TestReprepro2AptlyFilter(unittest.TestCase):
