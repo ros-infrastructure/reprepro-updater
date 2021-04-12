@@ -319,7 +319,7 @@ class UpdaterManager():
                                                          self.__get_mirror_name(dist)):
                 self.__remove_all_generated_mirrors()
                 self.__error(f'{self.__get_mirror_name(dist)} does not have a source package. Removing generated mirrors')
-            self.__log_ok('All source pakages exist in the mirror')
+            self.__log_ok('All source packages exist in the mirror')
             if self.only_mirror_creation:
                 return True
             # 2. Import from mirrors to local repositories
