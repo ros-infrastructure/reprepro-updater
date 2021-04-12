@@ -6,13 +6,19 @@ on: [push, pull_request]
 jobs:
   bionic-ci:
     runs-on: ubuntu-18.04
-    name: Bionic Aptly CI -
+    name: Bionic Aptly ${{ matrix.job_type }} -
           debug ${{ matrix.show_debug_cmds }}
     strategy:
       matrix:
         show_debug_cmds:
           - true
           - false
+        job_type:
+          - 'CI'
+          - 'CONFIG_TESTER'
+        exclude:
+          - job_type: 'CONFIG_TESTER'
+            show_debug_cmds: false
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -52,9 +58,27 @@ jobs:
                 %no-protection
             EOF
             gpg --gen-key --batch genkey
-      - name: Run tests
+
+      # CI TESTING
+      - name: Run CI tests
+        if: ${{ matrix.job_type == 'CI' }}
         run: |
             python3 scripts/aptly/aptly_importer_TEST.py
         env:
           _DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_: ${{ matrix.show_debug_cmds }}
           _ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_: true
+      # CONFIG FILE TESTER
+      - id: files
+        if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
+        uses: jitterbit/get-changed-files@v1
+      - name: Run testing on changed config files
+        if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
+        run: |
+          for changed_file in ${{ steps.files.outputs.all }}; do
+            if [[ ${changed_file} != ${changed_file/config\/*.yaml} ]]; then
+              echo "+ Detected config file: ${changed_file}."
+              python3 scripts/aptly/aptly_importer.py --ignore-signatures --only-mirror-creation ${changed_file}
+            else
+              echo "- Ignoring non config file ${changed_file}."
+            fi
+          done

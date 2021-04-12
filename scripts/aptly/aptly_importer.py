@@ -183,7 +183,7 @@ class UpdaterConfiguration():
         exit(2)
 
     def __load_config_file(self, config_file_path):
-        fn = Path(__file__).parent / config_file_path
+        fn = Path(config_file_path).absolute()
         try:
             with open(str(fn), 'r') as stream:
                 config = yaml.safe_load(stream)
@@ -195,11 +195,18 @@ class UpdaterConfiguration():
 
 
 class UpdaterManager():
-    def __init__(self, input_file, debug=False, aptly_config_file=None, simulate_repo_import=False, snapshot_and_publish=False):
+    def __init__(self, input_file, debug=False,
+                 aptly_config_file=None, 
+                 ignore_mirror_signature=False,
+                 only_mirror_creation=False,
+                 simulate_repo_import=False,
+                 snapshot_and_publish=False):
         self.aptly = Aptly(debug,
                            config_file=aptly_config_file)
         self.config = UpdaterConfiguration(input_file)
         self.debug = debug
+        self.ignore_mirror_signature = ignore_mirror_signature
+        self.only_mirror_creation = only_mirror_creation
         self.simulate_repo_import = simulate_repo_import
         self.snapshot_and_publish = snapshot_and_publish
         self.snapshot_timestamp = None
@@ -211,14 +218,22 @@ class UpdaterManager():
         if self.aptly.exists(Aptly.ArtifactType.MIRROR, mirror_name):
             self.__log_ok('Removing existing mirror')
             self.aptly.run(['mirror', 'drop', mirror_name])
-        self.aptly.run(['mirror', 'create', '-with-sources',
-                        f"-architectures={','.join(self.config.architectures)}",
-                        f"-filter={self.config.filter_formula}",
-                        mirror_name,
-                        self.config.method,
-                        distribution,
-                        self.config.component])
-        self.aptly.run(['mirror', 'update', mirror_name])
+        create_cmd = ['mirror', 'create', '-with-sources',
+                      f"-architectures={','.join(self.config.architectures)}",
+                      f"-filter={self.config.filter_formula}"]
+        if self.ignore_mirror_signature:
+            create_cmd += ['-ignore-signatures']
+        create_cmd += [mirror_name,
+                       self.config.method,
+                       distribution,
+                       self.config.component]
+        self.aptly.run(create_cmd)
+        update_cmd = ['mirror', 'update']
+        if self.ignore_mirror_signature:
+            update_cmd += ['-ignore-signatures']
+        update_cmd += [mirror_name]
+        self.aptly.run(update_cmd)
+
         self.__log_ok(f"mirror {mirror_name} created")
 
     def __create_aptly_snapshot(self, distribution):
@@ -304,7 +319,9 @@ class UpdaterManager():
                                                          self.__get_mirror_name(dist)):
                 self.__remove_all_generated_mirrors()
                 self.__error(f'{self.__get_mirror_name(dist)} does not have a source package. Removing generated mirrors')
-            self.__log_ok('There is a source pakage in the mirror')
+            self.__log_ok('All source packages exist in the mirror')
+            if self.only_mirror_creation:
+                return True
             # 2. Import from mirrors to local repositories
             self.__import__aptly_mirror_to_repo(dist)
             if self.simulate_repo_import:
@@ -321,11 +338,19 @@ class UpdaterManager():
 
 def main():
     """
-    Usage: python3 aptly_importer.py [--simulate-repo-import] <config_file>
+    Usage: python3 aptly_importer.py [parameters] <config_file>
     """
-    usage = "usage: %prog [--simulate-repo-import] config_file"
+    usage = "usage: python3 aptly_importer.py [parameters] <config_file>"
     parser = argparse.ArgumentParser(usage)
     parser.add_argument('config_file', type=str, default=None)
+    parser.add_argument("--ignore-signatures",
+                        help="Ignore mirror signatures when importing",
+                        action="store_true")
+    parser.add_argument("--only-mirror-creation",
+                        help="Perform only the mirror creation and update. Useful for"
+                             "checking, it does not modify anything in the system",
+                        action="store_true")
+
     parser.add_argument('--simulate-repo-import',
                         action='store_true',
                         help='Perform a dry-run until the point of simulation mirrors import to repositories')
@@ -336,7 +361,11 @@ def main():
     if not path.exists(args.config_file):
         parser.error("Missing input file from %s" % args.config_file)
 
-    manager = UpdaterManager(args.config_file, simulate_repo_import=args.simulate_repo_import, snapshot_and_publish=args.snapshot_and_publish)
+    manager = UpdaterManager(input_file=args.config_file,
+                             ignore_mirror_signature=args.ignore_signatures,
+                             only_mirror_creation=args.only_mirror_creation,
+                             simulate_repo_import=args.simulate_repo_import,
+                             snapshot_and_publish=args.snapshot_and_publish)
     manager.run()
 
 
