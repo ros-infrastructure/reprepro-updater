@@ -17,6 +17,7 @@ Package (% =libignition-common4-graphics-dev) |\
 Package (% =libignition-common4-profiler) |\
 Package (% =libignition-common4-profiler-dev)), \
 $Version (% 4.0.0-1~focal)) |\
+(Package (% =ignition-edifice), $Version (% 1.0.0-1~focal)) |\
 (Package (% =ignition-fuel-tools6), $Version (% 6.0.0-1~focal)) |\
 ((Package (% =ignition-gazebo5) |\
 Package (% =libignition-gazebo5) |\
@@ -36,7 +37,19 @@ Package (% =libignition-msgs7) |\
 Package (% =libignition-msgs7-dev) |\
 Package (% =libignition-msgs7-dbg)), \
 $Version (% 7.0.0-1~focal)) |\
-(Package (% =ignition-physics4), $Version (% 4.0.0-1~focal)) |\
+((Package (% =ignition-physics4) |\
+Package (% libignition-physics4) |\
+Package (% libignition-physics4-core-dev) |\
+Package (% libignition-physics4-dartsim) |\
+Package (% libignition-physics4-dartsim-dev) |\
+Package (% libignition-physics4-dev) |\
+Package (% libignition-physics4-mesh-dev) |\
+Package (% libignition-physics4-sdf-dev) |\
+Package (% libignition-physics4-tpe) |\
+Package (% libignition-physics4-tpe-dev) |\
+Package (% libignition-physics4-tpelib) |\
+Package (% libignition-physics4-tpelib-dev)), \
+$Version (% 4.0.0-1~focal)) |\
 ((Package (% =ignition-rendering5) |\
 Package (% =libignition-rendering5) |\
 Package (% =libignition-rendering5-core-dev) |\
@@ -75,8 +88,21 @@ Package (% =libignition-sensors5-rgbd-camera-dev) |\
 Package (% =libignition-sensors5-thermal-camera) |\
 Package (% =libignition-sensors5-thermal-camera-dev)), \
 $Version (% 5.0.0-1~focal)) |\
-(Package (% =ignition-transport10), $Version (% 10.0.0-1~focal)) |\
-(Package (% =ignition-utils1), $Version (% 1.0.0-1~focal)) |\
+((Package (% =ignition-transport10) |\
+Package (% libignition-transport10-core-dev) |\
+Package (% libignition-transport10-dbg) |\
+Package (% libignition-transport10-dev) |\
+Package (% libignition-transport10-log) |\
+Package (% libignition-transport10-log-dev)), \
+$Version (% 10.0.0-1~focal)) |\
+((Package (% =ignition-utils1) |\
+Package (% libignition-utils1) |\
+Package (% libignition-utils1-core-dev) |\
+Package (% libignition-utils1-dbg) |\
+Package (% libignition-utils1-dev) |\
+Package (% libignition-utils1-cli) |\
+Package (% libignition-utils1-cli-dev)), \
+$Version (% 1.0.0*)) |\
 ((Package (% =sdformat11) |\
 Package (% =libsdformat11) |\
 Package (% =libsdformat11-dbg) |\
