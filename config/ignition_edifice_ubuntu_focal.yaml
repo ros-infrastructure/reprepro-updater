@@ -1,0 +1,87 @@
+name: ignition_citadel_gazebo11_ubuntu_focal
+method: http://packages.osrfoundation.org/gazebo/ubuntu-stable
+suites: [focal]
+component: main
+architectures: [amd64, i386, armhf, arm64, source]
+filter_formula: "\
+(Package (% =ignition-common4), $Version (% 4.0.0-1~focal)) |\
+((Package (% =libignition-common4) |\
+Package (% =libignition-common4-av) |\
+Package (% =libignition-common4-av-dev) |\
+Package (% =libignition-common4-core-dev) |\
+Package (% =libignition-common4-dev) |\
+Package (% =libignition-common4-events) |\
+Package (% =libignition-common4-events-dev) |\
+Package (% =libignition-common4-graphics) |\
+Package (% =libignition-common4-graphics-dev) |\
+Package (% =libignition-common4-profiler) |\
+Package (% =libignition-common4-profiler-dev)), \
+$Version (% 4.0.0-1~focal)) |\
+(Package (% =ignition-fuel-tools6), $Version (% 6.0.0-1~focal)) |\
+((Package (% =ignition-gazebo5) |\
+Package (% =libignition-gazebo5) |\
+Package (% =libignition-gazebo5-dev) |\
+Package (% =libignition-gazebo5-plugins)), \
+$Version (% 5.0.0-1~focal)) |\
+((Package (% =ignition-gui5) |\
+Package (% libignition-gui5) |\
+Package (% libignition-gui5-dev)), \
+$Version (% 5.0.0-1~focal)) |\
+((Package (% =ignition-launch4) |\
+Package (% =libignition-launch4) |\
+Package (% =libignition-launch4-dev)), \
+$Version (% 4.0.0-1~focal)) |\
+((Package (% =ignition-msgs7) |\
+Package (% =libignition-msgs7) |\
+Package (% =libignition-msgs7-dev) |\
+Package (% =libignition-msgs7-dbg)), \
+$Version (% 7.0.0-1~focal)) |\
+(Package (% =ignition-physics4), $Version (% 4.0.0-1~focal)) |\
+((Package (% =ignition-rendering5) |\
+Package (% =libignition-rendering5) |\
+Package (% =libignition-rendering5-core-dev) |\
+Package (% =libignition-rendering5-dev) |\
+Package (% =libignition-rendering5-ogre1) |\
+Package (% =libignition-rendering5-ogre1-dev) |\
+Package (% =libignition-rendering5-ogre2) |\
+Package (% =libignition-rendering5-ogre2-dev)), \
+$Version (% 5.0.0-1~focal)) |\
+((Package (% =ignition-sensors5) |\
+Package (% =libignition-sensors5) |\
+Package (% =libignition-sensors5-air-pressure) |\
+Package (% =libignition-sensors5-air-pressure-dev) |\
+Package (% =libignition-sensors5-altimeter) |\
+Package (% =libignition-sensors5-altimeter-dev) |\
+Package (% =libignition-sensors5-camera) |\
+Package (% =libignition-sensors5-camera-dev) |\
+Package (% =libignition-sensors5-core-dev) |\
+Package (% =libignition-sensors5-depth-camera) |\
+Package (% =libignition-sensors5-depth-camera-dev) |\
+Package (% =libignition-sensors5-dev) |\
+Package (% =libignition-sensors5-gpu-lidar) |\
+Package (% =libignition-sensors5-gpu-lidar-dev) |\
+Package (% =libignition-sensors5-imu) |\
+Package (% =libignition-sensors5-imu-dev) |\
+Package (% =libignition-sensors5-lidar) |\
+Package (% =libignition-sensors5-lidar-dev) |\
+Package (% =libignition-sensors5-logical-camera) |\
+Package (% =libignition-sensors5-logical-camera-dev) |\
+Package (% =libignition-sensors5-magnetometer) |\
+Package (% =libignition-sensors5-magnetometer-dev) |\
+Package (% =libignition-sensors5-rendering) |\
+Package (% =libignition-sensors5-rendering-dev) |\
+Package (% =libignition-sensors5-rgbd-camera) |\
+Package (% =libignition-sensors5-rgbd-camera-dev) |\
+Package (% =libignition-sensors5-thermal-camera) |\
+Package (% =libignition-sensors5-thermal-camera-dev)), \
+$Version (% 5.0.0-1~focal)) |\
+(Package (% =ignition-transport10), $Version (% 10.0.0-1~focal)) |\
+(Package (% =ignition-utils1), $Version (% 1.0.0-1~focal)) |\
+((Package (% =sdformat11) |\
+Package (% =libsdformat11) |\
+Package (% =libsdformat11-dbg) |\
+Package (% =libsdformat11-dev) |\
+Package (% =sdformat11-doc) |\
+Package (% =sdformat11-sdf)), \
+$Version (% 11.0.0-1~focal)) \
+"
