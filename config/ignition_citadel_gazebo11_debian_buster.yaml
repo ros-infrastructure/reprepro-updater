@@ -15,7 +15,8 @@ $Version (% 11.5.0-1~buster)) |\
 Package (% libignition-cmake2-dev)) |\
 $Version (% 2.7.0-1~buster)) |\
 (Package (% =ignition-citadel), $Version (% 1.0.0*))|\
-((Package (% =libignition-common3) |\
+((Package (% =ignition-common3) |\
+Package (% =libignition-common3) |\
 Package (% =libignition-common3-av) |\
 Package (% =libignition-common3-av-dev) |\
 Package (% =libignition-common3-core-dev) |\
