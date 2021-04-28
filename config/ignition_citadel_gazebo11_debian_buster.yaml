@@ -113,10 +113,10 @@ Package (% libignition-transport8-core-dev) |\
 Package (% libignition-transport8-dbg) |\
 Package (% libignition-transport8-dev) |\
 Package (% libignition-transport8-log) |\
-Package (% libignition-transport8-log-dev)), |
+Package (% libignition-transport8-log-dev)), \
 $Version (% 8.2.0-1~buster)) |\
 ((Package (% ignition-tools) |\
-Package (% libignition-tools-dev)), |
+Package (% libignition-tools-dev)), \
 $Version (% 1.2.0-1~buster)) |\
 ((Package (% =ogre-2.1) |\
 Package (% =libogre-2.1) |\
