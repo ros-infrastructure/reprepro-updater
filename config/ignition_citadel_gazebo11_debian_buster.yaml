@@ -66,7 +66,7 @@ Package (% =libignition-physics2-tpe-dev) |\
 Package (% =libignition-physics2-tpelib) |\
 Package (% =libignition-physics2-tpelib-dev)), \
 $Version (% 2.4.0-1~buster)) |\
-((Package (% =ignition-plugin),
+((Package (% =ignition-plugin) |\
 Package (% =libignition-plugin) |\
 Package (% =libignition-plugin-dev)), \
 $Version (% 1.2.0-1~buster)) |\
