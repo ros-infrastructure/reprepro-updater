@@ -1,4 +1,4 @@
-name: ignition_citadel_gazebo11_debian_buster.yaml
+name: ignition_citadel_gazebo11_debian_buster
 method: http://packages.osrfoundation.org/gazebo/debian-stable
 suites: [buster]
 component: main
