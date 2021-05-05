@@ -28,7 +28,10 @@ Package (% =libignition-common3-graphics-dev) |\
 Package (% =libignition-common3-profiler) |\
 Package (% =libignition-common3-profiler-dev)), \
 $Version (% 3.12.0-1~*)) |\
-(Package (% =ignition-fuel-tools4), $Version (% 4.3.0-1~*)) |\
+((Package (% =ignition-fuel-tools4) |\
+Package (% =libignition-fuel-tools4) |\
+Package (% =libignition-fuel-tools4-dev)), \
+$Version (% 4.3.0-1~*)) |\
 ((Package (% =ignition-gazebo3) |\
 Package (% =libignition-gazebo3) |\
 Package (% =libignition-gazebo3-dev) |\
