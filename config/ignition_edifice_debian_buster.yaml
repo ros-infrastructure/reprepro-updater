@@ -106,7 +106,7 @@ Package (% libignition-utils1-dbg) |\
 Package (% libignition-utils1-dev) |\
 Package (% libignition-utils1-cli) |\
 Package (% libignition-utils1-cli-dev)), \
-$Version (% 1.0.0-1~*)) |\
+$Version (% 1.0.0-2~*)) |\
 ((Package (% =sdformat11) |\
 Package (% =libsdformat11) |\
 Package (% =libsdformat11-dbg) |\
