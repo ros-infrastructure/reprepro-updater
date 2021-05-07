@@ -10,7 +10,7 @@ Package (% =gazebo11-dbg) |\
 Package (% =gazebo11-doc) |\
 Package (% =libgazebo11) |\
 Package (% =libgazebo11-dev)), \
-$Version (% 11.5.0-1~*)) |\
+$Version (% 11.5.1-1~*)) |\
 ((Package (% =ignition-cmake2) |\
 Package (% =libignition-cmake2-dev)) |\
 $Version (% 2.8.0-1~*)) |\
