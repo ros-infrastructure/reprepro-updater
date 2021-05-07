@@ -1,7 +1,12 @@
 ---
 name: Aptly Importer
 
-on: [push, pull_request]
+on:
+  push:
+    branches: [master, refactor]
+  pull_request:
+    branches: ['*']
+
 
 jobs:
   bionic-ci:
