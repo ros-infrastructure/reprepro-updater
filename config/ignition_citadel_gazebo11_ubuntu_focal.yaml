@@ -8,6 +8,7 @@ filter_formula: "\
 Package (% =gazebo11-common) |\
 Package (% =gazebo11-dbg) |\
 Package (% =gazebo11-doc) |\
+Package (% =gazebo11-plugin-base) |\
 Package (% =libgazebo11) |\
 Package (% =libgazebo11-dev)), \
 $Version (% 11.5.1-1~*)) |\

@@ -4,8 +4,8 @@ suites: [buster]
 component: main
 architectures: [amd64, source]
 filter_formula: "\
-(Package (% =ignition-common4), $Version (% 4.0.0-1~*)) |\
-((Package (% =libignition-common4) |\
+((Package (% =ignition-common4) |\
+Package (% =libignition-common4) |\
 Package (% =libignition-common4-av) |\
 Package (% =libignition-common4-av-dev) |\
 Package (% =libignition-common4-core-dev) |\
@@ -18,7 +18,10 @@ Package (% =libignition-common4-profiler) |\
 Package (% =libignition-common4-profiler-dev)), \
 $Version (% 4.0.0-1~*)) |\
 (Package (% =ignition-edifice), $Version (% 1.0.0-1~*)) |\
-(Package (% =ignition-fuel-tools6), $Version (% 6.0.0-1~*)) |\
+((Package (% =ignition-fuel-tools6) |\
+Package (% =libignition-fuel-tools6) |\
+Package (% =libignition-fuel-tools6-dev)), \
+$Version (% 6.0.0-1~*)) |\
 ((Package (% =ignition-gazebo5) |\
 Package (% =libignition-gazebo5) |\
 Package (% =libignition-gazebo5-dev) |\
