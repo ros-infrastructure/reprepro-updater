@@ -13,7 +13,7 @@ Package (% =libgazebo11-dev)), \
 $Version (% 11.5.0-1~*)) |\
 ((Package (% =ignition-cmake2) |\
 Package (% =libignition-cmake2-dev)) |\
-$Version (% 2.7.0-1~*)) |\
+$Version (% 2.8.0-1~*)) |\
 (Package (% =ignition-citadel), $Version (% 1.0.0*))|\
 ((Package (% =ignition-common3) |\
 Package (% =libignition-common3) |\
