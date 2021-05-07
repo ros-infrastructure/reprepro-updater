@@ -15,7 +15,7 @@ $Version (% 11.5.1-1~*)) |\
 ((Package (% =ignition-cmake2) |\
 Package (% =libignition-cmake2-dev)), \
 $Version (% 2.8.0-1~*)) |\
-(Package (% =ignition-citadel), $Version (% 1.0.0*))|\
+(Package (% =ignition-citadel), $Version (% 1.0.1*))|\
 ((Package (% =ignition-common3) |\
 Package (% =libignition-common3) |\
 Package (% =libignition-common3-av) |\
@@ -28,7 +28,7 @@ Package (% =libignition-common3-graphics) |\
 Package (% =libignition-common3-graphics-dev) |\
 Package (% =libignition-common3-profiler) |\
 Package (% =libignition-common3-profiler-dev)), \
-$Version (% 3.12.0-1~*)) |\
+$Version (% 3.13.1-1~*)) |\
 ((Package (% =ignition-fuel-tools4) |\
 Package (% =libignition-fuel-tools4) |\
 Package (% =libignition-fuel-tools4-dev)), \
@@ -112,6 +112,9 @@ Package (% =libignition-sensors3-rgbd-camera-dev) |\
 Package (% =libignition-sensors3-thermal-camera) |\
 Package (% =libignition-sensors3-thermal-camera-dev)), \
 $Version (% 3.2.0-1~*)) |\
+((Package (% =ignition-tools) |\
+Package (% =libignition-tools-dev)), \
+$Version (% 1.2.0-1~*)) |\
 ((Package (% =ignition-transport8) |\
 Package (% =libignition-transport8) |\
 Package (% =libignition-transport8-core-dev) |\
@@ -120,9 +123,6 @@ Package (% =libignition-transport8-dev) |\
 Package (% =libignition-transport8-log) |\
 Package (% =libignition-transport8-log-dev)), \
 $Version (% 8.2.0-1~*)) |\
-((Package (% =ignition-tools) |\
-Package (% =libignition-tools-dev)), \
-$Version (% 1.2.0-1~*)) |\
 ((Package (% =ogre-2.1) |\
 Package (% =libogre-2.1) |\
 Package (% =libogre-2.1-dev)),
