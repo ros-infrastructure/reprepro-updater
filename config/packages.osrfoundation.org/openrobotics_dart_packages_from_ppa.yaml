@@ -5,5 +5,5 @@ component: main
 architectures: [amd64, armhf, arm64, source]
 # TODO: include version in the configuration to get a declarive way of knowing the contents of packages.osrfoundation.org
 # see https://github.com/ros-infrastructure/reprepro-updater/pull/83/files
-filter_formula: Package (% *dart6*, $Version (% TODO))
+filter_formula: Package (% *dart6*, $Version (% 6.10.0~osrf19~20210610~bionic~175596b511adb55d831c0c3401ef50e2cb96a6f3))
 verify_release: blindtrust
