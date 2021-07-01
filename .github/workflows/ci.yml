@@ -46,9 +46,9 @@ jobs:
       - name: Setup enviroment
         run: |
             gpg --no-default-keyring --keyring /usr/share/keyrings/ubuntu-archive-keyring.gpg --export | gpg --no-default-keyring --keyring trustedkeys.gpg --import
-            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 16E90B3FDF65EDE3AA7F323C04EE7237B7D453EC
-            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 0146DC6D4A0B2914BDED34DB648ACFD622F3D138
-            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keys.gnupg.net --recv-keys 67170598AF249743
+            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 16E90B3FDF65EDE3AA7F323C04EE7237B7D453EC
+            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 0146DC6D4A0B2914BDED34DB648ACFD622F3D138
+            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 67170598AF249743
 
       - name: Generate key
         run: |
