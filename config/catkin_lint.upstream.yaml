@@ -3,4 +3,4 @@ method: http://ppa.launchpad.net/roehling/ros/ubuntu
 suites: [bionic, focal]
 component: main
 architectures: [i386, amd64, armhf, arm64, source]
-filter_formula: $Source (== catkin-lint), $Version (% 1.6.13-*)
+filter_formula: $Source (== catkin-lint), $Version (% 1.6.14-*)
