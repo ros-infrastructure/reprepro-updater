@@ -175,7 +175,10 @@ class UpdaterConfiguration():
             self.method = self.config['method']
             self.name = self.config['name']
             self.suites = self.config['suites']
-            self.override_sources_required = self.config['override_sources_required']
+            if 'override_sources_required' in self.config:
+                self.override_sources_required = self.config['override_sources_required']
+            else:
+                self.override_sources_required = False
         except KeyError as e:
             self.__error(f"{e} key was not found in file {input_file}")
 
