@@ -318,7 +318,7 @@ class UpdaterManager():
             # 1. Create aptly mirrors from yaml configuration file
             self.__create_aptly_mirror(dist)
             # 2. Be sure mirror has all source packages unless the requirement is overridden.
-            if self.config.override_sources_required:
+            if not self.config.override_sources_required:
                 self.__log(f'Check all source packages exist')
                 if not self.aptly.exists_all_source_packages(Aptly.ArtifactType.MIRROR,
                                                              self.__get_mirror_name(dist)):
