@@ -3,4 +3,4 @@ method: https://packagecloud.io/dirk-thomas/vcstool/debian
 suites: [stretch, buster]
 component: main
 architectures: [i386, amd64, armhf, arm64, source]
-filter_formula: Package (% python3-vcstool, $Version (% 0.3.0*)
+filter_formula: Package (% python3-vcstool), $Version (% 0.3.0*)
