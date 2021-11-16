@@ -16,30 +16,30 @@ Package (% =libignition-common4-graphics) |\
 Package (% =libignition-common4-graphics-dev) |\
 Package (% =libignition-common4-profiler) |\
 Package (% =libignition-common4-profiler-dev)), \
-$Version (% 4.0.0-1~*)) |\
-(Package (% =ignition-edifice), $Version (% 1.0.0-1~*)) |\
+$Version (% 4.4.0*)) |\
+(Package (% =ignition-edifice), $Version (% 1.0.2*)) |\
 ((Package (% =ignition-fuel-tools6) |\
 Package (% =libignition-fuel-tools6) |\
 Package (% =libignition-fuel-tools6-dev)), \
-$Version (% 6.0.0-1~*)) |\
+$Version (% 6.1.0*)) |\
 ((Package (% =ignition-gazebo5) |\
 Package (% =libignition-gazebo5) |\
 Package (% =libignition-gazebo5-dev) |\
 Package (% =libignition-gazebo5-plugins)), \
-$Version (% 5.0.0-1~*)) |\
+$Version (% 5.3.0*)) |\
 ((Package (% =ignition-gui5) |\
 Package (% libignition-gui5) |\
 Package (% libignition-gui5-dev)), \
-$Version (% 5.0.0-1~*)) |\
+$Version (% 5.3.0*)) |\
 ((Package (% =ignition-launch4) |\
 Package (% =libignition-launch4) |\
 Package (% =libignition-launch4-dev)), \
-$Version (% 4.0.0-1~*)) |\
+$Version (% 4.1.0*)) |\
 ((Package (% =ignition-msgs7) |\
 Package (% =libignition-msgs7) |\
 Package (% =libignition-msgs7-dev) |\
 Package (% =libignition-msgs7-dbg)), \
-$Version (% 7.1.0-1~*)) |\
+$Version (% 7.2.0*)) |\
 ((Package (% =ignition-physics4) |\
 Package (% libignition-physics4) |\
 Package (% libignition-physics4-core-dev) |\
@@ -52,7 +52,7 @@ Package (% libignition-physics4-tpe) |\
 Package (% libignition-physics4-tpe-dev) |\
 Package (% libignition-physics4-tpelib) |\
 Package (% libignition-physics4-tpelib-dev)), \
-$Version (% 4.1.0-1~*)) |\
+$Version (% 4.3.0*)) |\
 ((Package (% =ignition-rendering5) |\
 Package (% =libignition-rendering5) |\
 Package (% =libignition-rendering5-core-dev) |\
@@ -61,7 +61,7 @@ Package (% =libignition-rendering5-ogre1) |\
 Package (% =libignition-rendering5-ogre1-dev) |\
 Package (% =libignition-rendering5-ogre2) |\
 Package (% =libignition-rendering5-ogre2-dev)), \
-$Version (% 5.0.0-1~*)) |\
+$Version (% 5.2.0*)) |\
 ((Package (% =ignition-sensors5) |\
 Package (% =libignition-sensors5) |\
 Package (% =libignition-sensors5-air-pressure) |\
@@ -90,7 +90,7 @@ Package (% =libignition-sensors5-rgbd-camera) |\
 Package (% =libignition-sensors5-rgbd-camera-dev) |\
 Package (% =libignition-sensors5-thermal-camera) |\
 Package (% =libignition-sensors5-thermal-camera-dev)), \
-$Version (% 5.0.0-1~*)) |\
+$Version (% 5.1.0*)) |\
 ((Package (% =ignition-transport10) |\
 Package (% =libignition-transport10) |\
 Package (% libignition-transport10-core-dev) |\
@@ -98,7 +98,7 @@ Package (% libignition-transport10-dbg) |\
 Package (% libignition-transport10-dev) |\
 Package (% libignition-transport10-log) |\
 Package (% libignition-transport10-log-dev)), \
-$Version (% 10.0.0-1~*)) |\
+$Version (% 10.1.0*)) |\
 ((Package (% =ignition-utils1) |\
 Package (% libignition-utils1) |\
 Package (% libignition-utils1-core-dev) |\
@@ -106,12 +106,12 @@ Package (% libignition-utils1-dbg) |\
 Package (% libignition-utils1-dev) |\
 Package (% libignition-utils1-cli) |\
 Package (% libignition-utils1-cli-dev)), \
-$Version (% 1.0.0-1~*)) |\
+$Version (% 1.1.0*)) |\
 ((Package (% =sdformat11) |\
 Package (% =libsdformat11) |\
 Package (% =libsdformat11-dbg) |\
 Package (% =libsdformat11-dev) |\
 Package (% =sdformat11-doc) |\
 Package (% =sdformat11-sdf)), \
-$Version (% 11.1.0-1~*)) \
+$Version (% 11.3.0*)) \
 "
