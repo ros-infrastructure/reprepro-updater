@@ -17,7 +17,7 @@ Package (% =libignition-common4-graphics-dev) |\
 Package (% =libignition-common4-profiler) |\
 Package (% =libignition-common4-profiler-dev)), \
 $Version (% 4.4.0-*)) |\
-(Package (% =ignition-edifice), $Version (% 1.0.2*)) |\
+(Package (% =ignition-edifice), $Version (% 1.0.2-*)) |\
 ((Package (% =ignition-fuel-tools6) |\
 Package (% =libignition-fuel-tools6) |\
 Package (% =libignition-fuel-tools6-dev)), \
