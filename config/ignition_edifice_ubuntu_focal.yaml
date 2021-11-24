@@ -46,6 +46,7 @@ Package (% libignition-physics4-core-dev) |\
 Package (% libignition-physics4-dartsim) |\
 Package (% libignition-physics4-dartsim-dev) |\
 Package (% libignition-physics4-dev) |\
+Package (% libignition-physics4-heightmap-dev) |\
 Package (% libignition-physics4-mesh-dev) |\
 Package (% libignition-physics4-sdf-dev) |\
 Package (% libignition-physics4-tpe) |\
