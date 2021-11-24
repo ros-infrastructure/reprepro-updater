@@ -42,10 +42,13 @@ Package (% =libignition-msgs7-dbg)), \
 $Version (% 7.2.0-*)) |\
 ((Package (% =ignition-physics4) |\
 Package (% libignition-physics4) |\
+Package (% libignition-physics4-bullet-dev) |\
+Package (% libignition-physics4-bullet) |\
 Package (% libignition-physics4-core-dev) |\
 Package (% libignition-physics4-dartsim) |\
 Package (% libignition-physics4-dartsim-dev) |\
 Package (% libignition-physics4-dev) |\
+Package (% libignition-physics4-heightmap-dev) |\
 Package (% libignition-physics4-mesh-dev) |\
 Package (% libignition-physics4-sdf-dev) |\
 Package (% libignition-physics4-tpe) |\
