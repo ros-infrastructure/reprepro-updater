@@ -5,7 +5,7 @@
 The ROS bootstrap repository is accessible via ssh to staff with public keys configured in [this private repository](https://github.com/osrf/chef-osrf/tree/latest/data_bags/staff_public_keys).
 Generally this access is reserved for staff who need to publish infrastructure packages directly to the bootstrap repository.
 
-Verify access using the command `ssh -T repos.ros.org /bin/true`, if the command exits without error then you have access.
+Verify access using the command `ssh -T apt@repos.ros.org /bin/true`, if the command exits without error then you have access.
 Otherwise you will see a "Permission denied" error.
 
 ## Importing packages from reprepro-updater configs.
