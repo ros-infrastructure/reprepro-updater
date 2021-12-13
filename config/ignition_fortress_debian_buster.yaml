@@ -13,11 +13,11 @@ $Version (% 7.0.0-*)) |\
 Package (% =libignition-gazebo6) |\
 Package (% =libignition-gazebo6-dev) |\
 Package (% =libignition-gazebo6-plugins)), \
-$Version (% 6.2.0-*)) |\
+$Version (% 6.3.0-*)) |\
 ((Package (% =ignition-gui6) |\
 Package (% libignition-gui6) |\
 Package (% libignition-gui6-dev)), \
-$Version (% 6.1.0-*)) |\
+$Version (% 6.2.0-*)) |\
 ((Package (% =ignition-launch5) |\
 Package (% =libignition-launch5) |\
 Package (% =libignition-launch5-dev)), \
@@ -29,10 +29,13 @@ Package (% =libignition-msgs8-dbg)), \
 $Version (% 8.1.0-*)) |\
 ((Package (% =ignition-physics5) |\
 Package (% libignition-physics5) |\
+Package (% libignition-physics5-bullet) |\
+Package (% libignition-physics5-bullet-dev) |\
 Package (% libignition-physics5-core-dev) |\
 Package (% libignition-physics5-dartsim) |\
 Package (% libignition-physics5-dartsim-dev) |\
 Package (% libignition-physics5-dev) |\
+Package (% libignition-physics5-heightmap-dev) |\
 Package (% libignition-physics5-mesh-dev) |\
 Package (% libignition-physics5-sdf-dev) |\
 Package (% libignition-physics5-tpe) |\
@@ -48,7 +51,7 @@ Package (% =libignition-rendering6-ogre1) |\
 Package (% =libignition-rendering6-ogre1-dev) |\
 Package (% =libignition-rendering6-ogre2) |\
 Package (% =libignition-rendering6-ogre2-dev)), \
-$Version (% 6.0.1-*)) |\
+$Version (% 6.1.0-*)) |\
 ((Package (% =ignition-sensors6) |\
 Package (% =libignition-sensors6) |\
 Package (% =libignition-sensors6-air-pressure) |\
@@ -61,6 +64,8 @@ Package (% =libignition-sensors6-core-dev) |\
 Package (% =libignition-sensors6-depth-camera) |\
 Package (% =libignition-sensors6-depth-camera-dev) |\
 Package (% =libignition-sensors6-dev) |\
+Package (% =libignition-sensors6-force-torque) |\
+Package (% =libignition-sensors6-force-torque-dev) |\
 Package (% =libignition-sensors6-gpu-lidar) |\
 Package (% =libignition-sensors6-gpu-lidar-dev) |\
 Package (% =libignition-sensors6-imu) |\
@@ -75,6 +80,8 @@ Package (% =libignition-sensors6-rendering) |\
 Package (% =libignition-sensors6-rendering-dev) |\
 Package (% =libignition-sensors6-rgbd-camera) |\
 Package (% =libignition-sensors6-rgbd-camera-dev) |\
+Package (% =libignition-sensors6-segmentation-camera) |\
+Package (% =libignition-sensors6-segmentation-camera-dev)), \
 Package (% =libignition-sensors6-thermal-camera) |\
 Package (% =libignition-sensors6-thermal-camera-dev)), \
 $Version (% 6.0.1-*)) |\
@@ -92,5 +99,5 @@ Package (% =libsdformat12-dbg) |\
 Package (% =libsdformat12-dev) |\
 Package (% =sdformat12-doc) |\
 Package (% =sdformat12-sdf)), \
-$Version (% 12.1.0-*)) \
+$Version (% 12.3.0-*)) \
 "
