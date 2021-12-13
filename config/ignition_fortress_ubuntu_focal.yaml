@@ -81,7 +81,7 @@ Package (% =libignition-sensors6-rendering-dev) |\
 Package (% =libignition-sensors6-rgbd-camera) |\
 Package (% =libignition-sensors6-rgbd-camera-dev) |\
 Package (% =libignition-sensors6-segmentation-camera) |\
-Package (% =libignition-sensors6-segmentation-camera-dev)) \
+Package (% =libignition-sensors6-segmentation-camera-dev)) |\
 Package (% =libignition-sensors6-thermal-camera) |\
 Package (% =libignition-sensors6-thermal-camera-dev)), \
 $Version (% 6.0.1-*)) |\
