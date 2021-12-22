@@ -2,7 +2,7 @@ name: ignition_citadel_gazebo11_debian_buster
 method: http://packages.osrfoundation.org/gazebo/debian-stable
 suites: [buster]
 component: main
-architectures: [amd64, source]
+architectures: [amd64, i386, armhf, arm64, source]
 filter_formula: "\
 ((Package (% =gazebo11) |\
 Package (% =gazebo11-common) |\
