@@ -131,18 +131,18 @@ class TestUpdaterManager(unittest.TestCase):
         self.__clean_up_aptly_test_artifacts()
 
     def test_basic_example_creation_from_scratch(self):
-        self.__setup__(['focal', 'groovy'], 'example.yaml')
+        self.__setup__(['focal', 'jammy'], 'example.yaml')
         self.assertTrue(self.manager.run())
         self.__assert_expected_repos_mirrors()
 
     def test_basic_example_creation_existing_mirror(self):
-        self.__setup__(['focal', 'groovy'], 'example.yaml')
+        self.__setup__(['focal', 'jammy'], 'example.yaml')
         [self.__add_mirror(name) for name in self.expected_mirrors_test_name]
         self.assertTrue(self.manager.run())
         self.__assert_expected_repos_mirrors()
 
     def test_basic_example_creation_existing_repo(self):
-        self.__setup__(['focal', 'groovy'], 'example.yaml')
+        self.__setup__(['focal', 'jammy'], 'example.yaml')
         [self.__add_repo(name) for name in self.expected_repos_test_name]
         self.assertTrue(self.manager.run())
         self.__assert_expected_repos_mirrors()

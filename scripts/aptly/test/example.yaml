@@ -1,7 +1,7 @@
 ---
 name: _reprepro_updater_test_suite_
 method: http://archive.ubuntu.com/ubuntu/
-suites: ['focal', 'groovy']
+suites: ['focal', 'jammy']
 component: main
 architectures: [i386, amd64, source]
 filter_formula: Package (% cmake* )
