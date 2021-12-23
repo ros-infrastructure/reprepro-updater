@@ -93,6 +93,10 @@ Package (% libignition-transport11-dev) |\
 Package (% libignition-transport11-log) |\
 Package (% libignition-transport11-log-dev)), \
 $Version (% 11.0.0-*)) |\
+((Package (% =ogre-2.2) |\
+Package (% =libogre-2.2) |\
+Package (% =libogre-2.2-dev)),
+$Version (% 2.2.5+*)) |\
 ((Package (% =sdformat12) |\
 Package (% =libsdformat12) |\
 Package (% =libsdformat12-dbg) |\
