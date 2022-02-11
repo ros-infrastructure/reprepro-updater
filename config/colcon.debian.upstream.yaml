@@ -4,6 +4,7 @@ suites: [stretch, buster]
 component: main
 architectures: [i386, amd64, armhf, arm64, source]
 filter_formula: "\
+(Package (% python3-colcon-alias), $Version (% 0.0.2*))|\
 (Package (% python3-colcon-argcomplete), $Version (% 0.3.3*))|\
 (Package (% python3-colcon-bash), $Version (% 0.4.2*))|\
 (Package (% python3-colcon-bazel), $Version (% 0.1.0*))|\
@@ -18,7 +19,7 @@ filter_formula: "\
 (Package (% python3-colcon-lcov-result), $Version (% 0.5.0*))|\
 (Package (% python3-colcon-library-path), $Version (% 0.2.1*))|\
 (Package (% python3-colcon-metadata), $Version (% 0.2.5*))|\
-(Package (% python3-colcon-mixin), $Version (% 0.2.1*))|\
+(Package (% python3-colcon-mixin), $Version (% 0.2.2*))|\
 (Package (% python3-colcon-notification), $Version (% 0.2.13*))|\
 (Package (% python3-colcon-output), $Version (% 0.2.12*))|\
 (Package (% python3-colcon-package-information), $Version (% 0.3.3*))|\
