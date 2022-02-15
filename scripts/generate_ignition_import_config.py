@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
-import urllib.request
+import argparse
 import sys
+import urllib.request
 
 from dataclasses import dataclass
 from typing import List, Union
@@ -41,10 +42,14 @@ class PackageGroup:
     packages: None|List[str]
     version_spec: str|None
 
-IGNITION_SUITE='fortress'
+parser = argparse.ArgumentParser(description='Generate import configurations for ignition packages.')
+parser.add_argument('--os', type=str)
+parser.add_argument('--suite', type=str)
+parser.add_argument('--ignition-suite', type=str)
+args = parser.parse_args(sys.argv[1:])
 
-PACKAGES = [
-        PackageGroup(f'ignition-{IGNITION_SUITE}', packages=None, version_spec=None),
+package_groups = [
+        PackageGroup(f'ignition-{args.ignition_suite}', packages=None, version_spec=None),
         PackageGroup('ignition-cmake2', packages=None, version_spec=None),
         PackageGroup('ignition-fuel-tools7', packages=None, version_spec=None),
         PackageGroup('ignition-gazebo6', packages=None, version_spec=None),
@@ -60,15 +65,12 @@ PACKAGES = [
         PackageGroup('sdformat12', packages=None, version_spec=None),
     ]
 
-OS = 'ubuntu'
-TARGET_REPO = f'http://packages.osrfoundation.org/gazebo/{OS}-stable'
-DISTS = ('focal', 'jammy', 'bullseye', 'buster')
-DISTRO = DISTS[1]
+target_repo = f'http://packages.osrfoundation.org/gazebo/{args.os}-stable'
 
-resp = urllib.request.urlopen(f'{TARGET_REPO}/dists/{DISTRO}/main/binary-amd64/Packages')
+resp = urllib.request.urlopen(f'{target_repo}/dists/{args.suite}/main/binary-amd64/Packages')
 packages_file = PackagesFile(resp.read().decode())
 
-for group in PACKAGES:
+for group in package_groups:
     expected_group_version = None
     group.packages = [pkg.name for pkg in packages_file.packages.values() if pkg.source_package == group.source_package]
     for p in group.packages:
@@ -82,13 +84,13 @@ for group in PACKAGES:
         group.version_spec = f'{package_ver}-*'
     group.packages.insert(0, group.source_package)
 
-print(f'name: ignition_{IGNITION_SUITE}_{OS}_{DISTRO}')
-print(f'method: {TARGET_REPO}')
-print(f'suites: [{DISTRO}]')
+print(f'name: ignition_{args.ignition_suite}_{args.os}_{args.suite}')
+print(f'method: {target_repo}')
+print(f'suites: [{args.suite}]')
 print('component: main')
-print('architectures: [amd64, i386, armhf, arm64, source]')
+print('architectures: [amd64, armhf, arm64, source]')
 print('filter_formula: "\\')
-printable_groups = [pgroup for pgroup in PACKAGES if pgroup.version_spec]
+printable_groups = [pgroup for pgroup in package_groups if pgroup.version_spec]
 for idx in range(0, len(printable_groups)):
     pgroup = printable_groups[idx]
     if not pgroup.version_spec:
@@ -100,5 +102,3 @@ for idx in range(0, len(printable_groups)):
         print(' |\\')
     else:
         print(' \\\n"')
-
-
