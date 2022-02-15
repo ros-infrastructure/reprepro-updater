@@ -58,10 +58,10 @@ PACKAGES = [
         PackageGroup('sdformat12', packages=None, version_spec=None),
     ]
 
-OS = 'ubuntu'
+OS = 'debian'
 TARGET_REPO = f'http://packages.osrfoundation.org/gazebo/{OS}-stable'
-DISTS = ('focal', 'jammy')
-DISTRO = DISTS[1]
+DISTS = ('focal', 'jammy', 'bullseye', 'buster')
+DISTRO = DISTS[2]
 
 resp = urllib.request.urlopen(f'{TARGET_REPO}/dists/{DISTRO}/main/binary-amd64/Packages')
 packages_file = PackagesFile(resp.read().decode())
@@ -93,7 +93,6 @@ for idx in range(0, len(printable_groups)):
         continue
     print('(', end='')
     print(' |\\\n '.join(f'(Package (= {name})' for name in pgroup.packages))
-    #'|\\\n'.join(f'Package (= x{name})' for name in pgroup.packages)
     print(f'), $Version (% {pgroup.version_spec})', end='')
     if idx != len(printable_groups) - 1:
         print(' |\\')
