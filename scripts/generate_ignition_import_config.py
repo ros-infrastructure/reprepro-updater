@@ -92,7 +92,7 @@ for idx in range(0, len(printable_groups)):
     if not pgroup.version_spec:
         continue
     print('(', end='')
-    print(' |\\\n '.join(f'(Package (= {name})' for name in pgroup.packages))
+    print(' |\\\n '.join(f'Package (= {name})' for name in pgroup.packages))
     print(f'), $Version (% {pgroup.version_spec})', end='')
     if idx != len(printable_groups) - 1:
         print(' |\\')
