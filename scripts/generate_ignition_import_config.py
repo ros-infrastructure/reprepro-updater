@@ -31,6 +31,8 @@ class PackagesFile:
                     current_source = None
                     current_version = None
                 current_package = line.split(': ')[1]
+        if current_package not in self.packages:
+            self.packages[current_package] = Package(current_package, current_source, current_version)
 
 
 @dataclass
