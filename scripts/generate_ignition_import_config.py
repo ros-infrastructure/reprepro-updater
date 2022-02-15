@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import re
 import sys
 import urllib.request
 
@@ -70,6 +71,7 @@ target_repo = f'http://packages.osrfoundation.org/gazebo/{args.os}-stable'
 resp = urllib.request.urlopen(f'{target_repo}/dists/{args.suite}/main/binary-amd64/Packages')
 packages_file = PackagesFile(resp.read().decode())
 
+version_spec_re = re.compile('(?P<version>[^-]+)-(?P<inc>\d+)(?P<rest>.*)')
 for group in package_groups:
     expected_group_version = None
     group.packages = [pkg.name for pkg in packages_file.packages.values() if pkg.source_package == group.source_package]
@@ -80,8 +82,10 @@ for group in package_groups:
             print(f'{p} in {group.packages[0]} does not match expected version {expected_group_version}', file=sys.stderr)
             exit(2)
     if expected_group_version:
-        package_ver, package_inc = expected_group_version.split('-')
-        group.version_spec = f'{package_ver}-*'
+        m = version_spec_re.match(expected_group_version)
+        version = m.group('version')
+        inc = m.group('inc')
+        group.version_spec = f'{version}-{inc}*'
     group.packages.insert(0, group.source_package)
 
 print(f'name: ignition_{args.ignition_suite}_{args.os}_{args.suite}')
