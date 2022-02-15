@@ -58,10 +58,10 @@ PACKAGES = [
         PackageGroup('sdformat12', packages=None, version_spec=None),
     ]
 
-OS = 'debian'
+OS = 'ubuntu'
 TARGET_REPO = f'http://packages.osrfoundation.org/gazebo/{OS}-stable'
 DISTS = ('focal', 'jammy', 'bullseye', 'buster')
-DISTRO = DISTS[2]
+DISTRO = DISTS[1]
 
 resp = urllib.request.urlopen(f'{TARGET_REPO}/dists/{DISTRO}/main/binary-amd64/Packages')
 packages_file = PackagesFile(resp.read().decode())
