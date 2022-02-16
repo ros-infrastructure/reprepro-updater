@@ -5,7 +5,7 @@ component: main
 architectures: [amd64, armhf, arm64, source]
 filter_formula: "\
 (Package (= ignition-cmake2) |\
- Package (= libignition-cmake2-dev)
+ Package (= libignition-cmake2-dev) \
 ), $Version (% 2.10.0-99*) |\
 (Package (= ignition-math6) |\
  Package (= libignition-math6) |\
@@ -13,6 +13,6 @@ filter_formula: "\
  Package (= libignition-math6-dev) |\
  Package (= libignition-math6-eigen3-dev) |\
  Package (= python3-ignition-math6) |\
- Package (= ruby-ignition-math6)
+ Package (= ruby-ignition-math6) \
 ), $Version (% 6.10.0-99*) \
 "
