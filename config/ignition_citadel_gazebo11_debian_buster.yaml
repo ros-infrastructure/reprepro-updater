@@ -14,7 +14,7 @@ Package (% =libgazebo11-dev)), \
 $Version (% 11.9.0-1~*)) |\
 ((Package (% =ignition-cmake2) |\
 Package (% =libignition-cmake2-dev)), \
-$Version (% 2.9.0-1~*)) |\
+$Version (% 2.11.0-1~*)) |\
 (Package (% =ignition-citadel), $Version (% 1.0.2*))|\
 ((Package (% =ignition-common3) |\
 Package (% =libignition-common3) |\
@@ -51,7 +51,7 @@ Package (% =libignition-math6) |\
 Package (% =libignition-math6-dbg) |\
 Package (% =libignition-math6-dev) |\
 Package (% =libignition-math6-eigen3-dev)), \
-$Version (% 6.9.2-1~*)) |\
+$Version (% 6.10.0-1~*)) |\
 ((Package (% =ignition-msgs5) |\
 Package (% =libignition-msgs5) |\
 Package (% =libignition-msgs5-dev) |\
