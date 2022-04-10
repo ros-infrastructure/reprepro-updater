@@ -29,7 +29,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Install aptly repo
         run: |
-            sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ED75B5A4483DA07C
+            wget -qO - https://www.aptly.info/pubkey.txt | sudo apt-key add -
             sudo bash -c "echo 'deb http://repo.aptly.info/ squeeze main' > /etc/apt/sources.list.d/aptly.list"
       - name: Install software
         run: |
