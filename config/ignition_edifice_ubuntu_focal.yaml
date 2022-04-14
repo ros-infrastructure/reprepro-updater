@@ -120,6 +120,13 @@ filter_formula: "\
  Package (= libignition-utils1-dbg) |\
  Package (= libignition-utils1-dev) \
 ), $Version (% 1.4.0-1*) |\
+(Package (= ogre-2.2) |\
+ Package (= blender-ogrexml-2.2) |\
+ Package (= libogre-2.2) |\
+ Package (= libogre-2.2-dev) |\
+ Package (= ogre-2.2-doc) |\
+ Package (= ogre-2.2-tools) \
+), $Version (% 2.2.5+20210824~ec3f70c-4*) |\
 (Package (= sdformat11) |\
  Package (= libsdformat11) |\
  Package (= libsdformat11-dbg) |\
