@@ -90,7 +90,8 @@ for group in package_groups:
         version = m.group('version')
         inc = m.group('inc')
         group.version_spec = f'{version}-{inc}*'
-    group.packages.insert(0, group.source_package)
+    if group.source_package not in group.packages:
+        group.packages.insert(0, group.source_package)
 
 print(f'name: ignition_{args.ignition_suite}_{args.os}_{args.suite}')
 print(f'method: {target_repo}')
