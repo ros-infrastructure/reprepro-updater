@@ -53,22 +53,64 @@ parser.add_argument('--suite', type=str)
 parser.add_argument('--ignition-suite', type=str)
 args = parser.parse_args(sys.argv[1:])
 
-package_groups = [
-        PackageGroup(f'ignition-{args.ignition_suite}', packages=None, version_spec=None),
+PACKAGE_GROUPS = {
+    'citadel': [
+        PackageGroup(f'ignition-citadel', packages=None, version_spec=None),
+        #PackageGroup('ignition-cmake2', packages=None, version_spec=None),
+        PackageGroup('ignition-common4', packages=None, version_spec=None),
+        PackageGroup('ignition-fuel-tools6', packages=None, version_spec=None),
+        PackageGroup('ignition-gazebo5', packages=None, version_spec=None),
+        PackageGroup('ignition-gui5', packages=None, version_spec=None),
+        PackageGroup('ignition-launch4', packages=None, version_spec=None),
+        #PackageGroup('ignition-math6', packages=None, version_spec=None),
+        PackageGroup('ignition-msgs7', packages=None, version_spec=None),
+        PackageGroup('ignition-physics4', packages=None, version_spec=None),
+        PackageGroup('ignition-rendering5', packages=None, version_spec=None),
+        PackageGroup('ignition-sensors5', packages=None, version_spec=None),
+        PackageGroup('ignition-transport10', packages=None, version_spec=None),
+        PackageGroup('ignition-utils1', packages=None, version_spec=None),
+        #PackageGroup('ogre-2.2', packages=None, version_spec=None),
+        PackageGroup('sdformat11', packages=None, version_spec=None),
+    ],
+    'edifice': [
+        PackageGroup(f'ignition-edifice', packages=None, version_spec=None),
         PackageGroup('ignition-cmake2', packages=None, version_spec=None),
-        PackageGroup('ignition-fuel-tools7', packages=None, version_spec=None),
-        PackageGroup('ignition-gazebo6', packages=None, version_spec=None),
-        PackageGroup('ignition-gui6', packages=None, version_spec=None),
-        PackageGroup('ignition-launch5', packages=None, version_spec=None),
+        PackageGroup('ignition-common4', packages=None, version_spec=None),
+        PackageGroup('ignition-fuel-tools6', packages=None, version_spec=None),
+        PackageGroup('ignition-gazebo5', packages=None, version_spec=None),
+        PackageGroup('ignition-gui5', packages=None, version_spec=None),
+        PackageGroup('ignition-launch4', packages=None, version_spec=None),
         PackageGroup('ignition-math6', packages=None, version_spec=None),
-        PackageGroup('ignition-msgs8', packages=None, version_spec=None),
-        PackageGroup('ignition-physics5', packages=None, version_spec=None),
-        PackageGroup('ignition-rendering6', packages=None, version_spec=None),
-        PackageGroup('ignition-sensors6', packages=None, version_spec=None),
-        PackageGroup('ignition-transport11', packages=None, version_spec=None),
+        PackageGroup('ignition-msgs7', packages=None, version_spec=None),
+        PackageGroup('ignition-physics4', packages=None, version_spec=None),
+        PackageGroup('ignition-rendering5', packages=None, version_spec=None),
+        PackageGroup('ignition-sensors5', packages=None, version_spec=None),
+        PackageGroup('ignition-transport10', packages=None, version_spec=None),
+        PackageGroup('ignition-utils1', skip_packages=['libignition-utils-dev'], packages=None, version_spec=None),
         PackageGroup('ogre-2.2', packages=None, version_spec=None),
-        PackageGroup('sdformat12', packages=None, version_spec=None),
+        PackageGroup('sdformat11', packages=None, version_spec=None),
+    ],
+    'fortress': [
+        PackageGroup(f'ignition-fortress', packages=None, version_spec=None),
+        #PackageGroup('ignition-cmake2', packages=None, version_spec=None),
+        PackageGroup('ignition-common4', packages=None, version_spec=None),
+        PackageGroup('ignition-fuel-tools6', packages=None, version_spec=None),
+        PackageGroup('ignition-gazebo5', packages=None, version_spec=None),
+        PackageGroup('ignition-gui5', packages=None, version_spec=None),
+        PackageGroup('ignition-launch4', packages=None, version_spec=None),
+        PackageGroup('ignition-math6', packages=None, version_spec=None),
+        PackageGroup('ignition-msgs7', packages=None, version_spec=None),
+        PackageGroup('ignition-physics4', packages=None, version_spec=None),
+        PackageGroup('ignition-rendering5', packages=None, version_spec=None),
+        PackageGroup('ignition-sensors5', packages=None, version_spec=None),
+        PackageGroup('ignition-transport10', packages=None, version_spec=None),
+        PackageGroup('ignition-utils1', packages=None, version_spec=None),
+        #PackageGroup('ogre-2.2', packages=None, version_spec=None),
+        PackageGroup('sdformat11', packages=None, version_spec=None),
     ]
+}
+
+package_groups = PACKAGE_GROUPS[args.ignition_suite]
 
 target_repo = f'http://packages.osrfoundation.org/gazebo/{args.os}-stable'
 
