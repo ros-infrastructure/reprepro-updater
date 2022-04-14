@@ -28,7 +28,10 @@ class PackagesFile:
                 current_version = line.split(': ')[1]
             if line.startswith('Package: '):
                 if current_package:
-                    assert current_version and current_source
+                    # Packages without a Source have source name = package name.
+                    if current_source is None:
+                        current_source = current_package
+                    assert current_version
                     self.packages[current_package] = Package(current_package, current_source, current_version)
                     current_source = None
                     current_version = None
