@@ -5,7 +5,7 @@ import re
 import sys
 import urllib.request
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List, Union
 
 
@@ -42,6 +42,7 @@ class PackageGroup:
     source_package: str
     packages: None|List[str]
     version_spec: str|None
+    skip_packages: List[str] = field(default_factory=list)
 
 parser = argparse.ArgumentParser(description='Generate import configurations for ignition packages.')
 parser.add_argument('--os', type=str)
@@ -74,7 +75,7 @@ packages_file = PackagesFile(resp.read().decode())
 version_spec_re = re.compile('(?P<version>[^-]+)-(?P<inc>\d+)(?P<rest>.*)')
 for group in package_groups:
     expected_group_version = None
-    group.packages = [pkg.name for pkg in packages_file.packages.values() if pkg.source_package == group.source_package]
+    group.packages = [pkg.name for pkg in packages_file.packages.values() if pkg.source_package == group.source_package and pkg.name not in group.skip_packages]
     for p in group.packages:
         if not expected_group_version:
             expected_group_version = packages_file.packages[p].version
