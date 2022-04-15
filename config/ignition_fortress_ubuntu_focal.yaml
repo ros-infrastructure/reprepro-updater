@@ -69,6 +69,11 @@ filter_formula: "\
  Package (= libignition-physics5-tpelib) |\
  Package (= libignition-physics5-tpelib-dev) \
 ), $Version (% 5.1.0-2*) |\
+(Package (= ignition-plugin) |\
+ Package (= libignition-plugin) |\
+ Package (= libignition-plugin-dbg) |\
+ Package (= libignition-plugin-dev) \
+), $Version (% 1.2.1-1*) |\
 (Package (= ignition-rendering6) |\
  Package (= libignition-rendering6) |\
  Package (= libignition-rendering6-core-dev) |\
@@ -113,6 +118,9 @@ filter_formula: "\
  Package (= libignition-sensors6-thermal-camera) |\
  Package (= libignition-sensors6-thermal-camera-dev) \
 ), $Version (% 6.3.0-2*) |\
+(Package (= ignition-tools) |\
+ Package (= libignition-tools-dev) \
+), $Version (% 1.4.1-1*) |\
 (Package (= ignition-transport11) |\
  Package (= libignition-transport11) |\
  Package (= libignition-transport11-core-dev) |\
