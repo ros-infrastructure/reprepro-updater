@@ -27,6 +27,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
       - name: Install aptly repo
         run: |
             wget -qO - https://www.aptly.info/pubkey.txt | sudo apt-key add -
@@ -74,13 +76,16 @@ jobs:
           _DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_: ${{ matrix.show_debug_cmds }}
           _ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_: true
       # CONFIG FILE TESTER
-      - id: files
+      - name: Idenfify files changed in this PR.
+        id: files
         if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
-        uses: jitterbit/get-changed-files@v1
+        run: |
+          git diff --name-only origin/${{ github.base_ref }}..origin/${{ github.head_ref }}
+          echo "::set-output name=changed-files::$(git diff --name-only origin/${{ github.base_ref }}..origin/${{ github.head_ref }})"
       - name: Run testing on changed config files
         if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
         run: |
-          for changed_file in ${{ steps.files.outputs.all }}; do
+          for changed_file in ${{ steps.files.outputs.changed-files }}; do
             if [[ ${changed_file} != ${changed_file/config\/*.yaml} ]]; then
               echo "+ Detected config file: ${changed_file}."
               python3 scripts/aptly/aptly_importer.py --ignore-signatures --only-mirror-creation ${changed_file}
