@@ -138,7 +138,11 @@ for group in package_groups:
     if group.source_package not in group.packages:
         group.packages.insert(0, group.source_package)
 
-print(f'name: ignition_{args.ignition_suite}_{args.os}_{args.suite}')
+gz_classic = ''
+if args.ignition_suite == 'citadel':
+    gz_classic = '_gazebo11'
+
+print(f'name: ignition_{args.ignition_suite}{gz_classic}_{args.os}_{args.suite}')
 print(f'method: {target_repo}')
 print(f'suites: [{args.suite}]')
 print('component: main')
