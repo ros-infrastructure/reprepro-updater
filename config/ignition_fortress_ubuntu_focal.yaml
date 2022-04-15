@@ -4,104 +4,105 @@ suites: [focal]
 component: main
 architectures: [amd64, i386, armhf, arm64, source]
 filter_formula: "\
-((Package (% =ignition-fortress), $Version (% 1.0.2-*))) |\
-((Package (% =ignition-fuel-tools7) |\
-Package (% =libignition-fuel-tools7) |\
-Package (% =libignition-fuel-tools7-dev)), \
-$Version (% 7.0.0-*)) |\
-((Package (% =ignition-gazebo6) |\
-Package (% =libignition-gazebo6) |\
-Package (% =libignition-gazebo6-dev) |\
-Package (% =libignition-gazebo6-plugins)), \
-$Version (% 6.3.0-*)) |\
-((Package (% =ignition-gui6) |\
-Package (% libignition-gui6) |\
-Package (% libignition-gui6-dev)), \
-$Version (% 6.2.0-*)) |\
-((Package (% =ignition-launch5) |\
-Package (% =libignition-launch5) |\
-Package (% =libignition-launch5-dev)), \
-$Version (% 5.0.0-*)) |\
-((Package (% =ignition-msgs8) |\
-Package (% =libignition-msgs8) |\
-Package (% =libignition-msgs8-dev) |\
-Package (% =libignition-msgs8-dbg)), \
-$Version (% 8.1.0-*)) |\
-((Package (% =ignition-physics5) |\
-Package (% libignition-physics5) |\
-Package (% libignition-physics5-bullet) |\
-Package (% libignition-physics5-bullet-dev) |\
-Package (% libignition-physics5-core-dev) |\
-Package (% libignition-physics5-dartsim) |\
-Package (% libignition-physics5-dartsim-dev) |\
-Package (% libignition-physics5-dev) |\
-Package (% libignition-physics5-heightmap-dev) |\
-Package (% libignition-physics5-mesh-dev) |\
-Package (% libignition-physics5-sdf-dev) |\
-Package (% libignition-physics5-tpe) |\
-Package (% libignition-physics5-tpe-dev) |\
-Package (% libignition-physics5-tpelib) |\
-Package (% libignition-physics5-tpelib-dev)), \
-$Version (% 5.1.0-*)) |\
-((Package (% =ignition-rendering6) |\
-Package (% =libignition-rendering6) |\
-Package (% =libignition-rendering6-core-dev) |\
-Package (% =libignition-rendering6-dev) |\
-Package (% =libignition-rendering6-ogre1) |\
-Package (% =libignition-rendering6-ogre1-dev) |\
-Package (% =libignition-rendering6-ogre2) |\
-Package (% =libignition-rendering6-ogre2-dev)), \
-$Version (% 6.1.0-*)) |\
-((Package (% =ignition-sensors6) |\
-Package (% =libignition-sensors6) |\
-Package (% =libignition-sensors6-air-pressure) |\
-Package (% =libignition-sensors6-air-pressure-dev) |\
-Package (% =libignition-sensors6-altimeter) |\
-Package (% =libignition-sensors6-altimeter-dev) |\
-Package (% =libignition-sensors6-camera) |\
-Package (% =libignition-sensors6-camera-dev) |\
-Package (% =libignition-sensors6-core-dev) |\
-Package (% =libignition-sensors6-depth-camera) |\
-Package (% =libignition-sensors6-depth-camera-dev) |\
-Package (% =libignition-sensors6-dev) |\
-Package (% =libignition-sensors6-force-torque) |\
-Package (% =libignition-sensors6-force-torque-dev) |\
-Package (% =libignition-sensors6-gpu-lidar) |\
-Package (% =libignition-sensors6-gpu-lidar-dev) |\
-Package (% =libignition-sensors6-imu) |\
-Package (% =libignition-sensors6-imu-dev) |\
-Package (% =libignition-sensors6-lidar) |\
-Package (% =libignition-sensors6-lidar-dev) |\
-Package (% =libignition-sensors6-logical-camera) |\
-Package (% =libignition-sensors6-logical-camera-dev) |\
-Package (% =libignition-sensors6-magnetometer) |\
-Package (% =libignition-sensors6-magnetometer-dev) |\
-Package (% =libignition-sensors6-rendering) |\
-Package (% =libignition-sensors6-rendering-dev) |\
-Package (% =libignition-sensors6-rgbd-camera) |\
-Package (% =libignition-sensors6-rgbd-camera-dev) |\
-Package (% =libignition-sensors6-segmentation-camera) |\
-Package (% =libignition-sensors6-segmentation-camera-dev) |\
-Package (% =libignition-sensors6-thermal-camera) |\
-Package (% =libignition-sensors6-thermal-camera-dev)), \
-$Version (% 6.0.1-*)) |\
-((Package (% =ignition-transport11) |\
-Package (% =libignition-transport11) |\
-Package (% libignition-transport11-core-dev) |\
-Package (% libignition-transport11-dbg) |\
-Package (% libignition-transport11-dev) |\
-Package (% libignition-transport11-log) |\
-Package (% libignition-transport11-log-dev)), \
-$Version (% 11.0.0-*)) |\
-((Package (% =ogre-2.2) |\
-Package (% =libogre-2.2) |\
-Package (% =libogre-2.2-dev)),
-$Version (% 2.2.5+*)) |\
-((Package (% =sdformat12) |\
-Package (% =libsdformat12) |\
-Package (% =libsdformat12-dbg) |\
-Package (% =libsdformat12-dev) |\
-Package (% =sdformat12-doc) |\
-Package (% =sdformat12-sdf)), \
-$Version (% 12.3.0-*)) \
+(Package (= ignition-fortress
+), $Version (% 1.0.2-*) |\
+(Package (= ignition-fuel-tools7) |\
+ Package (= libignition-fuel-tools7) |\
+ Package (= libignition-fuel-tools7-dev) \
+), $Version (% 7.0.0-*) |\
+(Package (= ignition-gazebo6) |\
+ Package (= libignition-gazebo6) |\
+ Package (= libignition-gazebo6-dev) |\
+ Package (= libignition-gazebo6-plugins) \
+), $Version (% 6.3.0-*) |\
+(Package (= ignition-gui6) |\
+ Package (% libignition-gui6) |\
+ Package (% libignition-gui6-dev) \
+), $Version (% 6.2.0-*) |\
+(Package (= ignition-launch5) |\
+ Package (= libignition-launch5) |\
+ Package (= libignition-launch5-dev) \
+), $Version (% 5.0.0-*) |\
+(Package (= ignition-msgs8) |\
+ Package (= libignition-msgs8) |\
+ Package (= libignition-msgs8-dev) |\
+ Package (= libignition-msgs8-dbg) \
+), $Version (% 8.1.0-*) |\
+(Package (= ignition-physics5) |\
+ Package (% libignition-physics5) |\
+ Package (% libignition-physics5-bullet) |\
+ Package (% libignition-physics5-bullet-dev) |\
+ Package (% libignition-physics5-core-dev) |\
+ Package (% libignition-physics5-dartsim) |\
+ Package (% libignition-physics5-dartsim-dev) |\
+ Package (% libignition-physics5-dev) |\
+ Package (% libignition-physics5-heightmap-dev) |\
+ Package (% libignition-physics5-mesh-dev) |\
+ Package (% libignition-physics5-sdf-dev) |\
+ Package (% libignition-physics5-tpe) |\
+ Package (% libignition-physics5-tpe-dev) |\
+ Package (% libignition-physics5-tpelib) |\
+ Package (% libignition-physics5-tpelib-dev) \
+), $Version (% 5.1.0-*) |\
+(Package (= ignition-rendering6) |\
+ Package (= libignition-rendering6) |\
+ Package (= libignition-rendering6-core-dev) |\
+ Package (= libignition-rendering6-dev) |\
+ Package (= libignition-rendering6-ogre1) |\
+ Package (= libignition-rendering6-ogre1-dev) |\
+ Package (= libignition-rendering6-ogre2) |\
+ Package (= libignition-rendering6-ogre2-dev) \
+), $Version (% 6.1.0-*) |\
+(Package (= ignition-sensors6) |\
+ Package (= libignition-sensors6) |\
+ Package (= libignition-sensors6-air-pressure) |\
+ Package (= libignition-sensors6-air-pressure-dev) |\
+ Package (= libignition-sensors6-altimeter) |\
+ Package (= libignition-sensors6-altimeter-dev) |\
+ Package (= libignition-sensors6-camera) |\
+ Package (= libignition-sensors6-camera-dev) |\
+ Package (= libignition-sensors6-core-dev) |\
+ Package (= libignition-sensors6-depth-camera) |\
+ Package (= libignition-sensors6-depth-camera-dev) |\
+ Package (= libignition-sensors6-dev) |\
+ Package (= libignition-sensors6-force-torque) |\
+ Package (= libignition-sensors6-force-torque-dev) |\
+ Package (= libignition-sensors6-gpu-lidar) |\
+ Package (= libignition-sensors6-gpu-lidar-dev) |\
+ Package (= libignition-sensors6-imu) |\
+ Package (= libignition-sensors6-imu-dev) |\
+ Package (= libignition-sensors6-lidar) |\
+ Package (= libignition-sensors6-lidar-dev) |\
+ Package (= libignition-sensors6-logical-camera) |\
+ Package (= libignition-sensors6-logical-camera-dev) |\
+ Package (= libignition-sensors6-magnetometer) |\
+ Package (= libignition-sensors6-magnetometer-dev) |\
+ Package (= libignition-sensors6-rendering) |\
+ Package (= libignition-sensors6-rendering-dev) |\
+ Package (= libignition-sensors6-rgbd-camera) |\
+ Package (= libignition-sensors6-rgbd-camera-dev) |\
+ Package (= libignition-sensors6-segmentation-camera) |\
+ Package (= libignition-sensors6-segmentation-camera-dev) |\
+ Package (= libignition-sensors6-thermal-camera) |\
+ Package (= libignition-sensors6-thermal-camera-dev) \
+), $Version (% 6.0.1-*) |\
+(Package (= ignition-transport11) |\
+ Package (= libignition-transport11) |\
+ Package (% libignition-transport11-core-dev) |\
+ Package (% libignition-transport11-dbg) |\
+ Package (% libignition-transport11-dev) |\
+ Package (% libignition-transport11-log) |\
+ Package (% libignition-transport11-log-dev) \
+), $Version (% 11.0.0-*) |\
+(Package (= ogre-2.2) |\
+ Package (= libogre-2.2) |\
+ Package (= libogre-2.2-dev) \
+), $Version (% 2.2.5+*) |\
+(Package (= sdformat12) |\
+ Package (= libsdformat12) |\
+ Package (= libsdformat12-dbg) |\
+ Package (= libsdformat12-dev) |\
+ Package (= sdformat12-doc) |\
+ Package (= sdformat12-sdf) \
+), $Version (% 12.3.0-*) \
 "
