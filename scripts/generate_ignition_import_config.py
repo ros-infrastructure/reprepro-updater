@@ -148,6 +148,9 @@ print(f'suites: [{args.suite}]')
 print('component: main')
 print('architectures: [amd64, armhf, arm64, source]')
 print('filter_formula: "\\')
+for pgroup in package_groups:
+    if pgroup.version_spec is None:
+        print(f'WARNING: Unable to generate package info for {pgroup.source_package}', file=sys.stderr)
 printable_groups = [pgroup for pgroup in package_groups if pgroup.version_spec]
 for idx in range(0, len(printable_groups)):
     pgroup = printable_groups[idx]
