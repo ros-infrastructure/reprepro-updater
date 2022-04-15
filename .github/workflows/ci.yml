@@ -81,7 +81,7 @@ jobs:
         if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
         run: |
           git diff --name-only origin/${{ github.base_ref }}..origin/${{ github.head_ref }}
-          echo "::set-output name=changed-files::$(git diff --name-only origin/${{ github.base_ref }}..origin/${{ github.head_ref }})"
+          echo "::set-output name=changed-files::$(git diff --name-only origin/${{ github.base_ref }}..origin/${{ github.head_ref }}| tr '\n' ' ')"
       - name: Run testing on changed config files
         if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
         run: |
