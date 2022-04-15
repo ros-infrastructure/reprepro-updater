@@ -15,7 +15,8 @@ filter_formula: "\
 (Package (= ignition-cmake2) |\
  Package (= libignition-cmake2-dev) \
 ), $Version (% 2.9.0-1~*) |\
-(Package (= ignition-citadel), $Version (% 1.0.2*))|\
+(Package (= ignition-citadel)
+), $Version (% 1.0.2*) |\
 (Package (= ignition-common3) |\
  Package (= libignition-common3) |\
  Package (= libignition-common3-av) |\
@@ -125,7 +126,7 @@ filter_formula: "\
 ), $Version (% 8.2.1-1~*) |\
 (Package (= ogre-2.1) |\
  Package (= libogre-2.1) |\
- Package (= libogre-2.1-dev)),
+ Package (= libogre-2.1-dev)
 ), $Version (% 2.0.9999~20180616~06a386f-3osrf~*) |\
 (Package (= sdformat9) |\
  Package (= libsdformat9) |\
@@ -133,5 +134,5 @@ filter_formula: "\
  Package (= libsdformat9-dev) |\
  Package (= sdformat9-doc) |\
  Package (= sdformat9-sdf) \
-), $Version (% 9.7.0-1~*)) \
+), $Version (% 9.7.0-1~*) \
 "
