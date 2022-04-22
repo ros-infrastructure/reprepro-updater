@@ -116,6 +116,9 @@ filter_formula: "\
  Package (= libignition-sensors3-thermal-camera) |\
  Package (= libignition-sensors3-thermal-camera-dev) \
 ), $Version (% 3.3.0-1*) |\
+(Package (= ignition-tools) |\
+ Package (= libignition-tools-dev) \
+), $Version (% 1.4.1-1*) |\
 (Package (= ignition-transport8) |\
  Package (= libignition-transport8) |\
  Package (= libignition-transport8-core-dev) |\
