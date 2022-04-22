@@ -2,136 +2,143 @@ name: ignition_citadel_gazebo11_ubuntu_focal
 method: http://packages.osrfoundation.org/gazebo/ubuntu-stable
 suites: [focal]
 component: main
-architectures: [amd64, i386, armhf, arm64, source]
+architectures: [amd64, armhf, arm64, source]
 filter_formula: "\
-((Package (% =gazebo11) |\
-Package (% =gazebo11-common) |\
-Package (% =gazebo11-dbg) |\
-Package (% =gazebo11-doc) |\
-Package (% =gazebo11-plugin-base) |\
-Package (% =libgazebo11) |\
-Package (% =libgazebo11-dev)), \
-$Version (% 11.9.0-1~*)) |\
-((Package (% =ignition-cmake2) |\
-Package (% =libignition-cmake2-dev)), \
-$Version (% 2.9.0-1~*)) |\
-(Package (% =ignition-citadel), $Version (% 1.0.2*))|\
-((Package (% =ignition-common3) |\
-Package (% =libignition-common3) |\
-Package (% =libignition-common3-av) |\
-Package (% =libignition-common3-av-dev) |\
-Package (% =libignition-common3-core-dev) |\
-Package (% =libignition-common3-dev) |\
-Package (% =libignition-common3-events) |\
-Package (% =libignition-common3-events-dev) |\
-Package (% =libignition-common3-graphics) |\
-Package (% =libignition-common3-graphics-dev) |\
-Package (% =libignition-common3-profiler) |\
-Package (% =libignition-common3-profiler-dev)), \
-$Version (% 3.14.0-1~*)) |\
-((Package (% =ignition-fuel-tools4) |\
-Package (% =libignition-fuel-tools4) |\
-Package (% =libignition-fuel-tools4-dev)), \
-$Version (% 4.4.0-1~*)) |\
-((Package (% =ignition-gazebo3) |\
-Package (% =libignition-gazebo3) |\
-Package (% =libignition-gazebo3-dev) |\
-Package (% =libignition-gazebo3-plugins)), \
-$Version (% 3.12.0-1~*)) |\
-((Package (% =ignition-gui3) |\
-Package (% =libignition-gui3) |\
-Package (% =libignition-gui3-dev)), \
-$Version (% 3.8.0-1~*)) |\
-((Package (% =ignition-launch2) |\
-Package (% =libignition-launch2) |\
-Package (% =libignition-launch2-dev)), \
-$Version (% 2.2.2-1~*)) |\
-((Package (% =ignition-math6) |\
-Package (% =libignition-math6) |\
-Package (% =libignition-math6-dbg) |\
-Package (% =libignition-math6-dev) |\
-Package (% =libignition-math6-eigen3-dev)), \
-$Version (% 6.9.2-1~*)) |\
-((Package (% =ignition-msgs5) |\
-Package (% =libignition-msgs5) |\
-Package (% =libignition-msgs5-dev) |\
-Package (% =libignition-msgs5-dbg)), \
-$Version (% 5.8.1-1~*)) |\
-((Package (% =ignition-physics2) |\
-Package (% =libignition-physics2) |\
-Package (% =libignition-physics2-core-dev) |\
-Package (% =libignition-physics2-dartsim) |\
-Package (% =libignition-physics2-dartsim-dev) |\
-Package (% =libignition-physics2-dev) |\
-Package (% =libignition-physics2-mesh-dev) |\
-Package (% =libignition-physics2-sdf-dev) |\
-Package (% =libignition-physics2-tpe) |\
-Package (% =libignition-physics2-tpe-dev) |\
-Package (% =libignition-physics2-tpelib) |\
-Package (% =libignition-physics2-tpelib-dev)), \
-$Version (% 2.5.0-1~*)) |\
-((Package (% =ignition-plugin) |\
-Package (% =libignition-plugin) |\
-Package (% =libignition-plugin-dev)), \
-$Version (% 1.2.1-1~*)) |\
-((Package (% =ignition-rendering3) |\
-Package (% =libignition-rendering3) |\
-Package (% =libignition-rendering3-core-dev) |\
-Package (% =libignition-rendering3-dev) |\
-Package (% =libignition-rendering3-ogre1) |\
-Package (% =libignition-rendering3-ogre1-dev) |\
-Package (% =libignition-rendering3-ogre2) |\
-Package (% =libignition-rendering3-ogre2-dev)), \
-$Version (% 3.6.0-1~*)) |\
-((Package (% =ignition-sensors3) |\
-Package (% =libignition-sensors3) |\
-Package (% =libignition-sensors3-air-pressure) |\
-Package (% =libignition-sensors3-air-pressure-dev) |\
-Package (% =libignition-sensors3-altimeter) |\
-Package (% =libignition-sensors3-altimeter-dev) |\
-Package (% =libignition-sensors3-camera) |\
-Package (% =libignition-sensors3-camera-dev) |\
-Package (% =libignition-sensors3-core-dev) |\
-Package (% =libignition-sensors3-depth-camera) |\
-Package (% =libignition-sensors3-depth-camera-dev) |\
-Package (% =libignition-sensors3-dev) |\
-Package (% =libignition-sensors3-gpu-lidar) |\
-Package (% =libignition-sensors3-gpu-lidar-dev) |\
-Package (% =libignition-sensors3-imu) |\
-Package (% =libignition-sensors3-imu-dev) |\
-Package (% =libignition-sensors3-lidar) |\
-Package (% =libignition-sensors3-lidar-dev) |\
-Package (% =libignition-sensors3-logical-camera) |\
-Package (% =libignition-sensors3-logical-camera-dev) |\
-Package (% =libignition-sensors3-magnetometer) |\
-Package (% =libignition-sensors3-magnetometer-dev) |\
-Package (% =libignition-sensors3-rendering) |\
-Package (% =libignition-sensors3-rendering-dev) |\
-Package (% =libignition-sensors3-rgbd-camera) |\
-Package (% =libignition-sensors3-rgbd-camera-dev) |\
-Package (% =libignition-sensors3-thermal-camera) |\
-Package (% =libignition-sensors3-thermal-camera-dev)), \
-$Version (% 3.3.0-1~*)) |\
-((Package (% =ignition-tools) |\
-Package (% =libignition-tools-dev)), \
-$Version (% 1.4.1-1~*)) |\
-((Package (% =ignition-transport8) |\
-Package (% =libignition-transport8) |\
-Package (% =libignition-transport8-core-dev) |\
-Package (% =libignition-transport8-dbg) |\
-Package (% =libignition-transport8-dev) |\
-Package (% =libignition-transport8-log) |\
-Package (% =libignition-transport8-log-dev)), \
-$Version (% 8.2.1-1~*)) |\
-((Package (% =ogre-2.1) |\
-Package (% =libogre-2.1) |\
-Package (% =libogre-2.1-dev)),
-$Version (% 2.0.9999~20180616~06a386f-3osrf~*)) |\
-((Package (% =sdformat9) |\
-Package (% =libsdformat9) |\
-Package (% =libsdformat9-dbg) |\
-Package (% =libsdformat9-dev) |\
-Package (% =sdformat9-doc) |\
-Package (% =sdformat9-sdf)), \
-$Version (% 9.7.0-1~*)) \
+(Package (= gazebo11) |\
+ Package (= gazebo11-common) |\
+ Package (= gazebo11-dbg) |\
+ Package (= gazebo11-doc) |\
+ Package (= gazebo11-plugin-base) |\
+ Package (= libgazebo11) |\
+ Package (= libgazebo11-dev) \
+), $Version (% 11.10.2-1*) |\
+(Package (= ignition-citadel) \
+), $Version (% 1.0.2-1*) |\
+(Package (= ignition-cmake2) |\
+ Package (= libignition-cmake2-dev) \
+), $Version (% 2.12.1-1*) |\
+(Package (= ignition-common3) |\
+ Package (= libignition-common3) |\
+ Package (= libignition-common3-av) |\
+ Package (= libignition-common3-av-dev) |\
+ Package (= libignition-common3-core-dev) |\
+ Package (= libignition-common3-dev) |\
+ Package (= libignition-common3-events) |\
+ Package (= libignition-common3-events-dev) |\
+ Package (= libignition-common3-graphics) |\
+ Package (= libignition-common3-graphics-dev) |\
+ Package (= libignition-common3-profiler) |\
+ Package (= libignition-common3-profiler-dev) \
+), $Version (% 3.14.0-1*) |\
+(Package (= ignition-fuel-tools4) |\
+ Package (= libignition-fuel-tools4) |\
+ Package (= libignition-fuel-tools4-dev) \
+), $Version (% 4.4.0-1*) |\
+(Package (= ignition-gazebo3) |\
+ Package (= libignition-gazebo3) |\
+ Package (= libignition-gazebo3-dbg) |\
+ Package (= libignition-gazebo3-dev) |\
+ Package (= libignition-gazebo3-plugins) \
+), $Version (% 3.12.0-1*) |\
+(Package (= ignition-gui3) |\
+ Package (= libignition-gui3) |\
+ Package (= libignition-gui3-dev) \
+), $Version (% 3.9.0-1*) |\
+(Package (= ignition-launch2) |\
+ Package (= libignition-launch2) |\
+ Package (= libignition-launch2-dev) \
+), $Version (% 2.2.2-1*) |\
+(Package (= ignition-math6) |\
+ Package (= libignition-math6) |\
+ Package (= libignition-math6-dbg) |\
+ Package (= libignition-math6-dev) |\
+ Package (= libignition-math6-eigen3-dev) |\
+ Package (= python3-ignition-math6) |\
+ Package (= ruby-ignition-math6) \
+), $Version (% 6.10.0-1*) |\
+(Package (= ignition-msgs5) |\
+ Package (= libignition-msgs5) |\
+ Package (= libignition-msgs5-dev) \
+), $Version (% 5.9.0-1*) |\
+(Package (= ignition-physics2) |\
+ Package (= libignition-physics2) |\
+ Package (= libignition-physics2-core-dev) |\
+ Package (= libignition-physics2-dartsim) |\
+ Package (= libignition-physics2-dartsim-dev) |\
+ Package (= libignition-physics2-dev) |\
+ Package (= libignition-physics2-mesh-dev) |\
+ Package (= libignition-physics2-sdf-dev) |\
+ Package (= libignition-physics2-tpe) |\
+ Package (= libignition-physics2-tpe-dev) |\
+ Package (= libignition-physics2-tpelib) |\
+ Package (= libignition-physics2-tpelib-dev) \
+), $Version (% 2.5.0-1*) |\
+(Package (= ignition-plugin) |\
+ Package (= libignition-plugin) |\
+ Package (= libignition-plugin-dbg) |\
+ Package (= libignition-plugin-dev) \
+), $Version (% 1.2.1-1*) |\
+(Package (= ignition-rendering3) |\
+ Package (= libignition-rendering3) |\
+ Package (= libignition-rendering3-core-dev) |\
+ Package (= libignition-rendering3-dev) |\
+ Package (= libignition-rendering3-ogre1) |\
+ Package (= libignition-rendering3-ogre1-dev) |\
+ Package (= libignition-rendering3-ogre2) |\
+ Package (= libignition-rendering3-ogre2-dev) \
+), $Version (% 3.6.0-1*) |\
+(Package (= ignition-sensors3) |\
+ Package (= libignition-sensors3) |\
+ Package (= libignition-sensors3-air-pressure) |\
+ Package (= libignition-sensors3-air-pressure-dev) |\
+ Package (= libignition-sensors3-altimeter) |\
+ Package (= libignition-sensors3-altimeter-dev) |\
+ Package (= libignition-sensors3-camera) |\
+ Package (= libignition-sensors3-camera-dev) |\
+ Package (= libignition-sensors3-core-dev) |\
+ Package (= libignition-sensors3-depth-camera) |\
+ Package (= libignition-sensors3-depth-camera-dev) |\
+ Package (= libignition-sensors3-dev) |\
+ Package (= libignition-sensors3-gpu-lidar) |\
+ Package (= libignition-sensors3-gpu-lidar-dev) |\
+ Package (= libignition-sensors3-imu) |\
+ Package (= libignition-sensors3-imu-dev) |\
+ Package (= libignition-sensors3-lidar) |\
+ Package (= libignition-sensors3-lidar-dev) |\
+ Package (= libignition-sensors3-logical-camera) |\
+ Package (= libignition-sensors3-logical-camera-dev) |\
+ Package (= libignition-sensors3-magnetometer) |\
+ Package (= libignition-sensors3-magnetometer-dev) |\
+ Package (= libignition-sensors3-rendering) |\
+ Package (= libignition-sensors3-rendering-dev) |\
+ Package (= libignition-sensors3-rgbd-camera) |\
+ Package (= libignition-sensors3-rgbd-camera-dev) |\
+ Package (= libignition-sensors3-thermal-camera) |\
+ Package (= libignition-sensors3-thermal-camera-dev) \
+), $Version (% 3.3.0-1*) |\
+(Package (= ignition-tools) |\
+ Package (= libignition-tools-dev) \
+), $Version (% 1.4.1-1*) |\
+(Package (= ignition-transport8) |\
+ Package (= libignition-transport8) |\
+ Package (= libignition-transport8-core-dev) |\
+ Package (= libignition-transport8-dbg) |\
+ Package (= libignition-transport8-dev) |\
+ Package (= libignition-transport8-log) |\
+ Package (= libignition-transport8-log-dev) \
+), $Version (% 8.2.1-1*) |\
+(Package (= ogre-2.1) |\
+ Package (= blender-ogrexml-2.1) |\
+ Package (= libogre-2.1) |\
+ Package (= libogre-2.1-dev) |\
+ Package (= ogre-2.1-doc) |\
+ Package (= ogre-2.1-tools) \
+), $Version (% 2.0.9999~20180616~06a386f-3*) |\
+(Package (= sdformat9) |\
+ Package (= libsdformat9) |\
+ Package (= libsdformat9-dbg) |\
+ Package (= libsdformat9-dev) |\
+ Package (= sdformat9-doc) |\
+ Package (= sdformat9-sdf) \
+), $Version (% 9.7.0-1*) \
 "
