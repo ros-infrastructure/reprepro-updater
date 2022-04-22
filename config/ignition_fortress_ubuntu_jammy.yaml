@@ -68,7 +68,7 @@ filter_formula: "\
  Package (= libignition-physics5-tpe-dev) |\
  Package (= libignition-physics5-tpelib) |\
  Package (= libignition-physics5-tpelib-dev) \
-), $Version (% 5.1.0+osrf-2*) |\
+), ($Version (% 5.1.0+osrf-2*) | $Version (% 5.1.0+osrf-3*)) |\
 (Package (= ignition-plugin) |\
  Package (= libignition-plugin) |\
  Package (= libignition-plugin-dbg) |\
