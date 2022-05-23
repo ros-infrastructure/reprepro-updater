@@ -8,7 +8,7 @@ filter_formula: "\
 ), $Version (% 1.0.3-1*) |\
 (Package (= ignition-cmake2) |\
  Package (= libignition-cmake2-dev) \
-), $Version (% 2.12.1-1*) |\
+), $Version (% 2.12.1-2*) |\
 (Package (= ignition-common4) |\
  Package (= libignition-common4) |\
  Package (= libignition-common4-av) |\
@@ -48,7 +48,7 @@ filter_formula: "\
  Package (= libignition-math6-eigen3-dev) |\
  Package (= python3-ignition-math6) |\
  Package (= ruby-ignition-math6) \
-), $Version (% 6.10.0-100*) |\
+), $Version (% 6.11.0-3*) |\
 (Package (= ignition-msgs8) |\
  Package (= libignition-msgs8) |\
  Package (= libignition-msgs8-dev) \
@@ -82,7 +82,7 @@ filter_formula: "\
  Package (= libignition-rendering6-ogre1-dev) |\
  Package (= libignition-rendering6-ogre2) |\
  Package (= libignition-rendering6-ogre2-dev) \
-), $Version (% 6.3.1-1*) |\
+), $Version (% 6.4.0-1*) |\
 (Package (= ignition-sensors6) |\
  Package (= libignition-sensors6) |\
  Package (= libignition-sensors6-air-pressure) |\
@@ -117,7 +117,7 @@ filter_formula: "\
  Package (= libignition-sensors6-segmentation-camera-dev) |\
  Package (= libignition-sensors6-thermal-camera) |\
  Package (= libignition-sensors6-thermal-camera-dev) \
-), $Version (% 6.3.0-2*) |\
+), $Version (% 6.4.0-1*) |\
 (Package (= ignition-tools) |\
  Package (= libignition-tools-dev) \
 ), $Version (% 1.4.1+osrf-1*) |\
@@ -141,5 +141,5 @@ filter_formula: "\
  Package (= libsdformat12-dev) |\
  Package (= sdformat12-doc) |\
  Package (= sdformat12-sdf) \
-), $Version (% 12.4.0-1*) \
+), $Version (% 12.5.0-1*) \
 "
