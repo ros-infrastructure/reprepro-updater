@@ -117,18 +117,19 @@ filter_formula: "\
  Package (= libignition-sensors6-segmentation-camera-dev) |\
  Package (= libignition-sensors6-thermal-camera) |\
  Package (= libignition-sensors6-thermal-camera-dev) \
-), $Version (% 6.4.0-1*) |\
+), $Version (% 6.5.0-1*) |\
 (Package (= ignition-tools) |\
  Package (= libignition-tools-dev) \
 ), $Version (% 1.4.1+osrf-1*) |\
 (Package (= ignition-transport11) |\
+ Package (= ignition-transport11-cli) |\
  Package (= libignition-transport11) |\
  Package (= libignition-transport11-core-dev) |\
  Package (= libignition-transport11-dbg) |\
  Package (= libignition-transport11-dev) |\
  Package (= libignition-transport11-log) |\
  Package (= libignition-transport11-log-dev) \
-), $Version (% 11.0.0+osrf-1*) |\
+), $Version (% 11.1.0-7*) |\
 (Package (= ignition-utils1) |\
  Package (= libignition-utils1) |\
  Package (= libignition-utils1-cli-dev) |\
