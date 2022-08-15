@@ -39,7 +39,7 @@ filter_formula: "\
  Package (= libignition-gazebo3-dbg) |\
  Package (= libignition-gazebo3-dev) |\
  Package (= libignition-gazebo3-plugins) \
-), $Version (% 3.12.0-1*) |\
+), $Version (% 3.13.0-1*) |\
 (Package (= ignition-gui3) |\
  Package (= libignition-gui3) |\
  Package (= libignition-gui3-dev) \
