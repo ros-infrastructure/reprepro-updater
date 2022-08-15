@@ -48,7 +48,7 @@ filter_formula: "\
  Package (= libignition-math6-eigen3-dev) |\
  Package (= python3-ignition-math6) |\
  Package (= ruby-ignition-math6) \
-), $Version (% 6.11.0-3*) |\
+), $Version (% 6.12.0-2*) |\
 (Package (= ignition-msgs8) |\
  Package (= libignition-msgs8) |\
  Package (= libignition-msgs8-dev) \
