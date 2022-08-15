@@ -117,7 +117,7 @@ filter_formula: "\
  Package (= libignition-sensors6-segmentation-camera-dev) |\
  Package (= libignition-sensors6-thermal-camera) |\
  Package (= libignition-sensors6-thermal-camera-dev) \
-), $Version (% 6.5.0-1*) |\
+), $Version (% 6.6.0-2*) |\
 (Package (= ignition-tools) |\
  Package (= libignition-tools-dev) \
 ), $Version (% 1.4.1+osrf-1*) |\
