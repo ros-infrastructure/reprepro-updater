@@ -48,7 +48,7 @@ filter_formula: "\
  Package (= libignition-math6-eigen3-dev) |\
  Package (= python3-ignition-math6) |\
  Package (= ruby-ignition-math6) \
-), $Version (% 6.11.0-3*) |\
+), $Version (% 6.12.0-2*) |\
 (Package (= ignition-msgs8) |\
  Package (= libignition-msgs8) |\
  Package (= libignition-msgs8-dev) \
@@ -117,18 +117,19 @@ filter_formula: "\
  Package (= libignition-sensors6-segmentation-camera-dev) |\
  Package (= libignition-sensors6-thermal-camera) |\
  Package (= libignition-sensors6-thermal-camera-dev) \
-), $Version (% 6.4.0-1*) |\
+), $Version (% 6.6.0-2*) |\
 (Package (= ignition-tools) |\
  Package (= libignition-tools-dev) \
 ), $Version (% 1.4.1+osrf-1*) |\
 (Package (= ignition-transport11) |\
+ Package (= ignition-transport11-cli) |\
  Package (= libignition-transport11) |\
  Package (= libignition-transport11-core-dev) |\
  Package (= libignition-transport11-dbg) |\
  Package (= libignition-transport11-dev) |\
  Package (= libignition-transport11-log) |\
  Package (= libignition-transport11-log-dev) \
-), $Version (% 11.0.0+osrf-1*) |\
+), $Version (% 11.1.0-7*) |\
 (Package (= ignition-utils1) |\
  Package (= libignition-utils1) |\
  Package (= libignition-utils1-cli-dev) |\
