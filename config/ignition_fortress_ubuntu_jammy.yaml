@@ -8,7 +8,7 @@ filter_formula: "\
 ), $Version (% 1.0.3-1*) |\
 (Package (= ignition-cmake2) |\
  Package (= libignition-cmake2-dev) \
-), $Version (% 2.12.1-2*) |\
+), $Version (% 2.14.0-2*) |\
 (Package (= ignition-common4) |\
  Package (= libignition-common4) |\
  Package (= libignition-common4-av) |\
@@ -32,7 +32,7 @@ filter_formula: "\
  Package (= libignition-gazebo6-dev) |\
  Package (= libignition-gazebo6-plugins) |\
  Package (= python3-ignition-gazebo6) \
-), $Version (% 6.9.0-1*) |\
+), $Version (% 6.10.0-1*) |\
 (Package (= ignition-gui6) |\
  Package (= libignition-gui6) |\
  Package (= libignition-gui6-dev) \
@@ -82,7 +82,7 @@ filter_formula: "\
  Package (= libignition-rendering6-ogre1-dev) |\
  Package (= libignition-rendering6-ogre2) |\
  Package (= libignition-rendering6-ogre2-dev) \
-), $Version (% 6.4.0-1*) |\
+), $Version (% 6.5.0-1*) |\
 (Package (= ignition-sensors6) |\
  Package (= libignition-sensors6) |\
  Package (= libignition-sensors6-air-pressure) |\
