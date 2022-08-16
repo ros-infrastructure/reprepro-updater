@@ -32,7 +32,7 @@ filter_formula: "\
  Package (= libignition-gazebo6-dev) |\
  Package (= libignition-gazebo6-plugins) |\
  Package (= python3-ignition-gazebo6) \
-), $Version (% 6.9.0-1*) |\
+), $Version (% 6.10.0-1*) |\
 (Package (= ignition-gui6) |\
  Package (= libignition-gui6) |\
  Package (= libignition-gui6-dev) \
