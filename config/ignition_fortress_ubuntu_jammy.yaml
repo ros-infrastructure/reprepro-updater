@@ -21,7 +21,7 @@ filter_formula: "\
  Package (= libignition-common4-graphics-dev) |\
  Package (= libignition-common4-profiler) |\
  Package (= libignition-common4-profiler-dev) \
-), $Version (% 4.5.0+osrf-1*) |\
+), $Version (% 4.5.1-2*) |\
 (Package (= ignition-fuel-tools7) |\
  Package (= libignition-fuel-tools7) |\
  Package (= libignition-fuel-tools7-dev) \
@@ -36,7 +36,7 @@ filter_formula: "\
 (Package (= ignition-gui6) |\
  Package (= libignition-gui6) |\
  Package (= libignition-gui6-dev) \
-), $Version (% 6.4.0-1*) |\
+), $Version (% 6.6.0-1*) |\
 (Package (= ignition-launch5) |\
  Package (= libignition-launch5) |\
  Package (= libignition-launch5-dev) \
@@ -52,7 +52,7 @@ filter_formula: "\
 (Package (= ignition-msgs8) |\
  Package (= libignition-msgs8) |\
  Package (= libignition-msgs8-dev) \
-), $Version (% 8.4.0-1*) |\
+), $Version (% 8.6.0-1*) |\
 (Package (= ignition-physics5) |\
  Package (= libignition-physics5) |\
  Package (= libignition-physics5-bullet) |\
@@ -68,12 +68,12 @@ filter_formula: "\
  Package (= libignition-physics5-tpe-dev) |\
  Package (= libignition-physics5-tpelib) |\
  Package (= libignition-physics5-tpelib-dev) \
-), ($Version (% 5.1.0+osrf-2*) | $Version (% 5.1.0+osrf-3*)) |\
+), $Version (% 5.2.0-1*) |\
 (Package (= ignition-plugin) |\
  Package (= libignition-plugin) |\
  Package (= libignition-plugin-dbg) |\
  Package (= libignition-plugin-dev) \
-), $Version (% 1.2.1+osrf-1*) |\
+), $Version (% 1.3.0-1*) |\
 (Package (= ignition-rendering6) |\
  Package (= libignition-rendering6) |\
  Package (= libignition-rendering6-core-dev) |\
@@ -82,7 +82,7 @@ filter_formula: "\
  Package (= libignition-rendering6-ogre1-dev) |\
  Package (= libignition-rendering6-ogre2) |\
  Package (= libignition-rendering6-ogre2-dev) \
-), $Version (% 6.5.0-1*) |\
+), $Version (% 6.5.1-1*) |\
 (Package (= ignition-sensors6) |\
  Package (= libignition-sensors6) |\
  Package (= libignition-sensors6-air-pressure) |\
@@ -120,7 +120,7 @@ filter_formula: "\
 ), $Version (% 6.6.0-2*) |\
 (Package (= ignition-tools) |\
  Package (= libignition-tools-dev) \
-), $Version (% 1.4.1+osrf-1*) |\
+), $Version (% 1.5.1-1*) |\
 (Package (= ignition-transport11) |\
  Package (= ignition-transport11-cli) |\
  Package (= libignition-transport11) |\
