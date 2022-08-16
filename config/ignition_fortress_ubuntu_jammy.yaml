@@ -89,6 +89,8 @@ filter_formula: "\
  Package (= libignition-sensors6-air-pressure-dev) |\
  Package (= libignition-sensors6-altimeter) |\
  Package (= libignition-sensors6-altimeter-dev) |\
+ Package (= libignition-sensors6-boundingbox-camera) |\
+ Package (= libignition-sensors6-boundingbox-camera-dev) |\
  Package (= libignition-sensors6-camera) |\
  Package (= libignition-sensors6-camera-dev) |\
  Package (= libignition-sensors6-core-dev) |\
