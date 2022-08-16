@@ -73,7 +73,7 @@ filter_formula: "\
  Package (= libignition-plugin) |\
  Package (= libignition-plugin-dbg) |\
  Package (= libignition-plugin-dev) \
-), $Version (% 1.3.1-1*) |\
+), $Version (% 1.3.0-1*) |\
 (Package (= ignition-rendering6) |\
  Package (= libignition-rendering6) |\
  Package (= libignition-rendering6-core-dev) |\
