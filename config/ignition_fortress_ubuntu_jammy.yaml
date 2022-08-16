@@ -82,7 +82,7 @@ filter_formula: "\
  Package (= libignition-rendering6-ogre1-dev) |\
  Package (= libignition-rendering6-ogre2) |\
  Package (= libignition-rendering6-ogre2-dev) \
-), $Version (% 6.4.0-1*) |\
+), $Version (% 6.5.0-1*) |\
 (Package (= ignition-sensors6) |\
  Package (= libignition-sensors6) |\
  Package (= libignition-sensors6-air-pressure) |\
