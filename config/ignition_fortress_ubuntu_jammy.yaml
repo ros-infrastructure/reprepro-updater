@@ -8,7 +8,7 @@ filter_formula: "\
 ), $Version (% 1.0.3-1*) |\
 (Package (= ignition-cmake2) |\
  Package (= libignition-cmake2-dev) \
-), $Version (% 2.12.1-2*) |\
+), $Version (% 2.14.0-2*) |\
 (Package (= ignition-common4) |\
  Package (= libignition-common4) |\
  Package (= libignition-common4-av) |\
