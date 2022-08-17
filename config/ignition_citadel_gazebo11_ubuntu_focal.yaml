@@ -13,10 +13,10 @@ filter_formula: "\
  Package (= libgazebo11-dev) \
 ), $Version (% 11.10.2-1*) |\
 (Package (= gz-citadel) \
- Package (= ignition-citadel) |\
+ Package (= ignition-citadel) \
 ), $Version (% 1.0.2-2*) |\
 (Package (= ignition-cmake2) |\
- Package (= libgz-cmake2-dev) \
+ Package (= libgz-cmake2-dev) |\
  Package (= libignition-cmake2-dev) \
 ), $Version (% 2.14.0-2*) |\
 (Package (= ignition-common3) |\
@@ -30,7 +30,7 @@ filter_formula: "\
  Package (= libgz-common3-graphics) |\
  Package (= libgz-common3-graphics-dev) |\
  Package (= libgz-common3-profiler) |\
- Package (= libgz-common3-profiler-dev) \
+ Package (= libgz-common3-profiler-dev) |\
  Package (= libignition-common3) |\
  Package (= libignition-common3-av) |\
  Package (= libignition-common3-av-dev) |\
@@ -45,7 +45,7 @@ filter_formula: "\
 ), $Version (% 3.14.2-1*) |\
 (Package (= ignition-fuel-tools4) |\
  Package (= libgz-fuel-tools4) |\
- Package (= libgz-fuel-tools4-dev) \
+ Package (= libgz-fuel-tools4-dev) |\
  Package (= libignition-fuel-tools4) |\
  Package (= libignition-fuel-tools4-dev) \
 ), $Version (% 4.6.0-1*) |\
@@ -53,7 +53,7 @@ filter_formula: "\
  Package (= libgz-sim3) |\
  Package (= libgz-sim3-dbg) |\
  Package (= libgz-sim3-dev) |\
- Package (= libgz-sim3-plugins) \
+ Package (= libgz-sim3-plugins) |\
  Package (= libignition-gazebo3) |\
  Package (= libignition-gazebo3-dbg) |\
  Package (= libignition-gazebo3-dev) |\
@@ -61,13 +61,13 @@ filter_formula: "\
 ), $Version (% 3.14.0-1*) |\
 (Package (= ignition-gui3) |\
  Package (= libgz-gui3) |\
- Package (= libgz-gui3-dev) \
+ Package (= libgz-gui3-dev) |\
  Package (= libignition-gui3) |\
  Package (= libignition-gui3-dev) \
 ), $Version (% 3.11.2-1*) |\
 (Package (= ignition-launch2) |\
  Package (= libgz-launch2) |\
- Package (= libgz-launch2-dev) \
+ Package (= libgz-launch2-dev) |\
  Package (= libignition-launch2) |\
  Package (= libignition-launch2-dev) \
 ), $Version (% 2.3.0-1*) |\
@@ -82,12 +82,12 @@ filter_formula: "\
  Package (= libignition-math6-eigen3-dev) |\
  Package (= python3-gz-math6) |\
  Package (= python3-ignition-math6) |\
- Package (= ruby-gz-math6) \
+ Package (= ruby-gz-math6) |\
  Package (= ruby-ignition-math6) \
 ), $Version (% 6.12.0-2*) |\
 (Package (= ignition-msgs5) |\
  Package (= libgz-msgs5) |\
- Package (= libgz-msgs5-dev) \
+ Package (= libgz-msgs5-dev) |\
  Package (= libignition-msgs5) |\
  Package (= libignition-msgs5-dev) \
 ), $Version (% 5.10.0-4*) |\
@@ -102,7 +102,7 @@ filter_formula: "\
  Package (= libgz-physics2-tpe) |\
  Package (= libgz-physics2-tpe-dev) |\
  Package (= libgz-physics2-tpelib) |\
- Package (= libgz-physics2-tpelib-dev) \
+ Package (= libgz-physics2-tpelib-dev) |\
  Package (= libignition-physics2) |\
  Package (= libignition-physics2-core-dev) |\
  Package (= libignition-physics2-dartsim) |\
@@ -118,7 +118,7 @@ filter_formula: "\
 (Package (= ignition-plugin) |\
  Package (= libgz-plugin) |\
  Package (= libgz-plugin-dbg) |\
- Package (= libgz-plugin-dev) \
+ Package (= libgz-plugin-dev) |\
  Package (= libignition-plugin) |\
  Package (= libignition-plugin-dbg) |\
  Package (= libignition-plugin-dev) \
@@ -130,7 +130,7 @@ filter_formula: "\
  Package (= libgz-rendering3-ogre1) |\
  Package (= libgz-rendering3-ogre1-dev) |\
  Package (= libgz-rendering3-ogre2) |\
- Package (= libgz-rendering3-ogre2-dev) \
+ Package (= libgz-rendering3-ogre2-dev) |\
  Package (= libignition-rendering3) |\
  Package (= libignition-rendering3-core-dev) |\
  Package (= libignition-rendering3-dev) |\
@@ -166,7 +166,7 @@ filter_formula: "\
  Package (= libgz-sensors3-rgbd-camera) |\
  Package (= libgz-sensors3-rgbd-camera-dev) |\
  Package (= libgz-sensors3-thermal-camera) |\
- Package (= libgz-sensors3-thermal-camera-dev) \
+ Package (= libgz-sensors3-thermal-camera-dev) |\
  Package (= libignition-sensors3) |\
  Package (= libignition-sensors3-air-pressure) |\
  Package (= libignition-sensors3-air-pressure-dev) |\
@@ -196,8 +196,8 @@ filter_formula: "\
  Package (= libignition-sensors3-thermal-camera-dev) \
 ), $Version (% 3.4.0-1*) |\
 (Package (= gz-tools) |\
- Package (= ignition-tools) \
- Package (= libgz-tools-dev) \
+ Package (= ignition-tools) |\
+ Package (= libgz-tools-dev) |\
  Package (= libignition-tools-dev) \
 ), $Version (% 1.5.0-1*) |\
 (Package (= ignition-transport8) |\
@@ -206,7 +206,7 @@ filter_formula: "\
  Package (= libgz-transport8-dbg) |\
  Package (= libgz-transport8-dev) |\
  Package (= libgz-transport8-log) |\
- Package (= libgz-transport8-log-dev) \
+ Package (= libgz-transport8-log-dev) |\
  Package (= libignition-transport8) |\
  Package (= libignition-transport8-core-dev) |\
  Package (= libignition-transport8-dbg) |\
