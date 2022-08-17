@@ -12,7 +12,7 @@ filter_formula: "\
  Package (= libgazebo11) |\
  Package (= libgazebo11-dev) \
 ), $Version (% 11.10.2-1*) |\
-(Package (= gz-citadel) \
+(Package (= gz-citadel) |\
  Package (= ignition-citadel) \
 ), $Version (% 1.0.2-2*) |\
 (Package (= ignition-cmake2) |\
