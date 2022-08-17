@@ -138,7 +138,7 @@ filter_formula: "\
  Package (= libignition-rendering3-ogre1-dev) |\
  Package (= libignition-rendering3-ogre2) |\
  Package (= libignition-rendering3-ogre2-dev) \
-), $Version (% 3.6.0-4*) |\
+), $Version (% 3.6.0-5*) |\
 (Package (= ignition-sensors3) |\
  Package (= libgz-sensors3) |\
  Package (= libgz-sensors3-air-pressure) |\
