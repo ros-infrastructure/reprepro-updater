@@ -8,8 +8,9 @@ filter_formula: "\
  Package (= ignition-fortress) \
 ), $Version (% 1.0.3-2*) |\
 (Package (= ignition-cmake2) |\
+ Package (= libgz-cmake2-dev) |\
  Package (= libignition-cmake2-dev) \
-), $Version (% 2.12.1-1*) |\
+), $Version (% 2.14.0-2*) |\
 (Package (= ignition-common4) |\
  Package (= libgz-common4) |\
  Package (= libgz-common4-av) |\
