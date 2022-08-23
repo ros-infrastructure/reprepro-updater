@@ -7,6 +7,9 @@ filter_formula: "\
 (Package (= gz-fortress) |\
  Package (= ignition-fortress) \
 ), $Version (% 1.0.3-2*) |\
+(Package (= ignition-cmake2) |\
+ Package (= libignition-cmake2-dev) \
+), $Version (% 2.12.1-1*) |\
 (Package (= ignition-common4) |\
  Package (= libgz-common4) |\
  Package (= libgz-common4-av) |\
@@ -61,6 +64,14 @@ filter_formula: "\
  Package (= libignition-launch5) |\
  Package (= libignition-launch5-dev) \
 ), $Version (% 5.2.0-1*) |\
+(Package (= ignition-math6) |\
+ Package (= libignition-math6) |\
+ Package (= libignition-math6-dbg) |\
+ Package (= libignition-math6-dev) |\
+ Package (= libignition-math6-eigen3-dev) |\
+ Package (= python3-ignition-math6) |\
+ Package (= ruby-ignition-math6) \
+), $Version (% 6.10.0-1*) |\
 (Package (= ignition-msgs8) |\
  Package (= libgz-msgs8) |\
  Package (= libgz-msgs8-dev) |\
@@ -97,6 +108,11 @@ filter_formula: "\
  Package (= libignition-physics5-tpelib) |\
  Package (= libignition-physics5-tpelib-dev) \
 ), $Version (% 5.2.0-2*) |\
+(Package (= ignition-plugin) |\
+ Package (= libignition-plugin) |\
+ Package (= libignition-plugin-dbg) |\
+ Package (= libignition-plugin-dev) \
+), $Version (% 1.2.1-1*) |\
 (Package (= ignition-rendering6) |\
  Package (= libgz-rendering6) |\
  Package (= libgz-rendering6-core-dev) |\
@@ -181,6 +197,9 @@ filter_formula: "\
  Package (= libignition-sensors6-thermal-camera) |\
  Package (= libignition-sensors6-thermal-camera-dev) \
 ), $Version (% 6.6.0-3*) |\
+(Package (= ignition-tools) |\
+ Package (= libignition-tools-dev) \
+), $Version (% 1.4.1-1*) |\
 (Package (= ignition-transport11) |\
  Package (= libgz-transport11) |\
  Package (= libgz-transport11-core-dev) |\

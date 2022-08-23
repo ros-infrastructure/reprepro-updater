@@ -11,7 +11,7 @@ filter_formula: "\
  Package (= gazebo11-plugin-base) |\
  Package (= libgazebo11) |\
  Package (= libgazebo11-dev) \
-), $Version (% 11.10.2-1*) |\
+), $Version (% 11.11.0-1*) |\
 (Package (= gz-citadel) |\
  Package (= ignition-citadel) \
 ), $Version (% 1.0.2-2*) |\
@@ -138,7 +138,7 @@ filter_formula: "\
  Package (= libignition-rendering3-ogre1-dev) |\
  Package (= libignition-rendering3-ogre2) |\
  Package (= libignition-rendering3-ogre2-dev) \
-), $Version (% 3.6.0-4*) |\
+), $Version (% 3.6.0-5*) |\
 (Package (= ignition-sensors3) |\
  Package (= libgz-sensors3) |\
  Package (= libgz-sensors3-air-pressure) |\
