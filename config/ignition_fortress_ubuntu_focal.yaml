@@ -211,9 +211,11 @@ filter_formula: "\
  Package (= libignition-sensors6-thermal-camera) |\
  Package (= libignition-sensors6-thermal-camera-dev) \
 ), $Version (% 6.6.0-3*) |\
-(Package (= ignition-tools) |\
+(Package (= gz-tools) |\
+ Package (= ignition-tools) |\
+ Package (= libgz-tools-dev) |\
  Package (= libignition-tools-dev) \
-), $Version (% 1.4.1-1*) |\
+), $Version (% 1.5.0-1*) |\
 (Package (= ignition-transport11) |\
  Package (= libgz-transport11) |\
  Package (= libgz-transport11-core-dev) |\
