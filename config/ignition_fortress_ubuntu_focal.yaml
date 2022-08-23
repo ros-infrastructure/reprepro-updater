@@ -50,7 +50,7 @@ filter_formula: "\
  Package (= libignition-gazebo6-dbg) |\
  Package (= libignition-gazebo6-dev) |\
  Package (= libignition-gazebo6-plugins) |\
- Package (= python3-gz-sim6) \
+ Package (= python3-gz-sim6) |\
  Package (= python3-ignition-gazebo6) \
 ), $Version (% 6.11.0-2*) |\
 (Package (= ignition-gui6) |\
