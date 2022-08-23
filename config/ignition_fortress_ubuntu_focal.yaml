@@ -66,13 +66,19 @@ filter_formula: "\
  Package (= libignition-launch5-dev) \
 ), $Version (% 5.2.0-1*) |\
 (Package (= ignition-math6) |\
+ Package (= libgz-math6) |\
+ Package (= libgz-math6-dbg) |\
+ Package (= libgz-math6-dev) |\
+ Package (= libgz-math6-eigen-dev) |\
  Package (= libignition-math6) |\
  Package (= libignition-math6-dbg) |\
  Package (= libignition-math6-dev) |\
  Package (= libignition-math6-eigen3-dev) |\
+ Package (= python3-gz-math6) |\
  Package (= python3-ignition-math6) |\
+ Package (= ruby-gz-math6) |\
  Package (= ruby-ignition-math6) \
-), $Version (% 6.10.0-1*) |\
+), $Version (% 6.12.0-2*) |\
 (Package (= ignition-msgs8) |\
  Package (= libgz-msgs8) |\
  Package (= libgz-msgs8-dev) |\
