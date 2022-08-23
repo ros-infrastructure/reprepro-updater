@@ -233,10 +233,6 @@ filter_formula: "\
  Package (= libignition-transport11-log-dev) \
 ), $Version (% 11.2.0-3*) |\
 (Package (= ignition-utils1) |\
- Package (= libgz-utils1) |\
- Package (= libgz-utils1-cli-dev) |\
- Package (= libgz-utils1-dbg) |\
- Package (= libgz-utils1-dev) |\
  Package (= libignition-utils1) |\
  Package (= libignition-utils1-cli-dev) |\
  Package (= libignition-utils1-dbg) |\
