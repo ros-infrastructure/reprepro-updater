@@ -116,10 +116,13 @@ filter_formula: "\
  Package (= libignition-physics5-tpelib-dev) \
 ), $Version (% 5.2.0-2*) |\
 (Package (= ignition-plugin) |\
+ Package (= libgz-plugin) |\
+ Package (= libgz-plugin-dbg) |\
+ Package (= libgz-plugin-dev) |\
  Package (= libignition-plugin) |\
  Package (= libignition-plugin-dbg) |\
  Package (= libignition-plugin-dev) \
-), $Version (% 1.2.1-1*) |\
+), $Version (% 1.3.0-1*) |\
 (Package (= ignition-rendering6) |\
  Package (= libgz-rendering6) |\
  Package (= libgz-rendering6-core-dev) |\
