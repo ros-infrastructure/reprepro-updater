@@ -123,6 +123,7 @@ resp = urllib.request.urlopen(f'{target_repo}/dists/{args.suite}/main/binary-amd
 packages_file = PackagesFile(resp.read().decode())
 
 version_spec_re = re.compile('(?P<version>[^-]+)-(?P<inc>\d+)(?P<rest>.*)')
+version_errors = False
 for group in package_groups:
     expected_group_version = None
     group.packages = [pkg.name for pkg in packages_file.packages.values() if pkg.source_package == group.source_package and pkg.name not in group.skip_packages]
@@ -131,7 +132,7 @@ for group in package_groups:
             expected_group_version = packages_file.packages[p].version
         elif packages_file.packages[p].version != expected_group_version:
             print(f'{p} {packages_file.packages[p].version} in {group.packages[0]} does not match expected version {expected_group_version}', file=sys.stderr)
-            exit(2)
+            version_errors = True
     if expected_group_version:
         m = version_spec_re.match(expected_group_version)
         version = m.group('version')
@@ -139,6 +140,9 @@ for group in package_groups:
         group.version_spec = f'{version}-{inc}*'
     if group.source_package not in group.packages:
         group.packages.insert(0, group.source_package)
+
+if version_errors:
+    exit(2)
 
 gz_classic = ''
 if args.ignition_suite == 'citadel':
