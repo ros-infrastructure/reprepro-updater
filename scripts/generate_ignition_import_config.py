@@ -130,7 +130,7 @@ for group in package_groups:
         if not expected_group_version:
             expected_group_version = packages_file.packages[p].version
         elif packages_file.packages[p].version != expected_group_version:
-            print(f'{p} in {group.packages[0]} does not match expected version {expected_group_version}', file=sys.stderr)
+            print(f'{p} {packages_file.packages[p].version} in {group.packages[0]} does not match expected version {expected_group_version}', file=sys.stderr)
             exit(2)
     if expected_group_version:
         m = version_spec_re.match(expected_group_version)
