@@ -47,10 +47,10 @@ class PackageGroup:
     version_spec: str|None = None
     skip_packages: List[str] = field(default_factory=list)
 
-parser = argparse.ArgumentParser(description='Generate import configurations for ignition packages.')
+parser = argparse.ArgumentParser(description='Generate import configurations for gazebo packages.')
 parser.add_argument('--os', type=str)
 parser.add_argument('--suite', type=str)
-parser.add_argument('--ignition-suite', type=str)
+parser.add_argument('--gazebo-suite', type=str)
 args = parser.parse_args(sys.argv[1:])
 
 PACKAGE_GROUPS = {
