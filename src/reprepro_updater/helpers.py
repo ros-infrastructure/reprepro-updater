@@ -8,6 +8,8 @@ import time
 
 from reprepro_updater.repository_info import RepositoryInfo
 
+ARG_MAX_LEN = os.sysconf('SC_ARG_MAX')
+
 
 class LockContext:
     def __init__(self, lockfilename=None, timeout=3000):
@@ -92,10 +94,13 @@ def invalidate_packages(repo_dir, distro, arch, packages):
         return True
     filterstr = 'Package (== {})'
     filterlist = [filterstr.format(pkgname) for pkgname in packages]
-    invalidate_packages_command = ['reprepro', '-b', repo_dir,
-                                   '-T', 'deb', '-A', arch, '-V',
-                                   'removefilter', distro,
-                                   ' | '.join(filterlist)]
+    cmd_prefix = ['reprepro', '-b', repo_dir, '-T', 'deb',
+                  '-A', arch, '-V', 'removefilter', distro]
+    invalidate_packages_command = cmd_prefix + [' | '.join(filterlist)]
+    if len(invalidate_packages_command) > ARG_MAX_LEN:
+        print('Too many packages, removefilter must be split and run multiple times')
+
+    
     return try_run_command(invalidate_packages_command)
 
 
