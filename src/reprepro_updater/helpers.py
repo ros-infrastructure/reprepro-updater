@@ -92,11 +92,25 @@ def invalidate_packages(repo_dir, distro, arch, packages):
         return True
     filterstr = 'Package (== {})'
     filterlist = [filterstr.format(pkgname) for pkgname in packages]
-    invalidate_packages_command = ['reprepro', '-b', repo_dir,
-                                   '-T', 'deb', '-A', arch, '-V',
-                                   'removefilter', distro,
-                                   ' | '.join(filterlist)]
-    return try_run_command(invalidate_packages_command)
+    cmd_prefix = ['reprepro', '-b', repo_dir, '-T', 'deb',
+                  '-A', arch, '-V', 'removefilter', distro]
+    invalidate_packages_command = cmd_prefix + [' | '.join(filterlist)]
+
+    # We first attempt to run the full list of packages.  However, this may
+    # fail if the package list is too long.  In that case, we split the list
+    # in half and try again.
+    if not try_run_command(invalidate_packages_command):
+        half = len(filterlist) // 2
+
+        invalidate1 = cmd_prefix + [' | '.join(filterlist[:half])]
+        invalidate2 = cmd_prefix + [' | '.join(filterlist[half:])]
+
+        ret = try_run_command(invalidate1)
+        ret = ret and try_run_command(invalidate2)
+    else:
+        ret = True
+
+    return ret
 
 
 def invalidate_package(repo_dir, distro, arch, package):
