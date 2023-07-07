@@ -46,6 +46,7 @@ def main():
     parser.add_argument('tofile', type=str, nargs='+', default=None)
     parser.add_argument('rosdistro', type=str, default='groovy')
     parser.add_argument('--output-dir', dest='output_dir', type=str, default='.')
+    parser.add_argument('--with-debug-pkgs', action='store_true')
 
     args = parser.parse_args()
 
@@ -58,6 +59,8 @@ def main():
     if not os.path.exists(args.tofile[0]):
         parser.error("Missing input file from %s" % args.tofile[0])
 
+    def is_debug_package(package_name):
+        return not args.with_debug_pkgs and (package_name.endswith('-dbg') or package_name.endswith('-dbgsym'))
 
     files = [args.fromfile[0], args.tofile[0]]
     fromlines = open(files[0], 'U')
@@ -90,11 +93,13 @@ def main():
     for p in [p for p in new_packages if p in old_packages]:
         if new_packages[p]['Version'] == old_packages[p]['Version']:
             continue
+        if is_debug_package(p):
+            continue
         if is_substantial_version_change(new_packages[p]['Version'], old_packages[p]['Version']):
             updated_packages.add(p)
 
-    added_packages = set([p for p in new_packages if p not in old_packages])
-    removed_packages = set([p for p in old_packages if p not in new_packages])
+    added_packages = set([p for p in new_packages if not is_debug_package(p) and p not in old_packages])
+    removed_packages = set([p for p in old_packages if not is_debug_package(p) and p not in new_packages])
 
     maintainers = set()
     for p in added_packages | updated_packages:
