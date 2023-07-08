@@ -34,6 +34,13 @@ def is_substantial_version_change(v1, v2):
 
     return cv1 != cv2
 
+def detect_debug_package(package_name):
+    if package_name.endswith('-dbg'):
+        return package_name[:-4], True
+    elif package_name.endswith('-dbgsym'):
+        return package_name[:-7], True
+    return package_name, False
+
     
 def main():
     """
@@ -46,7 +53,6 @@ def main():
     parser.add_argument('tofile', type=str, nargs='+', default=None)
     parser.add_argument('rosdistro', type=str, default='groovy')
     parser.add_argument('--output-dir', dest='output_dir', type=str, default='.')
-    parser.add_argument('--with-debug-pkgs', action='store_true')
 
     args = parser.parse_args()
 
@@ -58,9 +64,6 @@ def main():
 
     if not os.path.exists(args.tofile[0]):
         parser.error("Missing input file from %s" % args.tofile[0])
-
-    def is_debug_package(package_name):
-        return not args.with_debug_pkgs and (package_name.endswith('-dbg') or package_name.endswith('-dbgsym'))
 
     files = [args.fromfile[0], args.tofile[0]]
     fromlines = open(files[0], 'U')
@@ -86,6 +89,21 @@ def main():
             continue
         new_packages[intermediate['Package']] = intermediate
 
+    debug_packages = dict()
+    debug_base_packages = dict()
+
+    all_packages = set(old_packages.keys())
+    all_packages.update(new_packages.keys())
+    for p in all_packages:
+        base, is_debug = detect_debug_package(p)
+        if not is_debug:
+            continue
+        if base not in all_packages:
+            print("WARNING: Found debug package %s without its base package!" % (p,))
+            continue
+        debug_packages[base] = p
+        debug_base_packages[p] = base
+
     updated_packages = set()
     removed_packages = set()
     added_packages = set()
@@ -93,13 +111,13 @@ def main():
     for p in [p for p in new_packages if p in old_packages]:
         if new_packages[p]['Version'] == old_packages[p]['Version']:
             continue
-        if is_debug_package(p):
+        if p in debug_base_packages:
             continue
         if is_substantial_version_change(new_packages[p]['Version'], old_packages[p]['Version']):
             updated_packages.add(p)
 
-    added_packages = set([p for p in new_packages if not is_debug_package(p) and p not in old_packages])
-    removed_packages = set([p for p in old_packages if not is_debug_package(p) and p not in new_packages])
+    added_packages = set([p for p in new_packages if p not in debug_base_packages and p not in old_packages])
+    removed_packages = set([p for p in old_packages if p not in debug_base_packages and p not in new_packages])
 
     maintainers = set()
     for p in added_packages | updated_packages:
@@ -115,19 +133,45 @@ def main():
         fh.write("Updates to %s\n\n" % args.rosdistro)
         fh.write("Added Packages [%s]:\n" % len(added_packages))
         for p in sorted(added_packages):
-            fh.write(" * %s: %s\n" % (p, core_version(new_packages[p]['Version'])))
+            fh.write(" * %s: %s" % (p, core_version(new_packages[p]['Version'])))
+            if p in debug_packages:
+                debug_package = debug_packages[p]
+                if debug_package in new_packages:
+                    fh.write(" (+debug symbols %s)" % (debug_package,))
+                else:
+                    fh.write(" (-debug symbols %s)" % (debug_package,))
+            fh.write("\n")
         fh.write("\n\n")
 
         fh.write("Updated Packages [%s]:\n" % len(updated_packages))
         for p in sorted(updated_packages):
-            fh.write(" * %s: %s -> %s\n" % (p, 
-                                            core_version(old_packages[p]['Version']),
-                                            core_version(new_packages[p]['Version'])))
+            fh.write(" * %s: %s -> %s" % (p, 
+                                          core_version(old_packages[p]['Version']),
+                                          core_version(new_packages[p]['Version'])))
+            if p in debug_packages:
+                debug_package = debug_packages[p]
+                if debug_package in new_packages and debug_package in old_packages:
+                    fh.write(" (debug symbols %s)" % (debug_package,))
+                elif debug_package in new_packages:
+                    fh.write(" (+debug symbols %s)" % (debug_package,))
+                else:
+                    fh.write(" (-debug symbols %s)" % (debug_package,))
+            fh.write("\n")
         fh.write("\n\n")
 
         fh.write("Removed Packages [%s]:\n" % len(removed_packages))
         for p in sorted(removed_packages):
-            fh.write("- %s\n" % (p))
+            fh.write("- %s" % (p))
+            if p in debug_packages:
+                debug_package = debug_packages[p]
+                if debug_package in new_packages and debug_package in old_packages:
+                    fh.write(" (orphaned debug symbols remained %s)" % (debug_package,))
+                elif debug_package in old_packages:
+                    fh.write(" (-debug symbols %s)" % (debug_package,))
+                else:
+                    fh.write(" (+debug symbols %s)" % (debug_package,))
+                    print("WARNING: Pakckage %s was removed but its debug symbols %s were added." % (p, debug_package))
+            fh.write("\n")
         fh.write("\n\n")
 
         fh.write("Thanks to all ROS maintainers who make packages"
