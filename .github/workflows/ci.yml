@@ -10,8 +10,8 @@ on:
 
 jobs:
   bionic-ci:
-    runs-on: ubuntu-18.04
-    name: Bionic Aptly ${{ matrix.job_type }} -
+    runs-on: ubuntu-20.04
+    name: Focal Aptly ${{ matrix.job_type }} -
           debug ${{ matrix.show_debug_cmds }}
     strategy:
       matrix:
