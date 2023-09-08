@@ -225,12 +225,16 @@ filter_formula: "\
  Package (= libgz-transport11-dev) |\
  Package (= libgz-transport11-log) |\
  Package (= libgz-transport11-log-dev) |\
+ Package (= libgz-transport11-parameters) |\
+ Package (= libgz-transport11-parameters-dev) |\
  Package (= libignition-transport11) |\
  Package (= libignition-transport11-core-dev) |\
  Package (= libignition-transport11-dbg) |\
  Package (= libignition-transport11-dev) |\
  Package (= libignition-transport11-log) |\
- Package (= libignition-transport11-log-dev) \
+ Package (= libignition-transport11-log-dev) |\
+ Package (= libignition-transport11-parameters) |\
+ Package (= libignition-transport11-parameters-dev) \
 ), $Version (% 11.4.1-1*) |\
 (Package (= ignition-utils1) |\
  Package (= libgz-utils1) |\
