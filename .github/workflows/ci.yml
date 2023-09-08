@@ -10,8 +10,8 @@ on:
 
 jobs:
   bionic-ci:
-    runs-on: ubuntu-18.04
-    name: Bionic Aptly ${{ matrix.job_type }} -
+    runs-on: ubuntu-20.04
+    name: Focal Aptly ${{ matrix.job_type }} -
           debug ${{ matrix.show_debug_cmds }}
     strategy:
       matrix:
@@ -48,9 +48,9 @@ jobs:
       - name: Setup enviroment
         run: |
             gpg --no-default-keyring --keyring /usr/share/keyrings/ubuntu-archive-keyring.gpg --export | gpg --no-default-keyring --keyring trustedkeys.gpg --import
-            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 16E90B3FDF65EDE3AA7F323C04EE7237B7D453EC # Debian Stretch
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 0146DC6D4A0B2914BDED34DB648ACFD622F3D138 # Debian Buster
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9 # Debian Bullseye
+            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 4CB50190207B4758A3F73A796ED0E7B82643E131 # Debian bookworm
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 67170598AF249743 # OSRF Repository
 
       - name: Generate key
