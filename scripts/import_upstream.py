@@ -46,7 +46,7 @@ target_distros = set()
 for fname in yaml_files:
     with open(fname) as fh:
         print("loading config file: %s" % fname)
-        yaml_dict = yaml.load(fh.read())
+        yaml_dict = yaml.safe_load(fh.read())
         if 'name' not in yaml_dict:
             print("error %s does not include a name element" % fname)
             continue
