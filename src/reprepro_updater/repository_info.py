@@ -26,7 +26,7 @@ class RepositoryInfo:
         with open(packages_filepath, 'r') as packages_file:
             packages_contents = packages_file.read()
         for section in packages_contents.split('\n\n'):
-            if section is '':
+            if section == '':
                 continue
             name = None
             depends = set()
