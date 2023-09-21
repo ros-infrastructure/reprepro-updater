@@ -1,0 +1,7 @@
+name: dart6.13_gazebo_ppa
+method: http://launchpad.net/~openrobotics/+archive/ubuntu/dart6.13-gazebo
+suites: [jammy]
+component: main
+architectures: [amd64,  arm64, source]
+filter_formula: Package (% *dart*), $SourceVersion(= 6.13.0+ds-1~osrf10)
+verify_release: blindtrust

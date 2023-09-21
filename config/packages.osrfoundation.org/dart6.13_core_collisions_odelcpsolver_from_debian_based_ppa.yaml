@@ -1,7 +1,0 @@
-name: dart6.13_core_collisions_odelcpsolver_from_debian_based_ppa
-method: http://ppa.launchpadcontent.net/j-rivero/dart6.13-debian-based/ubuntu
-suites: [jammy]
-component: main
-architectures: [amd64,  arm64, source]
-filter_formula: Package (% *dart*), $SourceVersion(= 6.13.0+ds-1~osrf9)
-verify_release: blindtrust
