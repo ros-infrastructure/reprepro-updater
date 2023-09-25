@@ -4,18 +4,18 @@ suites: [bionic, focal, jammy]
 component: main
 architectures: [i386, amd64, armhf, arm64, source]
 filter_formula: "\
-(Package (% python3-colcon-alias), $Version (% 0.0.2*))|\
+(Package (% python3-colcon-alias), $Version (% 0.1.0*))|\
 (Package (% python3-colcon-argcomplete), $Version (% 0.3.3*))|\
-(Package (% python3-colcon-bash), $Version (% 0.4.2*))|\
+(Package (% python3-colcon-bash), $Version (% 0.5.0*))|\
 (Package (% python3-colcon-bazel), $Version (% 0.1.0*))|\
 (Package (% python3-colcon-cd), $Version (% 0.1.1*))|\
 (Package (% python3-colcon-clean), $Version (% 0.2.0*))|\
 (Package (% python3-colcon-cmake), $Version (% 0.2.27*))|\
 (Package (% python3-colcon-common-extensions), $Version (% 0.3.0*))|\
-(Package (% python3-colcon-core), $Version (% 0.12.1*))|\
+(Package (% python3-colcon-core), $Version (% 0.13.1*))|\
 (Package (% python3-colcon-coveragepy-result), $Version (% 0.0.8*))|\
 (Package (% python3-colcon-defaults), $Version (% 0.2.8*))|\
-(Package (% python3-colcon-devtools), $Version (% 0.2.3*))|\
+(Package (% python3-colcon-devtools), $Version (% 0.2.4*))|\
 (Package (% python3-colcon-ed), $Version (% 0.2.2*))|\
 (Package (% python3-colcon-hardware-acceleration), $Version (% 0.7.0*))|\
 (Package (% python3-colcon-installed-package-information), $Version (% 0.1.0*))|\
@@ -29,13 +29,13 @@ filter_formula: "\
 (Package (% python3-colcon-override-check), $Version (% 0.0.1*))|\
 (Package (% python3-colcon-package-information), $Version (% 0.3.3*))|\
 (Package (% python3-colcon-package-selection), $Version (% 0.2.10*))|\
-(Package (% python3-colcon-parallel-executor), $Version (% 0.2.4*))|\
+(Package (% python3-colcon-parallel-executor), $Version (% 0.3.0*))|\
 (Package (% python3-colcon-pkg-config), $Version (% 0.1.0*))|\
 (Package (% python3-colcon-powershell), $Version (% 0.3.7*))|\
 (Package (% python3-colcon-python-setup-py), $Version (% 0.2.8*))|\
-(Package (% python3-colcon-recursive-crawl), $Version (% 0.2.1*))|\
-(Package (% python3-colcon-rerun), $Version (% 0.0.1*))|\
-(Package (% python3-colcon-ros), $Version (% 0.3.23*))|\
+(Package (% python3-colcon-recursive-crawl), $Version (% 0.2.2*))|\
+(Package (% python3-colcon-rerun), $Version (% 0.1.0*))|\
+(Package (% python3-colcon-ros), $Version (% 0.4.0*))|\
 (Package (% python3-colcon-test-result), $Version (% 0.3.8*))|\
 (Package (% python3-colcon-zsh), $Version (% 0.4.0*))\
 "
