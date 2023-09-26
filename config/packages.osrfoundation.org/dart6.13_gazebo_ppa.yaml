@@ -1,5 +1,5 @@
 name: dart6.13_gazebo_ppa
-method: http://launchpad.net/~openrobotics/+archive/ubuntu/dart6.13-gazebo
+method: http://ppa.launchpad.net/openrobotics/dart6.13-gazebo/ubuntu/
 suites: [jammy]
 component: main
 architectures: [amd64,  arm64, source]
