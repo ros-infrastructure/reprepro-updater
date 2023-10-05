@@ -1,6 +1,6 @@
 name: colcon
 method: https://packagecloud.io/dirk-thomas/colcon/debian
-suites: [stretch, buster]
+suites: [bullseye, bookworm]
 component: main
 architectures: [i386, amd64, armhf, arm64, source]
 filter_formula: "\
