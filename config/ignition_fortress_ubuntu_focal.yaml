@@ -78,7 +78,7 @@ filter_formula: "\
  Package (= python3-ignition-math6) |\
  Package (= ruby-gz-math6) |\
  Package (= ruby-ignition-math6) \
-), $Version (% 6.15.0-1*) |\
+), $Version (% 6.15.1-1*) |\
 (Package (= ignition-msgs8) |\
  Package (= libgz-msgs8) |\
  Package (= libgz-msgs8-dev) |\
