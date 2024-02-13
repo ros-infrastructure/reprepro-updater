@@ -55,7 +55,7 @@ jobs:
             gpg --gen-key --batch genkey
 
       # CI TESTING
-      - name: Run CI tests
+      - name: Run software testsuite
         if: ${{ github.event_name != 'pull_request' }}
         run: |
             python3 scripts/aptly/aptly_importer_TEST.py
