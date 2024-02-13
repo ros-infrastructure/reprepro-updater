@@ -9,21 +9,8 @@ on:
 
 
 jobs:
-  bionic-ci:
-    runs-on: ubuntu-18.04
-    name: Bionic Aptly ${{ matrix.job_type }} -
-          debug ${{ matrix.show_debug_cmds }}
-    strategy:
-      matrix:
-        show_debug_cmds:
-          - true
-          - false
-        job_type:
-          - 'CI'
-          - 'CONFIG_TESTER'
-        exclude:
-          - job_type: 'CONFIG_TESTER'
-            show_debug_cmds: false
+  ci:
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -48,9 +35,9 @@ jobs:
       - name: Setup enviroment
         run: |
             gpg --no-default-keyring --keyring /usr/share/keyrings/ubuntu-archive-keyring.gpg --export | gpg --no-default-keyring --keyring trustedkeys.gpg --import
-            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 16E90B3FDF65EDE3AA7F323C04EE7237B7D453EC # Debian Stretch
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 0146DC6D4A0B2914BDED34DB648ACFD622F3D138 # Debian Buster
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 0E98404D386FA1D9 # Debian Bullseye
+            gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 4CB50190207B4758A3F73A796ED0E7B82643E131 # Debian bookworm
             gpg --no-default-keyring --keyring trustedkeys.gpg --keyserver keyserver.ubuntu.com --recv-keys 67170598AF249743 # OSRF Repository
 
       - name: Generate key
@@ -68,22 +55,32 @@ jobs:
             gpg --gen-key --batch genkey
 
       # CI TESTING
-      - name: Run CI tests
-        if: ${{ matrix.job_type == 'CI' }}
+      - name: Run software testsuite
+        if: ${{ github.event_name != 'pull_request' }}
         run: |
             python3 scripts/aptly/aptly_importer_TEST.py
         env:
-          _DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_: ${{ matrix.show_debug_cmds }}
+          _DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_: false
           _ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_: true
+
+      # CI TESTING (debug)
+      - name: Run CI tests (debug)
+        if: ${{ github.event_name != 'pull_request' }}
+        run: |
+            python3 scripts/aptly/aptly_importer_TEST.py
+        env:
+          _DEBUG_MSGS_REPREPRO_UPDATER_TEST_SUITE_: true
+          _ALLOW_DESTRUCTIVE_TESTS_REPREPRO_UPDATER_TEST_SUITE_: true
+
       # CONFIG FILE TESTER
       - name: Idenfify files changed in this PR.
         id: files
-        if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
+        if: ${{ github.event_name == 'pull_request' }}
         run: |
-          git diff --name-only origin/${{ github.base_ref }}...origin/${{ github.head_ref }}
-          echo "::set-output name=changed-files::$(git diff --name-only origin/${{ github.base_ref }}...origin/${{ github.head_ref }}| tr '\n' ' ')"
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }}... | tr '\n' ' ')
+          echo "changed-files=$CHANGED_FILES" | tee $GITHUB_OUTPUT
       - name: Run testing on changed config files
-        if: ${{ matrix.job_type == 'CONFIG_TESTER' }}
+        if: ${{ github.event_name == 'pull_request' }}
         run: |
           for changed_file in ${{ steps.files.outputs.changed-files }}; do
             if [[ ${changed_file} != ${changed_file/config\/*.yaml} ]]; then
