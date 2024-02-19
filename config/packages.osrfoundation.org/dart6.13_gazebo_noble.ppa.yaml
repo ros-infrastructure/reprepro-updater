@@ -1,0 +1,9 @@
+# To be merged with dart6.13_gazebo.pp.yaml once
+# https://github.com/gazebosim/gz-physics/issues/586 is resolved
+name: dart6.13_gazebo_ppa
+method: http://ppa.launchpad.net/openrobotics/dart6.13-gazebo/ubuntu/
+suites: [noble]
+component: main
+architectures: [amd64,  arm64, source]
+filter_formula: Package (% *dart*), $SourceVersion(= 6.13.1+ds-2~osrf4)
+verify_release: blindtrust
