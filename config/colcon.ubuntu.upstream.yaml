@@ -4,7 +4,7 @@ suites: [focal, jammy, noble]
 component: main
 architectures: [i386, amd64, armhf, arm64, source]
 filter_formula: "\
-(Package (% python3-colcon-alias), $Version (% 0.1.0*))|\
+(Package (% python3-colcon-alias), $Version (% 0.1.1*))|\
 (Package (% python3-colcon-argcomplete), $Version (% 0.3.3*))|\
 (Package (% python3-colcon-bash), $Version (% 0.5.0*))|\
 (Package (% python3-colcon-bazel), $Version (% 0.1.0*))|\
@@ -12,7 +12,7 @@ filter_formula: "\
 (Package (% python3-colcon-clean), $Version (% 0.2.1*))|\
 (Package (% python3-colcon-cmake), $Version (% 0.2.28*))|\
 (Package (% python3-colcon-common-extensions), $Version (% 0.3.0*))|\
-(Package (% python3-colcon-core), $Version (% 0.16.1*))|\
+(Package (% python3-colcon-core), $Version (% 0.17.0*))|\
 (Package (% python3-colcon-coveragepy-result), $Version (% 0.0.8*))|\
 (Package (% python3-colcon-defaults), $Version (% 0.2.8*))|\
 (Package (% python3-colcon-devtools), $Version (% 0.3.0*))|\
@@ -35,7 +35,7 @@ filter_formula: "\
 (Package (% python3-colcon-python-setup-py), $Version (% 0.2.8*))|\
 (Package (% python3-colcon-recursive-crawl), $Version (% 0.2.3*))|\
 (Package (% python3-colcon-rerun), $Version (% 0.1.1*))|\
-(Package (% python3-colcon-ros), $Version (% 0.4.1*))|\
+(Package (% python3-colcon-ros), $Version (% 0.5.0*))|\
 (Package (% python3-colcon-ros-domain-id-coordinator), $Version (% 0.2.0*))|\
 (Package (% python3-colcon-spawn-shell), $Version (% 0.3.0*))|\
 (Package (% python3-colcon-test-result), $Version (% 0.3.8*))|\
