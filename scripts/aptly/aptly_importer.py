@@ -236,15 +236,36 @@ class UpdaterManager():
 
         self.__log_ok(f"mirror {mirror_name} created")
 
-    def __create_aptly_snapshot(self, distribution):
-        self.__log('Creating an aptly snapshot from local aptly repository')
+    def __create_aptly_snapshot_from_repo(self, distribution):
         self.aptly.run(['snapshot', 'create', self.__get_snapshot_name(distribution),
                         'from', 'repo', self.__get_repo_name(distribution)])
         self.__log_ok(f"snapshot {self.__get_snapshot_name(distribution)} created from repo {self.__get_repo_name(distribution)}")
 
+    def __create_aptly_snapshot_from_all_repos(self):
+        for repo in self.__get_all_repos():
+            self.__create_aptly_snapshot_from_repo(self.__get_distro_from_repo_name(repo))
+
     def __error(self, msg):
         print(f"Update Manager error: {msg} \n", file=stderr)
         exit(1)
+
+    def __get_all_repos(self):
+        cmd = ['repo', 'list']
+        run_result = self.aptly.run(cmd, return_all_info=True)
+        if run_result.returncode != 0:
+            self.__error(run_result.stderr.decode('utf-8'))
+
+        all_repos = []
+        for line in run_result.stdout.splitlines():
+            if f"[{self.__get_repo_name_prefix()}-" in line.decode():
+                m = re.findall(r"\[(.*)\] \(packages", line.decode())
+                all_repos.append(m[0])
+        return all_repos
+
+    def __get_distro_from_repo_name(self, repo_name):
+        distro_regexp = re.findall(r'%s-(.*)' % self.__get_repo_name_prefix(), repo_name)
+        assert(len(distro_regexp) == 1)
+        return distro_regexp[0]
 
     def __get_endpoint_name(self, distribution):
         return f"filesystem:live:ros_bootstrap"
@@ -253,7 +274,10 @@ class UpdaterManager():
         return f"{self.config.name}-{distribution}"
 
     def __get_repo_name(self, distribution):
-        return f"ros_bootstrap-{distribution}"
+        return f"{self.__get_repo_name_prefix()}-{distribution}"
+
+    def __get_repo_name_prefix(self):
+        return 'ros_bootstrap'
 
     def __get_snapshot_name(self, distribution):
         if not self.snapshot_timestamp:
@@ -286,8 +310,11 @@ class UpdaterManager():
     def __log_ok(self, msg):
         self.__log(f"   [ok] {msg}")
 
+    def __publish_all_new_snapshot(self):
+        for repo in self.__get_all_repos():
+            self.__publish_new_snapshot(self.__get_distro_from_repo_name(repo))
+
     def __publish_new_snapshot(self, dist):
-        self.__log('Publish the new snapshot')
         if (self.aptly.exists_publication(dist, self.__get_endpoint_name(dist))):
             self.aptly.run(['publish', 'switch',
                             dist,
@@ -327,11 +354,14 @@ class UpdaterManager():
             if self.simulate_repo_import:
                 self.__log_ok(f"Simulation of the import actions from mirrors to repos finished")
                 exit(0)
-            if self.snapshot_and_publish:
-                # 3. Create snapshots from repositories
-                self.__create_aptly_snapshot(dist)
-                # 4. Publish new snapshots
-                self.__publish_new_snapshot(dist)
+
+        if self.snapshot_and_publish:
+            # 3. Create snapshots from all existing repositories
+            self.__log('Creating snapshots from all repositories')
+            self.__create_aptly_snapshot_from_all_repos()
+            # 4. Publish new snapshots
+            self.__log('Publishing all new snapshots')
+            self.__publish_all_new_snapshot()
         self.__log(f"\n == [ END OF PROCESSING {self.config.name} ] ==\n")
         return True
 
