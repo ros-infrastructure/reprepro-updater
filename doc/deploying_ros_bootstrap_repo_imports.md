@@ -34,6 +34,10 @@ git pull origin master
 ```
 python3 scripts/aptly/aptly_importer.py config/PATH_TO_CHANGED_CONFIG
 ```
+The aptly importer will create an aptly mirror (intentionally removing any previous one with the same name if it exists, this is fine) and import matched packages into `ros-bootstrap-$distro` aptly repositories for each configured suite.
+Note that is does not update the published repositories at this point, but stages these changes for the next created repository snapshots.
+If you need to check which packages were imported to the aptly repository, you can use the usual aptly tools against the `ros_bootstrap-$distro` repository (i.e: `aptly repo search ros_boostrap-focal | grep ignition`).
+
 8. Once all configurations have been updated, run the `snapshot-and-publish-all` script.
 ```
 ~/bin/snapshot-and-publish-all ros_bootstrap
