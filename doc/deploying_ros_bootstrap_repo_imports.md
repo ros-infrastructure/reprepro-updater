@@ -38,6 +38,6 @@ python3 scripts/aptly/aptly_importer.py config/PATH_TO_CHANGED_CONFIG
 ```
 ~/bin/snapshot-and-publish-all ros_bootstrap
 ```
-1. Once this process has completed, trigger `import_upstream` jobs on both build.ros.org and build.ros2.org
+1. Once this process has completed, trigger `import_upstream` jobs on **both** (no matter if the PR is targeted to just one)  [build.ros.org](https://build.ros.org/job/import_upstream) and [build.ros2.org](https://build.ros2.org/job/import_upstream)
 Update the build description with a message about the updated packages and a link to the reprepro-updater PR.
 1. Update the reprepro-updater PR with a comment containing links to the import_upstream jobs.
