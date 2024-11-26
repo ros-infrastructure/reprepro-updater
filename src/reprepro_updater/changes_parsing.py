@@ -13,6 +13,12 @@ class ChangesFile:
             raise Exception("Failed to load changes file %s.  [[%s]]" %
                             (filename, ex))
 
+    def __repr__(self):
+        return "ChangesFile(%s)"%(self.filename)
+
+    def __str__(self):
+        return "ChangesFile(%s): %s"%(self.filename, self.content)
+
 
 def find_changes_files(folder):
     changesfiles = []
