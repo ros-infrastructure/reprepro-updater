@@ -48,7 +48,7 @@ filter_formula: "\
  Package (= libgz-fuel-tools4-dev) |\
  Package (= libignition-fuel-tools4) |\
  Package (= libignition-fuel-tools4-dev) \
-), $Version (% 4.6.0-1*) |\
+), $Version (% 4.9.1-1*) |\
 (Package (= ignition-gazebo3) |\
  Package (= libgz-sim3) |\
  Package (= libgz-sim3-dbg) |\
@@ -64,7 +64,7 @@ filter_formula: "\
  Package (= libgz-gui3-dev) |\
  Package (= libignition-gui3) |\
  Package (= libignition-gui3-dev) \
-), $Version (% 3.11.2-1*) |\
+), $Version (% 3.12.0-1*) |\
 (Package (= ignition-launch2) |\
  Package (= libgz-launch2) |\
  Package (= libgz-launch2-dev) |\
@@ -213,7 +213,7 @@ filter_formula: "\
  Package (= libignition-transport8-dev) |\
  Package (= libignition-transport8-log) |\
  Package (= libignition-transport8-log-dev) \
-), $Version (% 8.3.0-2*) |\
+), $Version (% 8.5.0-1*) |\
 (Package (= ogre-2.1) |\
  Package (= blender-ogrexml-2.1) |\
  Package (= libogre-2.1) |\
