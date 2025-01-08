@@ -3,6 +3,7 @@ method: http://packages.osrfoundation.org/gazebo/ubuntu-stable
 suites: [focal]
 component: main
 architectures: [amd64, armhf, arm64, source]
+verify_release: 67170598AF249743
 filter_formula: "\
 (Package (= gazebo11) |\
  Package (= gazebo11-common) |\
