@@ -91,7 +91,7 @@ filter_formula: "\
  Package (= libgz-msgs5-dev) |\
  Package (= libignition-msgs5) |\
  Package (= libignition-msgs5-dev) \
-), $Version (% 5.11.0-4*)) |\
+), $Version (% 5.11.0-1*)) |\
 ((Package (= ignition-physics2) |\
  Package (= libgz-physics2) |\
  Package (= libgz-physics2-core-dev) |\
@@ -214,7 +214,7 @@ filter_formula: "\
  Package (= libignition-transport8-dev) |\
  Package (= libignition-transport8-log) |\
  Package (= libignition-transport8-log-dev) \
-), $Version (% 8.5.0-2*)) |\
+), $Version (% 8.5.0-1*)) |\
 ((Package (= ogre-2.1) |\
  Package (= blender-ogrexml-2.1) |\
  Package (= libogre-2.1) |\
