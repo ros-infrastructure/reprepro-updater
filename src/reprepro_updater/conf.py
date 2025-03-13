@@ -30,7 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from configparser import SafeConfigParser
+from configparser import ConfigParser
 import os
 
 
@@ -239,7 +239,7 @@ class ConfGenerator(object):
 
 
 def load_conf(config_name=None):
-    config = SafeConfigParser()
+    config = ConfigParser()
     config_file = os.path.join(
         os.path.expanduser('~'), '.buildfarm', 'reprepro-updater.ini')
 
