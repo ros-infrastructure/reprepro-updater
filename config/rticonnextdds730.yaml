@@ -49,9 +49,9 @@ Package (% =rti-connext-dds-7.3.0-tools-adminconsole) |\
 Package (% =rti-connext-dds-7.3.0-tools-cli) |\
 Package (% =rti-connext-dds-7.3.0-tools-gui-common) |\
 Package (% =rti-connext-dds-7.3.0-tools-launcher) |\
-Package (% =rti-connext-dds-7.3.0-tools-tools-monitor) |\
-Package (% =rti-connext-dds-7.3.0-tools-tools-shapesdemo) |\
-Package (% =rti-connext-dds-7.3.0-tools-tools-systemdesigner) |\
+Package (% =rti-connext-dds-7.3.0-tools-monitor) |\
+Package (% =rti-connext-dds-7.3.0-tools-shapesdemo) |\
+Package (% =rti-connext-dds-7.3.0-tools-systemdesigner) |\
 Package (% =rti-connext-dds-7.3.0-workspace)), \
 $Version (% 7.3.0.0-5-2bullseye) \
 "
