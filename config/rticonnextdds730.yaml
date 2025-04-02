@@ -9,11 +9,14 @@ filter_formula: "\
 Package (% =rti-connext-dds-7.3.0-common) |\
 Package (% =rti-connext-dds-7.3.0-doc)) |\
 Package (% =rti-connext-dds-7.3.0-env-amd64) |\
+Package (% =rti-connext-dds-7.3.0-env-arm64) |\
 Package (% =rti-connext-dds-7.3.0-env) |\
 Package (% =rti-connext-dds-7.3.0-lib-dbg-amd64) |\
+Package (% =rti-connext-dds-7.3.0-lib-dbg-arm64) |\
 Package (% =rti-connext-dds-7.3.0-lib-dbg) |\
 Package (% =rti-connext-dds-7.3.0-lib-dev) |\
 Package (% =rti-connext-dds-7.3.0-lib-amd64) |\
+Package (% =rti-connext-dds-7.3.0-lib-arm64) |\
 Package (% =rti-connext-dds-7.3.0-lib-host) |\
 Package (% =rti-connext-dds-7.3.0-lib) |\
 Package (% =rti-connext-dds-7.3.0-jre) |\
