@@ -1,0 +1,51 @@
+name: rticonnextdds730
+method: https://packages.rti.com/deb/official
+suites: [noble]
+component: main
+architectures: [amd64, arm64]
+filter_formula: "\
+((Package (% =rti-connext-dds-7.3.0) |\
+Package (% =rti-connext-dds-7.3.0-common) |\
+Package (% =rti-connext-dds-7.3.0-doc)) |\
+Package (% =rti-connext-dds-7.3.0-env-amd64) |\
+Package (% =rti-connext-dds-7.3.0-env) |\
+Package (% =rti-connext-dds-7.3.0-lib-dbg-amd64) |\
+Package (% =rti-connext-dds-7.3.0-lib-dbg) |\
+Package (% =rti-connext-dds-7.3.0-lib-dev) |\
+Package (% =rti-connext-dds-7.3.0-lib-amd64) |\
+Package (% =rti-connext-dds-7.3.0-lib-host) |\
+Package (% =rti-connext-dds-7.3.0-lib) |\
+Package (% =rti-connext-dds-7.3.0-jre) |\
+Package (% =rti-connext-dds-7.3.0-rtiddsgen) |\
+Package (% =rti-connext-dds-7.3.0-services-all) |\
+Package (% =rti-connext-dds-7.3.0-services-all-dbg) |\
+Package (% =rti-connext-dds-7.3.0-services-all-dev) |\
+Package (% =rti-connext-dds-7.3.0-services-clouddiscovery) |\
+Package (% =rti-connext-dds-7.3.0-services-clouddiscovery-dbg) |\
+Package (% =rti-connext-dds-7.3.0-services-clouddiscovery-dev) |\
+Package (% =rti-connext-dds-7.3.0-services-common) |\
+Package (% =rti-connext-dds-7.3.0-services-common-dev) |\
+Package (% =rti-connext-dds-7.3.0-services-persistence) |\
+Package (% =rti-connext-dds-7.3.0-services-persistence-dbg) |\
+Package (% =rti-connext-dds-7.3.0-services-persistence-dev) |\
+Package (% =rti-connext-dds-7.3.0-services-recording) |\
+Package (% =rti-connext-dds-7.3.0-services-recording-dbg) |\
+Package (% =rti-connext-dds-7.3.0-services-recording-dev) |\
+Package (% =rti-connext-dds-7.3.0-services-routing) |\
+Package (% =rti-connext-dds-7.3.0-services-routing-dbg) |\
+Package (% =rti-connext-dds-7.3.0-services-routing-dbg) |\
+Package (% =rti-connext-dds-7.3.0-services-routing-dev) |\
+Package (% =rti-connext-dds-7.3.0-services-webintegration) |\
+Package (% =rti-connext-dds-7.3.0-services-webintegration-dbg) |\
+Package (% =rti-connext-dds-7.3.0-services-webintegration-dev) |\
+Package (% =rti-connext-dds-7.3.0-tools-all) |\
+Package (% =rti-connext-dds-7.3.0-tools-adminconsole) |\
+Package (% =rti-connext-dds-7.3.0-tools-cli) |\
+Package (% =rti-connext-dds-7.3.0-tools-gui-common) |\
+Package (% =rti-connext-dds-7.3.0-tools-launcher) |\
+Package (% =rti-connext-dds-7.3.0-tools-tools-monitor) |\
+Package (% =rti-connext-dds-7.3.0-tools-tools-shapesdemo) |\
+Package (% =rti-connext-dds-7.3.0-tools-tools-systemdesigner) |\
+Package (% =rti-connext-dds-7.3.0-workspace)), \
+$Version (% 7.3.0.0-5-2bullseye) \
+"
