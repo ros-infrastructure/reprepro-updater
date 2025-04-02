@@ -3,6 +3,7 @@ method: https://packages.rti.com/deb/official
 suites: [noble]
 component: main
 architectures: [amd64, arm64]
+verify_release: 876866AAF5BE5C81
 filter_formula: "\
 ((Package (% =rti-connext-dds-7.3.0) |\
 Package (% =rti-connext-dds-7.3.0-common) |\
