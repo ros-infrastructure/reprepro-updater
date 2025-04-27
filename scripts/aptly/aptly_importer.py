@@ -175,6 +175,10 @@ class UpdaterConfiguration():
             self.method = self.config['method']
             self.name = self.config['name']
             self.suites = self.config['suites']
+            if 'override_sources_required' in self.config:
+                self.override_sources_required = self.config['override_sources_required']
+            else:
+                self.override_sources_required = False
         except KeyError as e:
             self.__error(f"{e} key was not found in file {input_file}")
 
@@ -313,13 +317,14 @@ class UpdaterManager():
         for dist in self.config.suites:
             # 1. Create aptly mirrors from yaml configuration file
             self.__create_aptly_mirror(dist)
-            # 2. Be sure mirror has all source packages
-            self.__log(f'Check all source packages exist')
-            if not self.aptly.exists_all_source_packages(Aptly.ArtifactType.MIRROR,
-                                                         self.__get_mirror_name(dist)):
-                self.__remove_all_generated_mirrors()
-                self.__error(f'{self.__get_mirror_name(dist)} does not have a source package. Removing generated mirrors')
-            self.__log_ok('All source packages exist in the mirror')
+            # 2. Be sure mirror has all source packages unless the requirement is overridden.
+            if not self.config.override_sources_required:
+                self.__log(f'Check all source packages exist')
+                if not self.aptly.exists_all_source_packages(Aptly.ArtifactType.MIRROR,
+                                                             self.__get_mirror_name(dist)):
+                    self.__remove_all_generated_mirrors()
+                    self.__error(f'{self.__get_mirror_name(dist)} does not have a source package. Removing generated mirrors')
+                self.__log_ok('All source packages exist in the mirror')
             if self.only_mirror_creation:
                 return True
             # 2. Import from mirrors to local repositories
