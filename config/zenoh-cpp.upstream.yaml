@@ -1,0 +1,6 @@
+name: zenoh-cpp
+method:  https://download.eclipse.org/zenoh/debian-repo/
+suites: [noble]
+component: /
+architectures: [amd64, arm64]
+filter_formula: (Package (= libzenohcpp-dev) | Package (= libzenohc-dev) | Package (= libzenohc)), $Version (% 1.5.0)
