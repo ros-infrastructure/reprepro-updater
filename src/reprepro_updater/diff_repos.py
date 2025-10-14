@@ -62,11 +62,11 @@ def get_packagefile_from_url(url):
     return package_file
 
 
-def conditional_markdown_package_homepage_link(package, package_file):
+def conditional_markdown_package_homepage_link(package, package_file, rosdistro=None):
     if 'Homepage' in package_file[package]:
         return "[%s](%s)" % (package, package_file[package]['Homepage'])
     else:
-        return "[%s](https://index.ros.org/p/%s)" % (package, package)
+        return "[%s](https://index.ros.org/p/%s/#%s)" % (package, package, rosdistro)
 
 
 def compute_annoucement(rosdistro, pf_old, pf_new):
@@ -117,21 +117,21 @@ def compute_annoucement(rosdistro, pf_old, pf_new):
     out += "### Added Packages [%s]:\n\n" % len(added_packages)
     for p in sorted(added_packages):
         out += " * %s: %s\n" % \
-            (conditional_markdown_package_homepage_link(p, new_packages),
+            (conditional_markdown_package_homepage_link(p, new_packages, rosdistro),
             core_version(new_packages[p]['Version']))
     out += "\n"
 
     out += "### Updated Packages [%s]:\n\n" % len(updated_packages)
     for p in sorted(updated_packages):
         out += " * %s: %s -> %s\n" % \
-            (conditional_markdown_package_homepage_link(p, new_packages),
+            (conditional_markdown_package_homepage_link(p, new_packages, rosdistro),
              core_version(old_packages[p]['Version']),
              core_version(new_packages[p]['Version']))
     out += "\n"
 
     out += "### Removed Packages [%s]:\n\n" % len(removed_packages)
     for p in sorted(removed_packages):
-        out += "- %s\n" % (conditional_markdown_package_homepage_link(p, old_packages),)
+        out += "- %s\n" % (conditional_markdown_package_homepage_link(p, old_packages, rosdistro),)
     out += "\n"
 
     out += \
