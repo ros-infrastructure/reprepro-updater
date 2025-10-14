@@ -66,7 +66,7 @@ def conditional_markdown_package_homepage_link(package, package_file):
     if 'Homepage' in package_file[package]:
         return "[%s](%s)" % (package, package_file[package]['Homepage'])
     else:
-        return package
+        return "[%s](https://index.ros.org/p/%s)" % (package, package)
 
 
 def compute_annoucement(rosdistro, pf_old, pf_new):
