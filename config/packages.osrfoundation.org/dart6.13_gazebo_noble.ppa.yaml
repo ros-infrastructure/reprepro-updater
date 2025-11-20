@@ -1,6 +1,6 @@
 # To be merged with dart6.13_gazebo.pp.yaml once
 # https://github.com/gazebosim/gz-physics/issues/586 is resolved
-name: dart6.13_gazebo_ppa
+name: dart6.13_gazebo_noble_ppa
 method: http://ppa.launchpad.net/openrobotics/dart6.13-gazebo/ubuntu/
 suites: [noble]
 component: main
