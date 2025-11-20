@@ -30,7 +30,7 @@
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from configparser import SafeConfigParser
+from configparser import ConfigParser
 import os
 import sys
 
@@ -222,24 +222,23 @@ class ConfGenerator(object):
         self.config_params = config_parameters_object
 
     def _generate_distribution(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def _generate_updates(self):
-        raise NotImplemented
+        raise NotImplementedError
 
     def _load_parameters(self, file):
         pass
 
     def import_from_folder(self, package, folder, invalidate=False):
-        """Import a package from the folder."""
-        raise NotImplemented
+        raise NotImplementedError
 
     def run_update(self):
         pass
 
 
 def load_conf(config_name=None):
-    config = SafeConfigParser()
+    config = ConfigParser()
     config_file = os.path.join(
         os.path.expanduser('~'), '.buildfarm', 'reprepro-updater.ini')
 
