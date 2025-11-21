@@ -191,13 +191,10 @@ def run_update(repo_dir, dist_generator, updates_generator,
     distributions_filename = os.path.join(conf_dir, 'distributions')
 
     # backup distributions file
-    old_distribution_filename = distributions_filename + '.old'
-    copyfile(distributions_filename, old_distribution_filename)
-    # do not override distribution file if not commit sent
-    if not commit:
-        fake_distribution_filename = distributions_filename + '.new'
-        copyfile(distributions_filename, fake_distribution_filename)
-        distributions_filename = fake_distribution_filename
+    backup_distribution_filename = distributions_filename + '.old'
+    copyfile(distributions_filename, backup_distribution_filename)
+    generated_distribution_filename = distributions_filename + '.new'
+    copyfile(distributions_filename, generated_distribution_filename)
 
     with LockContext(lockfile) as lock_c:
         print("I have a lock on %s" % lockfile)
@@ -210,15 +207,19 @@ def run_update(repo_dir, dist_generator, updates_generator,
         with open(update_filename, 'w') as fh:
             fh.write(update_contents)
 
-        # write out distributions file, fake or real
-        print("Creating distributions file %s" % distributions_filename)
-        with open(distributions_filename, 'w') as fh:
+        # write out the generated distributions file
+        print("Creating distributions file %s" % generated_distribution_filename)
+        with open(generated_distribution_filename, 'w') as fh:
             fh.write(dist_generator.generate_file_contents(arch))
 
         # Check if distributions files differ in more than just Update: field
-        if not _check_distributions_diff(old_distribution_filename, distributions_filename):
+        if _check_distributions_diff(distributions_filename, generated_distribution_filename):
+            print("Distributions file is OK (identical or differs only in Update: field)")
+            # Replace the real distributions file with the new one
+            os.replace(generated_distribution_filename, distributions_filename)
+        else:
             # run diff to show what changed
-            command = ['diff', '-u', old_distribution_filename, distributions_filename]
+            command = ['diff', '-u', distributions_filename, generated_distribution_filename]
             print("running command %s" % command, file=sys.stderr)
             subprocess.call(command)
             print("STOP: detected differences in distributions file beyond Update: field")
