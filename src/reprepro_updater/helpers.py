@@ -158,6 +158,30 @@ def run_cleanup(repo_dir, rosdistro, distro, arch, commit):
             raise RuntimeError('delete_unreferenced command failed')
 
 
+def _check_distributions_diff(old_file, new_file):
+    """
+    Check if distributions files differ only in Update: field.
+
+    Returns True if files are identical or differ only in Update: field.
+    Returns False if there are other differences.
+    """
+    with open(old_file, 'r') as f:
+        old_lines = f.readlines()
+    with open(new_file, 'r') as f:
+        new_lines = f.readlines()
+
+    # Normalize lines by removing Update: field for comparison
+    def normalize_line(line):
+        if line.strip().startswith('Update:'):
+            return ''
+        return line
+
+    old_normalized = [normalize_line(line) for line in old_lines]
+    new_normalized = [normalize_line(line) for line in new_lines]
+
+    return old_normalized == new_normalized
+
+
 def run_update(repo_dir, dist_generator, updates_generator,
                distro, arch, commit):
 
@@ -167,13 +191,10 @@ def run_update(repo_dir, dist_generator, updates_generator,
     distributions_filename = os.path.join(conf_dir, 'distributions')
 
     # backup distributions file
-    old_distribution_filename = distributions_filename + '.old'
-    copyfile(distributions_filename, old_distribution_filename)
-    # do not override distribution file if not commit sent
-    if not commit:
-        fake_distribution_filename = distributions_filename + '.new'
-        copyfile(distributions_filename, fake_distribution_filename)
-        distributions_filename = fake_distribution_filename
+    backup_distribution_filename = distributions_filename + '.old'
+    copyfile(distributions_filename, backup_distribution_filename)
+    generated_distribution_filename = distributions_filename + '.new'
+    copyfile(distributions_filename, generated_distribution_filename)
 
     with LockContext(lockfile) as lock_c:
         print("I have a lock on %s" % lockfile)
@@ -186,23 +207,24 @@ def run_update(repo_dir, dist_generator, updates_generator,
         with open(update_filename, 'w') as fh:
             fh.write(update_contents)
 
-        # write out distributions file, fake or real
-        print("Creating distributions file %s" % distributions_filename)
-        with open(distributions_filename, 'w') as fh:
+        # write out the generated distributions file
+        print("Creating distributions file %s" % generated_distribution_filename)
+        with open(generated_distribution_filename, 'w') as fh:
             fh.write(dist_generator.generate_file_contents(arch))
 
-        # run diff with custom subprocess call. Only real failure if exit status >= 2
-        command = ['diff', '-u', old_distribution_filename, distributions_filename]
-        try:
+        # Check if distributions files differ in more than just Update: field
+        if _check_distributions_diff(distributions_filename, generated_distribution_filename):
+            print("Distributions file is OK (identical or differs only in Update: field)")
+            # Replace the real distributions file with the new one
+            os.replace(generated_distribution_filename, distributions_filename)
+        else:
+            # run diff to show what changed
+            command = ['diff', '-u', distributions_filename, generated_distribution_filename]
             print("running command %s" % command, file=sys.stderr)
-            subprocess.check_call(command)
-        except subprocess.CalledProcessError as ex:
-            if ex.returncode == 1:
-                print("STOP: detected differences between distributions files please fix them before continue")
-                sys.exit(-1)
-            if ex.returncode >= 2:
-                print("Execution of [%s] Failed:" % command, ex)
-                sys.exit(-1)
+            subprocess.call(command)
+            print("STOP: detected differences in distributions file beyond Update: field")
+            print("Please fix the distributions file configuration before continuing")
+            sys.exit(-1)
 
         if not _run_update_command(repo_dir, distro, commit):
             raise RuntimeError('update command failed')
