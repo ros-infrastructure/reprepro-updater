@@ -4,6 +4,7 @@ suites: [focal, jammy, noble]
 component: main
 architectures: [i386, amd64, armhf, arm64, source]
 filter_formula: "\
+(Package (% python3-cargo-ament-build), $Version (% 0.1.11*))|\
 (Package (% python3-colcon-alias), $Version (% 0.1.1*))|\
 (Package (% python3-colcon-argcomplete), $Version (% 0.3.3*))|\
 (Package (% python3-colcon-bash), $Version (% 0.5.0*))|\
@@ -41,5 +42,6 @@ filter_formula: "\
 (Package (% python3-colcon-ros-domain-id-coordinator), $Version (% 0.2.4*))|\
 (Package (% python3-colcon-spawn-shell), $Version (% 0.3.0*))|\
 (Package (% python3-colcon-test-result), $Version (% 0.3.8*))|\
-(Package (% python3-colcon-zsh), $Version (% 0.5.0*))\
+(Package (% python3-colcon-zsh), $Version (% 0.5.0*))|\
+(Package (% python3-pallet-patcher), $Version (% 0.2.0*))\
 "
