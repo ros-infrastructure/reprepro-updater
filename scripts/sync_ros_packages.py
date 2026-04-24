@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 import datetime
+import os
 from optparse import OptionParser
 import sys
 
@@ -9,6 +10,7 @@ from reprepro_updater import conf
 from reprepro_updater import diff_repos
 from reprepro_updater.helpers import run_cleanup
 from reprepro_updater.helpers import run_update
+from reprepro_updater.helpers import LockContext
 
 parser = OptionParser()
 parser.add_option("-r", "--rosdistro", dest="rosdistro")
@@ -108,16 +110,18 @@ for ubuntu_distro in distros:
             ubuntu_distro,
             'main',
             package_architecture)
-        try:
-            pf_old = diff_repos.get_packagefile_from_url(target_url)
-        except RuntimeError as ex:
-            print("Exception: %s \n NOT Computing diff" % ex, file=sys.stderr)
-            continue
-        try:
-            pf_new = diff_repos.get_packagefile_from_url(upstream_url)
-        except RuntimeError as ex:
-            print("Exception: %s \n NOT Computing diff" % ex, file=sys.stderr)
-            continue
+        lockfile = os.path.join(conf_params.repository_path, 'lock')
+        with LockContext(lockfile):
+            try:
+                pf_old = diff_repos.get_packagefile_from_url(target_url)
+            except RuntimeError as ex:
+                print("Exception: %s \n NOT Computing diff" % ex, file=sys.stderr)
+                continue
+            try:
+                pf_new = diff_repos.get_packagefile_from_url(upstream_url)
+            except RuntimeError as ex:
+                print("Exception: %s \n NOT Computing diff" % ex, file=sys.stderr)
+                continue
         dtime = datetime.datetime.now()
         dtime = dtime.replace(microsecond=0)
         print("Difference between '%s' and '%s' computed at %s" %
