@@ -6,9 +6,12 @@
 from __future__ import print_function
 
 import argparse
+import os
 import subprocess
 import sys
 import time
+
+from reprepro_updater.helpers import LockContext
 
 DISTROS = ['precise',
            'quantal',
@@ -49,9 +52,14 @@ def apply_command_template(repo, command_arg, distro, regex, dry_run=False):
         command_template = 'echo ' + command_template
     _cmd = command_template.split() + [regex]
     print("Running %s" % _cmd)
-    subprocess.Popen(_cmd)
+
+    lockfile = os.path.join(repo, 'lock')
+    with LockContext(lockfile):
+        process = subprocess.Popen(_cmd)
+        process.wait()
+
     # sleep to let the lock file cleanup before iterating
-    print('Sleeping to allow lock reset')
+    print('Sleeping to allow internal reprepro lock to reset')
     time.sleep(2.0)
 
 
