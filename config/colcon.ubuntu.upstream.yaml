@@ -1,6 +1,6 @@
 name: colcon
 method: https://packagecloud.io/dirk-thomas/colcon/ubuntu
-suites: [focal, jammy, noble]
+suites: [focal, jammy, noble, resolute]
 component: main
 architectures: [i386, amd64, armhf, arm64, source]
 filter_formula: "\
