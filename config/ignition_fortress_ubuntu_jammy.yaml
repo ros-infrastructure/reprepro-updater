@@ -10,7 +10,7 @@ filter_formula: "\
 (Package (= ignition-cmake2) |\
  Package (= libgz-cmake2-dev) |\
  Package (= libignition-cmake2-dev) \
-), $Version (% 2.18.0-1*) |\
+), $Version (% 2.19.0-1*) |\
 (Package (= ignition-common4) |\
  Package (= libgz-common4) |\
  Package (= libgz-common4-av) |\
@@ -84,7 +84,7 @@ filter_formula: "\
  Package (= libgz-msgs8-dev) |\
  Package (= libignition-msgs8) |\
  Package (= libignition-msgs8-dev) \
-), $Version (% 8.7.0-1*) |\
+), $Version (% 8.7.1-1*) |\
 (Package (= ignition-physics5) |\
  Package (= libgz-physics5) |\
  Package (= libgz-physics5-bullet) |\
