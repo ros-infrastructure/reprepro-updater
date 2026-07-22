@@ -4,7 +4,6 @@ suites: [bullseye, bookworm, trixie]
 component: main
 architectures: [i386, amd64, armhf, arm64, source]
 filter_formula: "\
-(Package (% python3-cargo-ament-build), $Version (% 0.1.11*))|\
 (Package (% python3-colcon-alias), $Version (% 0.1.1*))|\
 (Package (% python3-colcon-argcomplete), $Version (% 0.3.3*))|\
 (Package (% python3-colcon-bash), $Version (% 0.5.0*))|\
