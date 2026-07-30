@@ -221,6 +221,7 @@ class UpdaterManager():
             self.__log_ok('Removing existing mirror')
             self.aptly.run(['mirror', 'drop', mirror_name])
         create_cmd = ['mirror', 'create',
+                      f"-with-sources={'true' if self.config.with_sources else 'false'}",
                       f"-architectures={','.join(self.config.architectures)}",
                       f"-filter={self.config.filter_formula}"]
         if self.config.with_sources:
