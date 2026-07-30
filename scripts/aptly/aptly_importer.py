@@ -224,8 +224,6 @@ class UpdaterManager():
                       f"-with-sources={'true' if self.config.with_sources else 'false'}",
                       f"-architectures={','.join(self.config.architectures)}",
                       f"-filter={self.config.filter_formula}"]
-        if self.config.with_sources:
-            create_cmd += ['-with-sources']
         if self.ignore_mirror_signature:
             create_cmd += ['-ignore-signatures']
         create_cmd += [mirror_name,
