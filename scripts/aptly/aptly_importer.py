@@ -321,12 +321,12 @@ class UpdaterManager():
                 self.__error(f'{self.__get_mirror_name(dist)} does not have a source package. Removing generated mirrors')
             self.__log_ok('All source packages exist in the mirror')
             if self.only_mirror_creation:
-                return True
+                continue
             # 2. Import from mirrors to local repositories
             self.__import__aptly_mirror_to_repo(dist)
             if self.simulate_repo_import:
                 self.__log_ok(f"Simulation of the import actions from mirrors to repos finished")
-                exit(0)
+                continue
             if self.snapshot_and_publish:
                 # 3. Create snapshots from repositories
                 self.__create_aptly_snapshot(dist)
