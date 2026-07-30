@@ -326,7 +326,7 @@ class UpdaterManager():
             self.__import__aptly_mirror_to_repo(dist)
             if self.simulate_repo_import:
                 self.__log_ok(f"Simulation of the import actions from mirrors to repos finished")
-                exit(0)
+                continue
             if self.snapshot_and_publish:
                 # 3. Create snapshots from repositories
                 self.__create_aptly_snapshot(dist)
