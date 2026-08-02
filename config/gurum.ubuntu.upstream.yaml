@@ -1,0 +1,8 @@
+name: gurum
+method: https://packages.gurum.cc/ubuntu
+suites: [jammy, noble, resolute]
+component: main
+architectures: [amd64, arm64]
+filter_formula: "\
+(Package (% gurumdds-3.2), $Version (% 3.2.19*))\
+"
