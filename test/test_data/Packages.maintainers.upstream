@@ -1,0 +1,70 @@
+Package: ros-humble-updated-pkg
+Source: updated-pkg
+Priority: optional
+Section: misc
+Installed-Size: 26
+Maintainer: "Bugs Bunny" <bugs.bunny@openrobotics.org>
+Architecture: amd64
+Version: 2.0.0-1jammy.20260801.120000
+Depends: libc6
+Filename: pool/main/r/ros-humble-updated-pkg/ros-humble-updated-pkg_2.0.0-1jammy.20260801.120000_amd64.deb
+Size: 5210
+SHA256: 0f5f2e1f0e4b8b3a1c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b
+Homepage: https://index.ros.org/p/updated_pkg/#humble
+Description: A package that gets updated by the sync
+
+Package: ros-humble-added-quoted-pkg
+Source: added-quoted-pkg
+Priority: optional
+Section: misc
+Installed-Size: 18
+Maintainer: "Pepé Le Pew" <pepe.le.pew@openrobotics.org>
+Architecture: amd64
+Version: 1.0.0-1jammy.20260801.120000
+Depends: libc6
+Filename: pool/main/r/ros-humble-added-quoted-pkg/ros-humble-added-quoted-pkg_1.0.0-1jammy.20260801.120000_amd64.deb
+Size: 4102
+SHA256: 2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f8091a
+Description: An added package whose maintainer name is quoted and non-ASCII
+
+Package: ros-humble-added-unquoted-pkg
+Source: added-unquoted-pkg
+Priority: optional
+Section: misc
+Installed-Size: 18
+Maintainer: Bugs Bunny <bugs.bunny@openrobotics.org>
+Architecture: amd64
+Version: 1.0.0-1jammy.20260801.120000
+Depends: libc6
+Filename: pool/main/r/ros-humble-added-unquoted-pkg/ros-humble-added-unquoted-pkg_1.0.0-1jammy.20260801.120000_amd64.deb
+Size: 4110
+SHA256: 3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f8091a2b
+Description: An added package released with a bloom that does not quote the name
+
+Package: ros-humble-added-quoted-comma-pkg
+Source: added-quoted-comma-pkg
+Priority: optional
+Section: misc
+Installed-Size: 18
+Maintainer: "Daffy Duck, Porky Pig" <daffy.duck@acme.com>
+Architecture: amd64
+Version: 1.0.0-1jammy.20260801.120000
+Depends: libc6
+Filename: pool/main/r/ros-humble-added-quoted-comma-pkg/ros-humble-added-quoted-comma-pkg_1.0.0-1jammy.20260801.120000_amd64.deb
+Size: 4118
+SHA256: 4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c
+Description: An added package whose quoted maintainer name contains a comma
+
+Package: ros-humble-added-unquoted-comma-pkg
+Source: added-unquoted-comma-pkg
+Priority: optional
+Section: misc
+Installed-Size: 18
+Maintainer: Acme, Inc. <opensource@acme.com>
+Architecture: amd64
+Version: 1.0.0-1jammy.20260801.120000
+Depends: libc6
+Filename: pool/main/r/ros-humble-added-unquoted-comma-pkg/ros-humble-added-unquoted-comma-pkg_1.0.0-1jammy.20260801.120000_amd64.deb
+Size: 4126
+SHA256: 5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d
+Description: An added package whose unquoted maintainer name contains a comma

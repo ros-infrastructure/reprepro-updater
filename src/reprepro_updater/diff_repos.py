@@ -27,7 +27,17 @@ def convert_tuples_list_to_dict(tuples_list):
 
 
 def strip_email(maintainer):
-    return re.sub("(.*)<.*>", "\\1", maintainer)
+    """Extract the maintainer name from a debian Maintainer field."""
+    name = re.sub("(.*)<.*>", "\\1", maintainer).strip()
+    # bloom wraps the name in double quotes to keep the field RFC 5322 compliant, see:
+    # https://github.com/ros-infrastructure/bloom/pull/770. Unwrap the name.
+    # Only unwrap a pair of quotes around the whole name: a field holding more than one mailbox also
+    # starts and ends with a quote, and stripping those would corrupt it rather than leave it merely
+    # ugly.
+    unwrapped = re.match('^"([^"]*)"$', name)
+    if unwrapped:
+        name = unwrapped.group(1)
+    return name
 
 
 def core_version(version):
@@ -109,7 +119,7 @@ def compute_annoucement(rosdistro, pf_old, pf_new):
 
     maintainers = set()
     for p in added_packages | updated_packages:
-        maintainers.add(strip_email(new_packages[p]['Maintainer']).strip())
+        maintainers.add(strip_email(new_packages[p]['Maintainer']))
 
     out = ''
 
