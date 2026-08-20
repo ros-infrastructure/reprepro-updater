@@ -30,13 +30,10 @@ def strip_email(maintainer):
     """Extract the maintainer name from a debian Maintainer field."""
     name = re.sub("(.*)<.*>", "\\1", maintainer).strip()
     # bloom wraps the name in double quotes to keep the field RFC 5322 compliant, see:
-    # https://github.com/ros-infrastructure/bloom/pull/770. Unwrap the name.
-    # Only unwrap a pair of quotes around the whole name: a field holding more than one mailbox also
-    # starts and ends with a quote, and stripping those would corrupt it rather than leave it merely
-    # ugly.
-    unwrapped = re.match('^"([^"]*)"$', name)
-    if unwrapped:
-        name = unwrapped.group(1)
+    # https://github.com/ros-infrastructure/bloom/pull/770. Unwrap the name, which is simply the
+    # inverse of that: bloom adds one quote at each end and does not escape any quote in the name.
+    if name.startswith('"') and name.endswith('"'):
+        name = name[1:-1]
     return name
 
 

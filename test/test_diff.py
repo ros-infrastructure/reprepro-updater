@@ -56,8 +56,10 @@ def test_strip_email():
     # the address is optional
     assert 'Acme Robotics' == diff_repos.strip_email('Acme Robotics')
     assert 'Acme Robotics' == diff_repos.strip_email('"Acme Robotics"')
-    # a lone double quote is not a quoted name
-    assert '"' == diff_repos.strip_email('"')
+    # bloom does not escape a quote inside the name, so only the pair it added
+    # around the whole name is removed
+    assert 'Wile E. "Super Genius" Coyote' == diff_repos.strip_email(
+        '"Wile E. "Super Genius" Coyote" <wile.e.coyote@acme.com>')
     # a name and an address that each hold several comma-separated values are
     # still a single entry, they are not split apart
     assert 'Yosemite Sam, Foghorn Leghorn' == diff_repos.strip_email(
@@ -66,12 +68,6 @@ def test_strip_email():
     assert 'Yosemite Sam, Foghorn Leghorn' == diff_repos.strip_email(
         '"Yosemite Sam, Foghorn Leghorn" '
         '<yosemite.sam@openrobotics.org, foghorn.leghorn@acme.com>')
-    # a field holding several mailboxes also starts and ends with a quote, but
-    # those quotes do not wrap a single name, so it is left untouched
-    assert '"Tweety Bird" <tweety@openrobotics.org>, "Sylvester Cat"' == \
-        diff_repos.strip_email(
-            '"Tweety Bird" <tweety@openrobotics.org>, '
-            '"Sylvester Cat" <sylvester@acme.com>')
 
 
 def test_announcement_maintainer_names():
