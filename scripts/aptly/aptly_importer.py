@@ -166,9 +166,11 @@ class UpdaterConfiguration():
             self.architectures = self.config['architectures']
             # source was accepted as a valid architecture to indicate that
             # source packages need to be download. It is not a valid arch in aptly
-            if 'source' in self.config['architectures']:
-                self.architectures = self.config['architectures'].remove('source')
-            self.architectures = self.config['architectures']
+            if 'source' in self.architectures:
+                self.architectures.remove('source')
+                self.with_sources = True
+            else:
+                self.with_sources = False
             self.component = self.config['component']
             self.filter_formula = self.reprepro2aptly.convert(
                 self.config['filter_formula'])
@@ -218,7 +220,8 @@ class UpdaterManager():
         if self.aptly.exists(Aptly.ArtifactType.MIRROR, mirror_name):
             self.__log_ok('Removing existing mirror')
             self.aptly.run(['mirror', 'drop', mirror_name])
-        create_cmd = ['mirror', 'create', '-with-sources',
+        create_cmd = ['mirror', 'create',
+                      f"-with-sources={'true' if self.config.with_sources else 'false'}",
                       f"-architectures={','.join(self.config.architectures)}",
                       f"-filter={self.config.filter_formula}"]
         if self.ignore_mirror_signature:
