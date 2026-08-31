@@ -1,0 +1,28 @@
+Package: ros-humble-updated-pkg
+Source: updated-pkg
+Priority: optional
+Section: misc
+Installed-Size: 25
+Maintainer: Bugs Bunny <bugs.bunny@openrobotics.org>
+Architecture: amd64
+Version: 1.0.0-1jammy.20260401.120000
+Depends: libc6
+Filename: pool/main/r/ros-humble-updated-pkg/ros-humble-updated-pkg_1.0.0-1jammy.20260401.120000_amd64.deb
+Size: 5108
+SHA256: 0f5f2e1f0e4b8b3a1c9d8e7f6a5b4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b
+Homepage: https://index.ros.org/p/updated_pkg/#humble
+Description: A package that gets updated by the sync
+
+Package: ros-humble-removed-pkg
+Source: removed-pkg
+Priority: optional
+Section: misc
+Installed-Size: 12
+Maintainer: Elmer Fudd <elmer.fudd@acme.com>
+Architecture: amd64
+Version: 0.5.0-1jammy.20260401.120000
+Depends: libc6
+Filename: pool/main/r/ros-humble-removed-pkg/ros-humble-removed-pkg_0.5.0-1jammy.20260401.120000_amd64.deb
+Size: 3204
+SHA256: 1a2b3c4d5e6f708192a3b4c5d6e7f8091a2b3c4d5e6f708192a3b4c5d6e7f809
+Description: A package that is no longer in the upstream repo
